@@ -1,4 +1,4 @@
-﻿namespace AceAttitude.Data.Models.Contracts
+﻿namespace AceAttitude.Data.Models.Contracts.Role
 {
     public interface IsCreatable
     {
