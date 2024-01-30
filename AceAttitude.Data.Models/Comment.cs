@@ -25,8 +25,6 @@ namespace AceAttitude.Data.Models
 
         public int Likes { get; set; }
 
-        public ICollection<IApplicationUser> LikedByUsers { get; set; } = new List<IApplicationUser>();
-
         public ICollection<ICommentLike> CommentLikes { get; set; } = new List<ICommentLike>();
     }
 }

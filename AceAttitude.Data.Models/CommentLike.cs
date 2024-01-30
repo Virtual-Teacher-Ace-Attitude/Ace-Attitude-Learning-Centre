@@ -11,5 +11,7 @@ namespace AceAttitude.Data.Models
         public IApplicationUser User { get; set; } = null!;
 
         public string? UserId { get; set; }
+
+        public bool IsLiked { get; set; }
     }
 }

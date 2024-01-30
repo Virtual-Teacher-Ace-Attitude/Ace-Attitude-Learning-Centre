@@ -16,8 +16,6 @@
 
         public int Likes { get; set; }
 
-        public ICollection<IApplicationUser> LikedByUsers { get; set; }
-
         public ICollection<ICommentLike> CommentLikes { get; set; }
     }
 }

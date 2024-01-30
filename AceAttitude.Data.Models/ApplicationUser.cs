@@ -13,10 +13,15 @@ namespace AceAttitude.Data.Models
         public ApplicationUser()
         {
             this.Id = Guid.NewGuid().ToString();
-            this.Roles = new HashSet<IdentityUserRole<string>>();
-            this.Claims = new HashSet<IdentityUserClaim<string>>();
-            this.Logins = new HashSet<IdentityUserLogin<string>>();
         }
+
+        public string? TeacherId { get; set; }
+
+        public ITeacher? Teacher { get; set; }
+
+        public string? StudentId { get; set; }
+
+        public IStudent? Student { get; set; }
 
         [Required]
         public DateTime CreatedOn { get; set; }
@@ -31,36 +36,18 @@ namespace AceAttitude.Data.Models
         [NotMapped]
         public bool IsDeleted => DeletedOn.HasValue;
 
-        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; }
-
-        public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; }
-
-        public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; }
-
-        public bool IsTeacher { get; set; }
-
-        public bool IsAdmin { get; set; }
-
         public string? PictureFilePath { get; set; }
 
         public string? NoteFilePath { get; set; }
 
         public ICollection<IComment> Comments { get; set; } = new List<IComment>();
 
-        // Comments many-to-many relations
         public ICollection<ICommentLike> CommentLikes { get; set; } = new List<ICommentLike>();
 
-        public ICollection<IComment> LikedComments { get; set; } = new List<IComment>();
+        //public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserLogin<string>>();
 
-        // Student-Only
-        // Ratings many-to-many relations
-        //public string LectureNote { get; set; }
+        //public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; } = new HashSet<IdentityUserClaim<string>>();
 
-        public ICollection<IRating> Ratings { get; set; } = new List<IRating>();
-
-        public ICollection<ICourse> RatedCourses { get; set; } = new List<ICourse>();
-
-        // Teacher-Only
-        public ICollection<ICourse> CreatedCourses { get; set; } = new List<ICourse>();
+        //public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; } = new HashSet<IdentityUserLogin<string>>();
     }
 }
