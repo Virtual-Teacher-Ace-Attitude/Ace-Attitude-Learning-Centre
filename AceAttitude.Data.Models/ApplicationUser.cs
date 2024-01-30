@@ -17,11 +17,11 @@ namespace AceAttitude.Data.Models
 
         public string? TeacherId { get; set; }
 
-        public ITeacher? Teacher { get; set; }
+        public Teacher? Teacher { get; set; }
 
         public string? StudentId { get; set; }
 
-        public IStudent? Student { get; set; }
+        public Student? Student { get; set; }
 
         [Required]
         public DateTime CreatedOn { get; set; }
@@ -40,9 +40,9 @@ namespace AceAttitude.Data.Models
 
         public string? NoteFilePath { get; set; }
 
-        public ICollection<IComment> Comments { get; set; } = new List<IComment>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-        public ICollection<ICommentLike> CommentLikes { get; set; } = new List<ICommentLike>();
+        public ICollection<CommentLike> CommentLikes { get; set; } = new List<CommentLike>();
 
         //public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserLogin<string>>();
 

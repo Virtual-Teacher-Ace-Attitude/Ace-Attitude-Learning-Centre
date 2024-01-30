@@ -15,7 +15,7 @@ namespace AceAttitude.Data.Models
         public string? Title { get; set; }
 
         public int TeacherId { get; set; }
-        public IApplicationUser? CreatedBy { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
 
         public Level Level { get; set; }
 
@@ -28,16 +28,13 @@ namespace AceAttitude.Data.Models
 
         public bool IsDraft { get; set; }
 
-        public ICollection<ILecture> Lectures { get; set; } = new List<ILecture>();
+        public ICollection<Lecture> Lectures { get; set; } = new List<Lecture>();
 
         [Range(1, 5)]
         public double Rating { get; set; }
 
-        public ICollection<IComment> Comments { get; set; } = new List<IComment>();
+        public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
-        // Ratings many-to-many relations
-        public ICollection<IApplicationUser> RatedByUsers { get; set; } = new List<IApplicationUser>();
-
-        public ICollection<IRating> Ratings { get; set; } = new List<IRating>();
+        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }

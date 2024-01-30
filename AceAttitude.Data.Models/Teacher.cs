@@ -8,8 +8,8 @@ namespace AceAttitude.Data.Models
 
         public string UserId { get; set; } = null!;
 
-        public IApplicationUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
-        public ICollection<ICourse> CreatedCourses { get; set; } = new List<ICourse>();
+        public ICollection<Course> CreatedCourses { get; set; } = new List<Course>();
     }
 }

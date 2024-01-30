@@ -6,10 +6,8 @@
 
         public string? UserId { get; set; }
 
-        public IApplicationUser User { get; set; }
+        public ApplicationUser User { get; set; }
 
-        public ICollection<IRating> Ratings { get; set; }
-
-        public ICollection<ICourse> RatedCourses { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
     }
 }

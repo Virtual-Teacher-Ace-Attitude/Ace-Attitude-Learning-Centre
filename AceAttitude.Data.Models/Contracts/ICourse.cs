@@ -6,7 +6,7 @@ namespace AceAttitude.Data.Models.Contracts
     {
         public int Id { get; set; }
 
-        public IApplicationUser? CreatedBy { get; set; }
+        public ApplicationUser? CreatedBy { get; set; }
 
         public string? Title { get; set; }
 
@@ -20,11 +20,10 @@ namespace AceAttitude.Data.Models.Contracts
 
         public bool IsDraft { get; set; }
 
-        public ICollection<ILecture> Lectures { get; set; }
+        public ICollection<Lecture> Lectures { get; set; }
 
-        public ICollection<IComment> Comments { get; set; }
-        public ICollection<IApplicationUser> RatedByUsers { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
-        public ICollection<IRating> Ratings { get; set; }
+        public ICollection<Rating> Ratings { get; set; }
     }
 }

@@ -2,12 +2,14 @@
 {
     public interface ICommentLike
     {
-        public IComment Comment { get; set; }
+        public Comment Comment { get; set; }
 
         public int? CommentId { get; set; }
 
-        public IApplicationUser User { get; set; }
+        public ApplicationUser User { get; set; }
 
         public string? UserId { get; set; }
+
+        public bool IsLiked { get; set; }
     }
 }

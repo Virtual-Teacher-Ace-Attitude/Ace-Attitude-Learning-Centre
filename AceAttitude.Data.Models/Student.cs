@@ -8,10 +8,8 @@ namespace AceAttitude.Data.Models
 
         public string? UserId { get; set; }
 
-        public IApplicationUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
-        public ICollection<IRating> Ratings { get; set; } = new List<IRating>();
-
-        public ICollection<ICourse> RatedCourses { get; set; } = new List<ICourse>();
+        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
     }
 }

@@ -6,9 +6,9 @@
 
         public int CourseId { get; set; }
 
-        public ICourse? Course { get; set; }
+        public Course? Course { get; set; }
 
-        public IApplicationUser? Student { get; set; }
+        public ApplicationUser? Student { get; set; }
 
         public string? StudentId { get; set; }
     }

@@ -6,8 +6,8 @@
 
         public string UserId { get; set; }
 
-        public IApplicationUser User { get; set; }
+        public ApplicationUser User { get; set; }
 
-        public ICollection<ICourse> CreatedCourses { get; set; }
+        public ICollection<Course> CreatedCourses { get; set; }
     }
 }

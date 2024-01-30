@@ -10,18 +10,18 @@
 
         public string? TeacherId { get; set; }
 
-        public ITeacher? Teacher { get; set; }
+        public Teacher? Teacher { get; set; }
 
         public string? StudentId { get; set; }
 
-        public IStudent? Student { get; set; }
+        public Student? Student { get; set; }
 
         public string? PictureFilePath { get; set; }
 
         public string? NoteFilePath { get; set; }
 
-        public ICollection<IComment> Comments { get; set; }
+        public ICollection<Comment> Comments { get; set; }
 
-        public ICollection<ICommentLike> CommentLikes { get; set; }
+        public ICollection<CommentLike> CommentLikes { get; set; }
     }
 }

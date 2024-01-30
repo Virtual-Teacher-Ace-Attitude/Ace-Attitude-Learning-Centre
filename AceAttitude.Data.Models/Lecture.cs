@@ -20,7 +20,5 @@ namespace AceAttitude.Data.Models
         public string? VideoFilePath { get; set; }
 
         public string? TextFilePath { get; set; }
-
-
     }
 }

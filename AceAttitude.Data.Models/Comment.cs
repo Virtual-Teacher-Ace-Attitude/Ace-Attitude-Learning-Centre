@@ -5,7 +5,7 @@ using AceAttitude.Data.Models.Misc;
 
 namespace AceAttitude.Data.Models
 {
-    internal class Comment : IComment
+    public class Comment : IComment
     {
         public int Id { get; set; }
 
@@ -16,15 +16,15 @@ namespace AceAttitude.Data.Models
         [Required]
         public int? CourseId { get; set; }
 
-        public ICourse? Course { get; set; }
+        public Course? Course { get; set; }
 
         [Required]
         public string? UserId { get; set; }
 
-        public IApplicationUser? User { get; set; }
+        public ApplicationUser? User { get; set; }
 
         public int Likes { get; set; }
 
-        public ICollection<ICommentLike> CommentLikes { get; set; } = new List<ICommentLike>();
+        public ICollection<CommentLike> CommentLikes { get; set; } = new List<CommentLike>();
     }
 }

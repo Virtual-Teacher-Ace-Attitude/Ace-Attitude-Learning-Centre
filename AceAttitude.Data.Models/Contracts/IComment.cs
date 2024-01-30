@@ -8,14 +8,14 @@
 
         public int? CourseId { get; set; }
 
-        public ICourse? Course { get; set; }
+        public Course? Course { get; set; }
 
         public string? UserId { get; set; }
 
-        public IApplicationUser? User { get; set; }
+        public ApplicationUser? User { get; set; }
 
         public int Likes { get; set; }
 
-        public ICollection<ICommentLike> CommentLikes { get; set; }
+        public ICollection<CommentLike> CommentLikes { get; set; }
     }
 }

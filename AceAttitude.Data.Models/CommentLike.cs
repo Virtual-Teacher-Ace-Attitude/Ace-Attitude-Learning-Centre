@@ -1,14 +1,12 @@
-﻿using AceAttitude.Data.Models.Contracts;
-
-namespace AceAttitude.Data.Models
+﻿namespace AceAttitude.Data.Models
 {
     public class CommentLike
     {
-        public IComment Comment { get; set; } = null!;
+        public Comment Comment { get; set; } = null!;
 
         public int? CommentId { get; set; }
 
-        public IApplicationUser User { get; set; } = null!;
+        public ApplicationUser User { get; set; } = null!;
 
         public string? UserId { get; set; }
 
