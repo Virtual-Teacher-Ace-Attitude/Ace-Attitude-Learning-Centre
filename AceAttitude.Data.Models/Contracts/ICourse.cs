@@ -1,23 +1,30 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AceAttitude.Data.Models.Misc;
 
 namespace AceAttitude.Data.Models.Contracts
 {
     public interface ICourse
     {
-        string Title { get; set; }
+        public int Id { get; set; }
 
-        AgeGroup AgeGroup { get; set; }
+        public IApplicationUser? CreatedBy { get; set; }
 
-        Level Level { get; set; }
+        public string? Title { get; set; }
 
-        string Description { get; set; }
+        public AgeGroup AgeGroup { get; set; }
 
-        DateTime StartingDate { get; set; }
+        public Level Level { get; set; }
 
-        List<ILecture> Lectures { get; set; }
+        public string? Description { get; set; }
+
+        public DateTime StartingDate { get; set; }
+
+        public bool IsDraft { get; set; }
+
+        public ICollection<ILecture> Lectures { get; set; }
+
+        public ICollection<IComment> Comments { get; set; }
+        public ICollection<IApplicationUser> RatedByUsers { get; set; }
+
+        public ICollection<IRating> Ratings { get; set; }
     }
 }

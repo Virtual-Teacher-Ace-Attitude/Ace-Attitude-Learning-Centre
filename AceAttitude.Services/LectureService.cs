@@ -13,12 +13,12 @@ namespace AceAttitude.Services
         {
             this.lectureRepository = lectureRepository;
         }
-        public ILecture CreateLecture(ILecture lecture, IUser user)
+        public ILecture CreateLecture(ILecture lecture, IApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public ILecture DeleteLecture(int id, IUser user)
+        public ILecture DeleteLecture(int id, IApplicationUser user)
         {
             throw new NotImplementedException();
         }
@@ -28,7 +28,7 @@ namespace AceAttitude.Services
             throw new NotImplementedException();
         }
 
-        public ILecture UpdateLecture(int id, ILecture lecture, IUser user)
+        public ILecture UpdateLecture(int id, ILecture lecture, IApplicationUser user)
         {
             throw new NotImplementedException();
         }

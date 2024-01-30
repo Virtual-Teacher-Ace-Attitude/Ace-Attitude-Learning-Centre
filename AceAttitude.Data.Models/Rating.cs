@@ -1,25 +1,20 @@
-﻿using AceAttitude.Data.Models.Contracts;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
+
+using AceAttitude.Data.Models.Contracts;
 
 namespace AceAttitude.Data.Models
 {
-
     public class Rating
     {
+        [Required]
         public int Id { get; set; }
 
         public int CourseId { get; set; }
-        public ICourse Course { get; set; }
 
-        public int? UserId { get; set; }
-        public IUser User { get; set; }
+        public ICourse? Course { get; set; } = null!;
 
-        [Range(1, 5)]
-        public int Value { get; set; }
+        public IApplicationUser? Student { get; set; } = null!;
+
+        public string? StudentId { get; set; }
     }
 }

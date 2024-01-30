@@ -24,14 +24,14 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult CreateUser(IUser user)
+        public IActionResult CreateUser(IApplicationUser user)
         {
             var createdUser = userService.CreateUser(user);
             return StatusCode(StatusCodes.Status201Created, createdUser);
         }
 
         [HttpPut("{id}/edit")]
-        public IActionResult UpdateUser(int id, [FromBody] IUser user)
+        public IActionResult UpdateUser(int id, [FromBody] IApplicationUser user)
         {
             var updatedUser = userService.UpdateUser(id, user);
             return Ok(updatedUser);

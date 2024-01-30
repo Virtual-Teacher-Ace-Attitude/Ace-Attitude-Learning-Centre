@@ -14,12 +14,12 @@ namespace AceAttitude.Services
         {
             this.courseRepository = courseRepository;
         }   
-        public ICourse CreateCourse(ICourse course, IUser user)
+        public ICourse CreateCourse(ICourse course, IApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public ICourse DeleteCourse(int id, IUser user)
+        public ICourse DeleteCourse(int id, IApplicationUser user)
         {
             throw new NotImplementedException();
         }
@@ -29,7 +29,7 @@ namespace AceAttitude.Services
             throw new NotImplementedException();
         }
 
-        public ICourse UpdateCourse(int id, ICourse course, IUser user)
+        public ICourse UpdateCourse(int id, ICourse course, IApplicationUser user)
         {
             throw new NotImplementedException();
         }

@@ -6,22 +6,22 @@ namespace AceAttitude.Data.Repositories
 {
     public class UserRepository : IUserRepository
     {
-        public IUser CreateUser(IUser user)
+        public IApplicationUser CreateUser(IApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public IUser DeleteUser(int id)
+        public IApplicationUser DeleteUser(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IUser GetById(int id)
+        public IApplicationUser GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IUser UpdateUser(int id, IUser user)
+        public IApplicationUser UpdateUser(int id, IApplicationUser user)
         {
             throw new NotImplementedException();
         }

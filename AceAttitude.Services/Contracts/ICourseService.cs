@@ -6,10 +6,10 @@ namespace AceAttitude.Services.Contracts
     {
         ICourse GetById(int id);
 
-        ICourse CreateCourse(ICourse course, IUser user);
+        ICourse CreateCourse(ICourse course, IApplicationUser user);
 
-        ICourse DeleteCourse(int id, IUser user);
+        ICourse DeleteCourse(int id, IApplicationUser user);
 
-        ICourse UpdateCourse(int id, ICourse course, IUser user);
+        ICourse UpdateCourse(int id, ICourse course, IApplicationUser user);
     }
 }

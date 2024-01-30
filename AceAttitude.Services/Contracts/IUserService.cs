@@ -6,12 +6,12 @@ namespace AceAttitude.Services.Contracts
 {
     public interface IUserService
     {
-        IUser GetById(int id);
+        IApplicationUser GetById(int id);
 
-        IUser CreateUser (IUser user);
+        IApplicationUser CreateUser (IApplicationUser user);
 
-        IUser UpdateUser (int id, IUser user);
+        IApplicationUser UpdateUser (int id, IApplicationUser user);
 
-        IUser DeleteUser (int id);
+        IApplicationUser DeleteUser (int id);
     }
 }

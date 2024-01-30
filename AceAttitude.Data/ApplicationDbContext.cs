@@ -12,9 +12,18 @@ namespace AceAttitude.Data
         {
         }
 
-        public DbSet<User> Users { get; set; }
-        public DbSet<Course> Courses { get; set; }  
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
 
-        public DbSet<Lecture> Lectures { get; set; }
+            // Seed roles
+            modelBuilder.Entity<ApplicationRole>().HasData(
+                new ApplicationRole { Id = "1", Name = "Student", NormalizedName = "STUDENT" },
+                new ApplicationRole { Id = "2", Name = "Teacher", NormalizedName = "TEACHER" },
+                new ApplicationRole { Id = "3", Name = "Admin", NormalizedName = "ADMIN" }
+            );
+
+            
+        }
     }
 }
