@@ -4,6 +4,7 @@ using AceAttitude.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AceAttitude.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240131131053_Initial")]
+    partial class Initial
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -61,7 +63,7 @@ namespace AceAttitude.Data.Migrations
                         new
                         {
                             Id = "1",
-                            ConcurrencyStamp = "9598b3bd-c655-4ed5-91a2-892dacfb2b06",
+                            ConcurrencyStamp = "69078c83-f930-4c5e-945c-ac915d0f8566",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Student",
                             NormalizedName = "STUDENT"
@@ -69,7 +71,7 @@ namespace AceAttitude.Data.Migrations
                         new
                         {
                             Id = "2",
-                            ConcurrencyStamp = "cb744fcb-4aaf-43e4-a55d-73424c80b5f2",
+                            ConcurrencyStamp = "bcc83f11-0a94-444b-8155-fc93d0415e8b",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Teacher",
                             NormalizedName = "TEACHER"
@@ -77,7 +79,7 @@ namespace AceAttitude.Data.Migrations
                         new
                         {
                             Id = "3",
-                            ConcurrencyStamp = "437c4d3b-ddd9-465d-acc3-a7d586b60938",
+                            ConcurrencyStamp = "736ae17d-4631-490d-8a51-5098efe4ef0e",
                             CreatedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             Name = "Admin",
                             NormalizedName = "ADMIN"
@@ -352,33 +354,6 @@ namespace AceAttitude.Data.Migrations
                     b.ToTable("Students");
                 });
 
-            modelBuilder.Entity("AceAttitude.Data.Models.StudentCourses", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
-
-                    b.Property<int>("CourseId")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCompleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("StudentId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CourseId");
-
-                    b.HasIndex("StudentId");
-
-                    b.ToTable("StudentCourses");
-                });
-
             modelBuilder.Entity("AceAttitude.Data.Models.Teacher", b =>
                 {
                     b.Property<string>("Id")
@@ -604,25 +579,6 @@ namespace AceAttitude.Data.Migrations
                     b.Navigation("Student");
                 });
 
-            modelBuilder.Entity("AceAttitude.Data.Models.StudentCourses", b =>
-                {
-                    b.HasOne("AceAttitude.Data.Models.Course", "Course")
-                        .WithMany("StudentCourses")
-                        .HasForeignKey("CourseId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AceAttitude.Data.Models.Student", "Student")
-                        .WithMany("StudentCourses")
-                        .HasForeignKey("StudentId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Course");
-
-                    b.Navigation("Student");
-                });
-
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
                 {
                     b.HasOne("AceAttitude.Data.Models.ApplicationRole", null)
@@ -700,15 +656,11 @@ namespace AceAttitude.Data.Migrations
                     b.Navigation("Lectures");
 
                     b.Navigation("Ratings");
-
-                    b.Navigation("StudentCourses");
                 });
 
             modelBuilder.Entity("AceAttitude.Data.Models.Student", b =>
                 {
                     b.Navigation("Ratings");
-
-                    b.Navigation("StudentCourses");
 
                     b.Navigation("User")
                         .IsRequired();

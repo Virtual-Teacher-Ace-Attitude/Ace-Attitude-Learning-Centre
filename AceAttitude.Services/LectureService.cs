@@ -1,5 +1,6 @@
 ﻿
 
+using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Contracts;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
@@ -13,22 +14,22 @@ namespace AceAttitude.Services
         {
             this.lectureRepository = lectureRepository;
         }
-        public ILecture CreateLecture(ILecture lecture, IApplicationUser user)
+        public Lecture CreateLecture(Lecture lecture, ApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public ILecture DeleteLecture(int id, IApplicationUser user)
+        public Lecture DeleteLecture(int id, ApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public ILecture GetById(int id)
+        public Lecture GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public ILecture UpdateLecture(int id, ILecture lecture, IApplicationUser user)
+        public Lecture UpdateLecture(int id, Lecture lecture, ApplicationUser user)
         {
             throw new NotImplementedException();
         }

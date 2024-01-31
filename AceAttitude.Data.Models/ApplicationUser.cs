@@ -1,24 +1,23 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
-using System.ComponentModel.DataAnnotations;
-
+﻿using AceAttitude.Data.Models.Contracts.Role;
 using Microsoft.AspNetCore.Identity;
-
-using AceAttitude.Data.Models.Contracts.Role;
-using AceAttitude.Data.Models.Contracts;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AceAttitude.Data.Models
 {
-    public class ApplicationUser : IdentityUser, IApplicationUser, IsCreatable, IsModifiable, IsDeletable
+    public class ApplicationUser : IdentityUser, IsCreatable, IsModifiable, IsDeletable
     {
         public ApplicationUser()
         {
             this.Id = Guid.NewGuid().ToString();
         }
 
+        [ForeignKey("Teacher")]
         public string? TeacherId { get; set; }
 
         public Teacher? Teacher { get; set; }
 
+        [ForeignKey("Student")]
         public string? StudentId { get; set; }
 
         public Student? Student { get; set; }
@@ -44,7 +43,7 @@ namespace AceAttitude.Data.Models
 
         public ICollection<CommentLike> CommentLikes { get; set; } = new List<CommentLike>();
 
-        //public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserLogin<string>>();
+        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserRole<string>>();
 
         //public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; } = new HashSet<IdentityUserClaim<string>>();
 

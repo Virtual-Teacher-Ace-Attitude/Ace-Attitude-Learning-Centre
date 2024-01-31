@@ -1,15 +1,16 @@
-﻿using AceAttitude.Data.Models.Contracts;
+﻿using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Contracts;
 
 namespace AceAttitude.Services.Contracts
 {
     public interface ICourseService
     {
-        ICourse GetById(int id);
+        Course GetById(int id);
 
-        ICourse CreateCourse(ICourse course, IApplicationUser user);
+        Course CreateCourse(Course course, ApplicationUser user);
 
-        ICourse DeleteCourse(int id, IApplicationUser user);
+        Course DeleteCourse(int id, ApplicationUser user);
 
-        ICourse UpdateCourse(int id, ICourse course, IApplicationUser user);
+        Course UpdateCourse(int id, Course course, ApplicationUser user);
     }
 }

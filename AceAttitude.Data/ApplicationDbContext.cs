@@ -12,9 +12,28 @@ namespace AceAttitude.Data
         {
         }
 
+        public DbSet<Comment> Comments { get; set; }
+
+        public DbSet<CommentLike> CommentLikes { get; set; }
+
+        public DbSet<Course> Courses { get; set; }
+
+        public DbSet<Lecture> Lectures { get; set; }
+
+        public DbSet<Rating> Ratings { get; set; }
+
+        public DbSet<Student> Students { get; set; }
+
+        public DbSet<Teacher> Teachers { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+
+            foreach (var relationship in modelBuilder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
 
             // Seed roles
             modelBuilder.Entity<ApplicationRole>().HasData(
@@ -22,8 +41,6 @@ namespace AceAttitude.Data
                 new ApplicationRole { Id = "2", Name = "Teacher", NormalizedName = "TEACHER" },
                 new ApplicationRole { Id = "3", Name = "Admin", NormalizedName = "ADMIN" }
             );
-
-            
         }
     }
 }

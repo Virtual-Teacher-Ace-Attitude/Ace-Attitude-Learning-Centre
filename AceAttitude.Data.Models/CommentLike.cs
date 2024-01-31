@@ -1,14 +1,21 @@
-﻿namespace AceAttitude.Data.Models
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace AceAttitude.Data.Models
 {
     public class CommentLike
     {
+        [Required]
+        public int Id { get; set; }
+
         public Comment Comment { get; set; } = null!;
 
-        public int? CommentId { get; set; }
+        [Required]
+        public int CommentId { get; set; }
 
         public ApplicationUser User { get; set; } = null!;
 
-        public string? UserId { get; set; }
+        [Required]
+        public string ApplicationUserId { get; set; } = null!;
 
         public bool IsLiked { get; set; }
     }

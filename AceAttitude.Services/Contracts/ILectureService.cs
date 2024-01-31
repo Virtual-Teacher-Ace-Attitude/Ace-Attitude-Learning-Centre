@@ -1,17 +1,18 @@
 ﻿
 
+using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Contracts;
 
 namespace AceAttitude.Services.Contracts
 {
     public interface ILectureService
     {
-        ILecture GetById(int id);
+        Lecture GetById(int id);
 
-        ILecture CreateLecture(ILecture lecture, IApplicationUser user);
+        Lecture CreateLecture(Lecture lecture, ApplicationUser user);
 
-        ILecture UpdateLecture(int id, ILecture lecture, IApplicationUser user);
+        Lecture UpdateLecture(int id, Lecture lecture, ApplicationUser user);
 
-        ILecture DeleteLecture(int id, IApplicationUser user);
+        Lecture DeleteLecture(int id, ApplicationUser user);
     }
 }

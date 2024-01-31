@@ -1,5 +1,6 @@
 ﻿
 
+using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Contracts;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
@@ -13,22 +14,22 @@ namespace AceAttitude.Services
         {
             this.userRepository = userRepository;
         }
-        public IApplicationUser CreateUser(IApplicationUser user)
+        public ApplicationUser CreateUser(ApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public IApplicationUser DeleteUser(int id)
+        public ApplicationUser DeleteUser(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IApplicationUser GetById(int id)
+        public ApplicationUser GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public IApplicationUser UpdateUser(int id, IApplicationUser user)
+        public ApplicationUser UpdateUser(int id, ApplicationUser user)
         {
             throw new NotImplementedException();
         }

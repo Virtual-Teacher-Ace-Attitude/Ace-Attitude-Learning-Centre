@@ -1,4 +1,5 @@
-﻿using AceAttitude.Data.Models.Contracts;
+﻿using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Contracts;
 using AceAttitude.Data.Repositories.Contracts;
 using System;
 using System.Collections.Generic;
@@ -10,22 +11,22 @@ namespace AceAttitude.Data.Repositories
 {
     public class LectureRepository : ILectureRepository
     {
-        public ILecture CreateLecture(ILecture lecture)
+        public Lecture CreateLecture(Lecture lecture)
         {
             throw new NotImplementedException();
         }
 
-        public ILecture DeleteLecture(int id)
+        public Lecture DeleteLecture(int id)
         {
             throw new NotImplementedException();
         }
 
-        public ILecture GetById(int id)
+        public Lecture GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public ILecture UpdateLecture(ILecture lecture)
+        public Lecture UpdateLecture(Lecture lecture)
         {
             throw new NotImplementedException();
         }
