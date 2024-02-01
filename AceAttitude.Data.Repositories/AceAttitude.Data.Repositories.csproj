@@ -10,6 +10,7 @@
     <ProjectReference Include="..\AceAttitude.Common.Exceptions\AceAttitude.Common.Exceptions.csproj" />
     <ProjectReference Include="..\AceAttitude.Data.Models\AceAttitude.Data.Models.csproj" />
     <ProjectReference Include="..\AceAttitude.Data\AceAttitude.Data.csproj" />
+    <ProjectReference Include="..\Exceptions\AceAttitude.Data.Exceptions.csproj" />
   </ItemGroup>
 
 </Project>

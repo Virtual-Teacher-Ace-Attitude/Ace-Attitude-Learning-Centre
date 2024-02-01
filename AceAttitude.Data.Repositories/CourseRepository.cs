@@ -1,6 +1,6 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
-
+using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 
 namespace AceAttitude.Data.Repositories
@@ -21,6 +21,8 @@ namespace AceAttitude.Data.Repositories
             return course;
         }
 
+
+
         public Course DeleteCourse(int id)
         {
             Course courseToDelete = GetById(id);
@@ -31,7 +33,7 @@ namespace AceAttitude.Data.Repositories
 
         public Course GetById(int id)
         {
-            Course course = context.Courses.FirstOrDefault(c => c.Id == id) 
+            Course course = context.Courses.FirstOrDefault(c => c.Id == id && c.IsDeleted == false)
                 ?? throw new EntityNotFoundException($"Course with id: {id} does not exist!");
             return course;
         }
@@ -65,5 +67,99 @@ namespace AceAttitude.Data.Repositories
             context.SaveChanges();
             return courseToRate;
         }
+
+        public IQueryable<Course> GetAll()
+        {
+            IQueryable<Course> allCourses = context.Courses.Where(c => c.IsDeleted == false);
+            return allCourses;
+        }
+
+        public List<Course> GetFilteredCourses(string filterParam, string filterParamValue, string sortParam)
+        {
+            IQueryable<Course> filteredCourses = FilterCourses(filterParam, filterParamValue);
+            return SortCourses(sortParam, filteredCourses).ToList();
+        }
+
+        private IQueryable<Course> FilterCourses(string filterParam, string paramValue)
+        {
+
+            switch (filterParam)
+            {
+                case "name":
+                    return GetAll().Where(c => c.Title.Contains(paramValue));
+                case "level":
+                    Level level = ParseLevel(paramValue);
+                    return GetAll().Where(c => c.Level == level);
+                case "age":
+                    AgeGroup age = ParseAge(paramValue);
+                    return GetAll().Where(c => c.AgeGroup == age);
+                case "teacher":
+                    return GetAll().Where(c => c.Teacher.User.LastName == paramValue
+                                            || c.Teacher.User.FirstName == paramValue);
+                case "rating":
+                    decimal rating = ParseRating(paramValue);
+                    return GetAll().Where(c => c.Rating >= rating);
+                default:
+                    return GetAll();
+
+            }
+        }
+
+        //name and rating
+        private IQueryable<Course> SortCourses(string sortParam, IQueryable<Course> filteredCourses)
+        {
+            switch (sortParam)
+            {
+                case "name":
+                    return filteredCourses.OrderByDescending(c => c.Title);
+                case "rating":
+                    return filteredCourses.OrderByDescending(c => c.Rating);
+                case "name and rating":
+                    return filteredCourses.OrderByDescending(c => c.Rating)
+                        .ThenByDescending(c => c.Title);
+                default:
+                    return filteredCourses.OrderByDescending(c => c.StartingDate);
+            }
+        }
+
+        private AgeGroup ParseAge(string paramValue)
+        {
+            if (Enum.TryParse(paramValue, out AgeGroup age))
+            {
+                return age;
+            }
+            else
+            {
+                throw new ArgumentException($"{paramValue} is not a valid age group.");
+            }
+
+        }
+
+        private Level ParseLevel(string paramValue)
+        {
+            if (Enum.TryParse(paramValue, out Level level))
+            {
+                return level;
+            }
+            else
+            {
+                throw new ArgumentException($"{paramValue} is not a valid level.");
+            }
+
+        }
+
+        private decimal ParseRating(string paramValue)
+        {
+            if (decimal.TryParse(paramValue, out decimal rating))
+            {
+                return rating;
+            }
+            else
+            {
+                throw new ArgumentException("Rating must be a decimal number.");
+            }
+
+        }
+
     }
 }

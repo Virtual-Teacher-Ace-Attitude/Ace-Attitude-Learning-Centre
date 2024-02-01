@@ -18,6 +18,12 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
         //These are placeholder methods to be properly implemented with authentication, authorization and exception handling!
         //UserId should be replaced with proper credentials.
+        [HttpGet("")]
+        public IActionResult GetAll([FromBody] string filterParam, 
+            [FromBody] string filterParamValue, [FromBody] string sortParam) 
+        {
+            return Ok(courseService.GetAll(filterParam, filterParamValue, sortParam));
+        }
 
         [HttpGet("{id}")]
         public IActionResult GetCourseById(int id)
@@ -33,12 +39,21 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             return StatusCode(StatusCodes.Status201Created, createdCourse);
         }
 
-        [HttpPut("{id}/edit")]
+        [HttpPost("{id}")]
         public IActionResult UpdateCourse(int id, [FromBody] Course course, [FromHeader] int userId)
         {
             var user = userService.GetById(userId);
             var updatedCourse = courseService.UpdateCourse(id, course, user);
             return Ok(updatedCourse);
+
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult RateCourse(int id, [FromBody] Rating rating, [FromHeader] int userId) 
+        {
+            var user = userService.GetById(userId);
+            var ratedCourse = courseService.RateCourse(id, rating, user);
+            return Ok(ratedCourse);
 
         }
 
@@ -49,5 +64,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             var deletedCourse = courseService.DeleteCourse(id, user);
             return Ok(deletedCourse);
         }
+
+
     }
 }
