@@ -1,4 +1,4 @@
-﻿using AceAttitude.Data.Models.Contracts;
+﻿using AceAttitude.Data.Models;
 using AceAttitude.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,7 +26,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult CreateCourse(ILecture lecture, [FromHeader] int userId)
+        public IActionResult CreateCourse(Lecture lecture, [FromHeader] int userId)
         {
             var user = userService.GetById(userId);
             var createdLecture = lectureService.CreateLecture(lecture, user);
@@ -34,7 +34,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPut("{id}/edit")]
-        public IActionResult UpdateCourse(int id, [FromBody] ILecture lecture, [FromHeader] int userId)
+        public IActionResult UpdateCourse(int id, [FromBody] Lecture lecture, [FromHeader] int userId)
         {
             var user = userService.GetById(userId);
             var updatedLecture = lectureService.UpdateLecture(id, lecture, user);

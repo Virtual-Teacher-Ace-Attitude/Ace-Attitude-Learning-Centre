@@ -1,23 +1,22 @@
-﻿
-
-using AceAttitude.Data.Models.Contracts;
+﻿using AceAttitude.Data.Models.Misc;
 using System.ComponentModel.DataAnnotations;
 
 namespace AceAttitude.Data.Models
 {
-
-    public class Lecture : ILecture
+    public class Lecture
     {
+        [Required]
+        public int Id { get; set; }
 
         [Required, MinLength(5, ErrorMessage = ModelErrorMessages.TitleMinLengthErrorMessage),
             MaxLength(50, ErrorMessage = ModelErrorMessages.TitleMaxLengthErrorMessage)]
-        public string Title { get; set; }
+        public string Title { get; set; } = null!;
 
-       [MaxLength(1000, ErrorMessage = ModelErrorMessages.DescriptionMaxLengthErrorMessage)]
-        public string Description { get; set; }
+        [MaxLength(1000, ErrorMessage = ModelErrorMessages.DescriptionMaxLengthErrorMessage)]
+        public string? Description { get; set; }
 
-        //Lectures must have a video. Video from front end?
+        public string? VideoFilePath { get; set; }
 
-        //Lectures must have a text document assignment. Assignment from front end?
+        public string? TextFilePath { get; set; }
     }
 }

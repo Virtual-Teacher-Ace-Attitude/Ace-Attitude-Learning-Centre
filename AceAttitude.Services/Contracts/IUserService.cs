@@ -1,17 +1,17 @@
 ﻿
 
-using AceAttitude.Data.Models.Contracts;
+using AceAttitude.Data.Models;
 
 namespace AceAttitude.Services.Contracts
 {
     public interface IUserService
     {
-        IUser GetById(int id);
+        ApplicationUser GetById(int id);
 
-        IUser CreateUser (IUser user);
+        ApplicationUser CreateUser(ApplicationUser user);
 
-        IUser UpdateUser (int id, IUser user);
+        ApplicationUser UpdateUser(int id, ApplicationUser user);
 
-        IUser DeleteUser (int id);
+        ApplicationUser DeleteUser(int id);
     }
 }

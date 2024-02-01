@@ -1,17 +1,18 @@
 ﻿
 
+using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Contracts;
 
 namespace AceAttitude.Data.Repositories.Contracts
 {
     public interface ICourseRepository
     {
-        ICourse GetById(int id);
+        Course GetById(int id);
 
-        ICourse CreateCourse (ICourse course);
+        Course CreateCourse (Course course);
 
-        ICourse UpdateCourse (ICourse course);
+        Course UpdateCourse (Course course);
 
-        ICourse DeleteCourse (int id);
+        Course DeleteCourse (int id);
     }
 }

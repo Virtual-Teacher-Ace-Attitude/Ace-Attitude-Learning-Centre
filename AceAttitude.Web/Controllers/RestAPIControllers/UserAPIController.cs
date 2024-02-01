@@ -1,4 +1,4 @@
-﻿using AceAttitude.Data.Models.Contracts;
+﻿using AceAttitude.Data.Models;
 using AceAttitude.Services.Contracts;
 using Microsoft.AspNetCore.Mvc;
 
@@ -24,14 +24,14 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult CreateUser(IUser user)
+        public IActionResult CreateUser(ApplicationUser user)
         {
             var createdUser = userService.CreateUser(user);
             return StatusCode(StatusCodes.Status201Created, createdUser);
         }
 
         [HttpPut("{id}/edit")]
-        public IActionResult UpdateUser(int id, [FromBody] IUser user)
+        public IActionResult UpdateUser(int id, [FromBody] ApplicationUser user)
         {
             var updatedUser = userService.UpdateUser(id, user);
             return Ok(updatedUser);

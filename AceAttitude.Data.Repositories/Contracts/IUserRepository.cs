@@ -1,20 +1,15 @@
-﻿using AceAttitude.Data.Models.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AceAttitude.Data.Models;
 
 namespace AceAttitude.Data.Repositories.Contracts
 {
     public interface IUserRepository
     {
-        IUser GetById(int id);
+        ApplicationUser GetById(int id);
 
-        IUser CreateUser(IUser user);
+        ApplicationUser CreateUser(ApplicationUser user);
 
-        IUser UpdateUser(int id, IUser user);
+        ApplicationUser UpdateUser(int id, ApplicationUser user);
 
-        IUser DeleteUser(int id);
+        ApplicationUser DeleteUser(int id);
     }
 }

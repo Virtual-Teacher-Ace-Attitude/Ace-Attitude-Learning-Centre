@@ -1,6 +1,6 @@
 ﻿
 
-using AceAttitude.Data.Models.Contracts;
+using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
 
@@ -10,26 +10,26 @@ namespace AceAttitude.Services
     {
         private readonly ICourseRepository courseRepository;
 
-        public CourseService (ICourseRepository courseRepository)
+        public CourseService(ICourseRepository courseRepository)
         {
             this.courseRepository = courseRepository;
-        }   
-        public ICourse CreateCourse(ICourse course, IUser user)
+        }
+        public Course CreateCourse(Course course, ApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public ICourse DeleteCourse(int id, IUser user)
+        public Course DeleteCourse(int id, ApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
-        public ICourse GetById(int id)
+        public Course GetById(int id)
         {
             throw new NotImplementedException();
         }
 
-        public ICourse UpdateCourse(int id, ICourse course, IUser user)
+        public Course UpdateCourse(int id, Course course, ApplicationUser user)
         {
             throw new NotImplementedException();
         }
