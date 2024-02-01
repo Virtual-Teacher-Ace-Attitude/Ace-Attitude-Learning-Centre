@@ -18,5 +18,8 @@ namespace AceAttitude.Data.Repositories.Contracts
         Course RateCourse(int id, Rating rating);
 
         decimal GetRating(int Id);
+
+        List<Course> GetFilteredCourses(string filterParam, string filterParamValue, string sortParam);
+
     }
 }

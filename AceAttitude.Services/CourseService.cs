@@ -16,22 +16,36 @@ namespace AceAttitude.Services
         }
         public Course CreateCourse(Course course, ApplicationUser user)
         {
-            throw new NotImplementedException();
+            //Must be a teacher or admin
+            return courseRepository.CreateCourse(course);
         }
 
         public Course DeleteCourse(int id, ApplicationUser user)
         {
-            throw new NotImplementedException();
+            //Must be a teacher or admin
+            return courseRepository.DeleteCourse(id);
         }
 
         public Course GetById(int id)
         {
-            throw new NotImplementedException();
+            return courseRepository.GetById(id);
         }
 
         public Course UpdateCourse(int id, Course course, ApplicationUser user)
         {
-            throw new NotImplementedException();
+            //must be a teacher or admin
+            return courseRepository.UpdateCourse(id, course);
+        }
+
+        public List<Course> GetAll(string filterParam, string filterParamValue, string sortParam) 
+        {
+            return courseRepository.GetFilteredCourses(filterParam, filterParamValue, sortParam);
+        }
+
+        public Course RateCourse(int id, Rating rating, ApplicationUser user)
+        {
+            //must be a student
+            return courseRepository.RateCourse(id, rating);
         }
     }
 }
