@@ -11,8 +11,12 @@ namespace AceAttitude.Data.Repositories.Contracts
 
         Course CreateCourse (Course course);
 
-        Course UpdateCourse (Course course);
+        Course UpdateCourse (int id, Course course);
 
         Course DeleteCourse (int id);
+
+        Course RateCourse(int id, Rating rating);
+
+        decimal GetRating(int Id);
     }
 }

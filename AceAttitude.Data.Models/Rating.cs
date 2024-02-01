@@ -7,6 +7,10 @@ namespace AceAttitude.Data.Models
         [Required]
         public int Id { get; set; }
 
+        [Required]
+        public decimal Value { get; set; }
+
+        public bool IsRated { get; set; }
         public Course Course { get; set; } = null!;
 
         [Required]
