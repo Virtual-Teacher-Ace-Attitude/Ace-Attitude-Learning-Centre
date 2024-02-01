@@ -16,13 +16,13 @@ namespace AceAttitude.Services
         }
         public Course CreateCourse(Course course, ApplicationUser user)
         {
-            //Must be a teacher.
+            //Must be a teacher or admin
             return courseRepository.CreateCourse(course);
         }
 
         public Course DeleteCourse(int id, ApplicationUser user)
         {
-            //Must be a teacher/admin.
+            //Must be a teacher or admin
             return courseRepository.DeleteCourse(id);
         }
 
@@ -33,7 +33,19 @@ namespace AceAttitude.Services
 
         public Course UpdateCourse(int id, Course course, ApplicationUser user)
         {
-            throw new NotImplementedException();
+            //must be a teacher or admin
+            return courseRepository.UpdateCourse(id, course);
+        }
+
+        public List<Course> GetAll(string filterParam, string filterParamValue, string sortParam) 
+        {
+            return courseRepository.GetFilteredCourses(filterParam, filterParamValue, sortParam);
+        }
+
+        public Course RateCourse(int id, Rating rating, ApplicationUser user)
+        {
+            //must be a student
+            return courseRepository.RateCourse(id, rating);
         }
     }
 }
