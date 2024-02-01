@@ -1,5 +1,5 @@
 ﻿using AceAttitude.Data.Models.Contracts.Role;
-using Microsoft.AspNetCore.Identity;
+
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -43,13 +43,7 @@ namespace AceAttitude.Data.Models
 
         public DateTime? ModifiedOn { get; set; }
 
-        [NotMapped]
-        public bool IsModified => ModifiedOn.HasValue;
-
         public DateTime? DeletedOn { get; set; }
-
-        [NotMapped]
-        public bool IsDeleted => DeletedOn.HasValue;
 
         public string? PictureFilePath { get; set; }
 

@@ -2,7 +2,6 @@
 {
     public interface IsModifiable
     {
-        public bool IsModified { get; }
         public DateTime? ModifiedOn { get; set; }
     }
 }
