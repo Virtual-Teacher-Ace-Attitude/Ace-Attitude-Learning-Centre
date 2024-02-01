@@ -12,5 +12,9 @@ namespace AceAttitude.Services.Contracts
         Course DeleteCourse(int id, ApplicationUser user);
 
         Course UpdateCourse(int id, Course course, ApplicationUser user);
+
+        List<Course> GetAll(string filterParam, string filterParamValue, string sortParam);
+
+        Course RateCourse(int id, Rating rating, ApplicationUser user);
     }
 }
