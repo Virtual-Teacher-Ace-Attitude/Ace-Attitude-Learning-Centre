@@ -16,17 +16,19 @@ namespace AceAttitude.Services
         }
         public Course CreateCourse(Course course, ApplicationUser user)
         {
-            throw new NotImplementedException();
+            //Must be a teacher.
+            return courseRepository.CreateCourse(course);
         }
 
         public Course DeleteCourse(int id, ApplicationUser user)
         {
-            throw new NotImplementedException();
+            //Must be a teacher/admin.
+            return courseRepository.DeleteCourse(id);
         }
 
         public Course GetById(int id)
         {
-            throw new NotImplementedException();
+            return courseRepository.GetById(id);
         }
 
         public Course UpdateCourse(int id, Course course, ApplicationUser user)
