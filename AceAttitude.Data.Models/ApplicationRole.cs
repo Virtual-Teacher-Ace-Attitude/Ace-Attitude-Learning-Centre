@@ -1,25 +1,14 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-using Microsoft.AspNetCore.Identity;
-
-using AceAttitude.Data.Models.Contracts.Role;
+﻿using Microsoft.AspNetCore.Identity;
 
 namespace AceAttitude.Data.Models
 {
-    public class ApplicationRole : IdentityRole, IsCreatable, IsModifiable, IsDeletable
+    public class ApplicationRole : IdentityRole
     {
-        public DateTime? DeletedOn { get; set; }
+        public ApplicationRole(string name)
+            : base(name)
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
 
-        [NotMapped]
-        public bool IsDeleted => DeletedOn.HasValue;
-
-        [Required]
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime? ModifiedOn { get; set; }
-
-        [NotMapped]
-        public bool IsModified => ModifiedOn.HasValue;
     }
 }

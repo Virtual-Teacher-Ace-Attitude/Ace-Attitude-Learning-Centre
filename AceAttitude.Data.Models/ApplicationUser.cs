@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AceAttitude.Data.Models
 {
-    public class ApplicationUser : IdentityUser, IsCreatable, IsModifiable, IsDeletable
+    public class ApplicationUser : IdentityUser<string>, IsCreatable, IsModifiable, IsDeletable
     {
         public ApplicationUser()
         {

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using AceAttitude.Data.Models;
+using Microsoft.AspNetCore.Identity;
 
 namespace AceAttitude.Data
 {
@@ -35,12 +36,12 @@ namespace AceAttitude.Data
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
 
-            // Seed roles
-            modelBuilder.Entity<ApplicationRole>().HasData(
-                new ApplicationRole { Id = "1", Name = "Student", NormalizedName = "STUDENT" },
-                new ApplicationRole { Id = "2", Name = "Teacher", NormalizedName = "TEACHER" },
-                new ApplicationRole { Id = "3", Name = "Admin", NormalizedName = "ADMIN" }
-            );
+            //// Seed roles
+            //modelBuilder.Entity<IdentityRole>().HasData(
+            //    new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Student", NormalizedName = "STUDENT" },
+            //    new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Teacher", NormalizedName = "TEACHER" },
+            //    new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" }
+            //);
         }
     }
 }
