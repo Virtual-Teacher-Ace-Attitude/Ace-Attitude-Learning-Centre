@@ -8,11 +8,11 @@ namespace AceAttitude.Services.Contracts
     {
         ApplicationUser GetById(int id);
 
-        ApplicationUser CreateUser(ApplicationUser user);
+        ApplicationUser Create(ApplicationUser user);
 
-        ApplicationUser UpdateUser(int id, ApplicationUser user);
+        ApplicationUser Update(int id, ApplicationUser user);
 
-        ApplicationUser DeleteUser(int id);
+        ApplicationUser Delete(int id);
 
         public void CheckEmailExists(string email);
 

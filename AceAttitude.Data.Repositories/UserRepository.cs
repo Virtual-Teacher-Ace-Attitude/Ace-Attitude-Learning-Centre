@@ -17,12 +17,16 @@ namespace AceAttitude.Data.Repositories
             this.context = context;
         }
 
-        public ApplicationUser CreateUser(ApplicationUser user)
+        public ApplicationUser Create(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            context.Users.Add(user);
+
+            context.SaveChanges();
+
+            return user;
         }
 
-        public ApplicationUser DeleteUser(int id)
+        public ApplicationUser Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -34,20 +38,20 @@ namespace AceAttitude.Data.Repositories
 
         public ApplicationUser GetByEmail(string email)
         {
-            var user = context.Users.FirstOrDefault(user => user.Email == email && user.IsDeleted == false)
+            var user = context.Users.FirstOrDefault(user => user.Email == email && user.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException(string.Format(UserNotFoundErrorMessage, "email:", email));
 
             return user;
         }
 
-        public ApplicationUser UpdateUser(int id, ApplicationUser user)
+        public ApplicationUser Update(int id, ApplicationUser user)
         {
             throw new NotImplementedException();
         }
 
         public bool CheckEmailExists(string email)
         {
-            return context.Users.Any(u => u.Email == email && u.IsDeleted == false);
+            return context.Users.Any(u => u.Email == email && u.DeletedOn.HasValue == false);
         }
     }
 }

@@ -17,12 +17,14 @@ namespace AceAttitude.Services
         {
             this.userRepository = userRepository;
         }
-        public ApplicationUser CreateUser(ApplicationUser user)
+        public ApplicationUser Create(ApplicationUser user)
         {
-            throw new NotImplementedException();
+            this.userRepository.Create(user);
+
+            return user;
         }
 
-        public ApplicationUser DeleteUser(int id)
+        public ApplicationUser Delete(int id)
         {
             throw new NotImplementedException();
         }
@@ -32,7 +34,7 @@ namespace AceAttitude.Services
             throw new NotImplementedException();
         }
 
-        public ApplicationUser UpdateUser(int id, ApplicationUser user)
+        public ApplicationUser Update(int id, ApplicationUser user)
         {
             throw new NotImplementedException();
         }

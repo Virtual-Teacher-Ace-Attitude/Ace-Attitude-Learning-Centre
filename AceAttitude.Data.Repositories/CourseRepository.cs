@@ -33,7 +33,7 @@ namespace AceAttitude.Data.Repositories
 
         public Course GetById(int id)
         {
-            Course course = context.Courses.FirstOrDefault(c => c.Id == id && c.IsDeleted == false)
+            Course course = context.Courses.FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException($"Course with id: {id} does not exist!");
             return course;
         }
@@ -70,7 +70,7 @@ namespace AceAttitude.Data.Repositories
 
         public IQueryable<Course> GetAll()
         {
-            IQueryable<Course> allCourses = context.Courses.Where(c => c.IsDeleted == false);
+            IQueryable<Course> allCourses = context.Courses.Where(c => c.DeletedOn.HasValue == false);
             return allCourses;
         }
 

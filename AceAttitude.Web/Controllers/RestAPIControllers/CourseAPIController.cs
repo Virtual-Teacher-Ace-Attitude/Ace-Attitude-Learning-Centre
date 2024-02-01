@@ -19,8 +19,8 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         //These are placeholder methods to be properly implemented with authentication, authorization and exception handling!
         //UserId should be replaced with proper credentials.
         [HttpGet("")]
-        public IActionResult GetAll([FromBody] string filterParam, 
-            [FromBody] string filterParamValue, [FromBody] string sortParam) 
+        public IActionResult GetAll([FromQuery] string filterParam, 
+            [FromQuery] string filterParamValue, [FromQuery] string sortParam) 
         {
             return Ok(courseService.GetAll(filterParam, filterParamValue, sortParam));
         }

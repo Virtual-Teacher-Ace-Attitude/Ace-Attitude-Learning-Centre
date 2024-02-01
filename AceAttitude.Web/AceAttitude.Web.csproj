@@ -8,13 +8,15 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.15" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.26" />
+    <PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.15">
+      <TreatAsUsed>true</TreatAsUsed>
+    </PackageReference>
     <PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.15" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.26" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.26">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <TreatAsUsed>true</TreatAsUsed>
     </PackageReference>
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
   </ItemGroup>
@@ -23,6 +25,7 @@
     <ProjectReference Include="..\AceAttitude.Data\AceAttitude.Data.csproj" />
     <ProjectReference Include="..\AceAttitude.Services.Mapping\AceAttitude.Services.Mapping.csproj" />
     <ProjectReference Include="..\AceAttitude.Services\AceAttitude.Services.csproj" />
+    <ProjectReference Include="..\AceAttitude.Web.DTO\AceAttitude.Web.DTO.csproj" />
   </ItemGroup>
 
 </Project>
