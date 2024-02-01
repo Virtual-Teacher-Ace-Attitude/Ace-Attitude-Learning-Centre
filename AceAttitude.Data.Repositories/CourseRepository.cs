@@ -1,5 +1,6 @@
-﻿using AceAttitude.Data.Models;
-using AceAttitude.Data.Repositories.Exceptions;
+﻿using AceAttitude.Common.Exceptions;
+using AceAttitude.Data.Models;
+
 using AceAttitude.Data.Repositories.Contracts;
 
 namespace AceAttitude.Data.Repositories

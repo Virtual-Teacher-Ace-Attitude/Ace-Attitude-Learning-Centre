@@ -13,5 +13,9 @@ namespace AceAttitude.Services.Contracts
         ApplicationUser UpdateUser(int id, ApplicationUser user);
 
         ApplicationUser DeleteUser(int id);
+
+        public void CheckEmailExists(string email);
+
+        public ApplicationUser GetByEmail(string email);
     }
 }

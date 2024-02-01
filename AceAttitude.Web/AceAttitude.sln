@@ -21,7 +21,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceAttitude.Data.Models", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceAttitude.Data.Repositories", "..\AceAttitude.Data.Repositories\AceAttitude.Data.Repositories.csproj", "{A2CA2543-26C7-40B4-8369-756B1F8F1D61}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AceAttitude.Services", "..\AceAttitude.Services\AceAttitude.Services.csproj", "{B5048105-096D-486B-A995-B94465E79600}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceAttitude.Services", "..\AceAttitude.Services\AceAttitude.Services.csproj", "{B5048105-096D-486B-A995-B94465E79600}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Common", "Common", "{C5E55370-AFC2-4527-A18A-BBB69AD6E797}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AceAttitude.Common.Exceptions", "..\AceAttitude.Common.Exceptions\AceAttitude.Common.Exceptions.csproj", "{1093F942-66BE-43D1-89E5-377B9C528C42}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AceAttitude.Web.DTO", "..\AceAttitude.Web.DTO\AceAttitude.Web.DTO.csproj", "{E96FABDB-90C8-488A-A69B-F049D55CE00D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AceAttitude.Common.Constants", "..\AceAttitude.Common.Constants\AceAttitude.Common.Constants.csproj", "{2C4815C0-2841-42AA-9711-83A39AD9D659}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AceAttitude.Services.Mapping", "..\AceAttitude.Services.Mapping\AceAttitude.Services.Mapping.csproj", "{2CC12A69-C127-4704-8089-F25AEA470872}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -53,6 +63,22 @@ Global
 		{B5048105-096D-486B-A995-B94465E79600}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B5048105-096D-486B-A995-B94465E79600}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B5048105-096D-486B-A995-B94465E79600}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1093F942-66BE-43D1-89E5-377B9C528C42}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1093F942-66BE-43D1-89E5-377B9C528C42}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1093F942-66BE-43D1-89E5-377B9C528C42}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1093F942-66BE-43D1-89E5-377B9C528C42}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E96FABDB-90C8-488A-A69B-F049D55CE00D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E96FABDB-90C8-488A-A69B-F049D55CE00D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E96FABDB-90C8-488A-A69B-F049D55CE00D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E96FABDB-90C8-488A-A69B-F049D55CE00D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2C4815C0-2841-42AA-9711-83A39AD9D659}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2C4815C0-2841-42AA-9711-83A39AD9D659}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2C4815C0-2841-42AA-9711-83A39AD9D659}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2C4815C0-2841-42AA-9711-83A39AD9D659}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2CC12A69-C127-4704-8089-F25AEA470872}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2CC12A69-C127-4704-8089-F25AEA470872}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2CC12A69-C127-4704-8089-F25AEA470872}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2CC12A69-C127-4704-8089-F25AEA470872}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -64,6 +90,10 @@ Global
 		{440E01E7-DF46-43D7-863B-32647B6E3C61} = {D7047DF0-57BD-4AD2-8EA1-A0C6D6D9B95E}
 		{A2CA2543-26C7-40B4-8369-756B1F8F1D61} = {D7047DF0-57BD-4AD2-8EA1-A0C6D6D9B95E}
 		{B5048105-096D-486B-A995-B94465E79600} = {7975A806-851E-4658-9AF4-8CCCF3BABC1F}
+		{1093F942-66BE-43D1-89E5-377B9C528C42} = {C5E55370-AFC2-4527-A18A-BBB69AD6E797}
+		{E96FABDB-90C8-488A-A69B-F049D55CE00D} = {EE876553-C769-4098-B00C-DE82CEEE7E93}
+		{2C4815C0-2841-42AA-9711-83A39AD9D659} = {C5E55370-AFC2-4527-A18A-BBB69AD6E797}
+		{2CC12A69-C127-4704-8089-F25AEA470872} = {7975A806-851E-4658-9AF4-8CCCF3BABC1F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {32B7897B-3D46-4791-948F-7731723B273D}

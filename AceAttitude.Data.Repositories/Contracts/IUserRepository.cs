@@ -6,10 +6,14 @@ namespace AceAttitude.Data.Repositories.Contracts
     {
         ApplicationUser GetById(int id);
 
+        ApplicationUser GetByEmail(string email);
+
         ApplicationUser CreateUser(ApplicationUser user);
 
         ApplicationUser UpdateUser(int id, ApplicationUser user);
 
         ApplicationUser DeleteUser(int id);
+
+        public bool CheckEmailExists(string email);
     }
 }

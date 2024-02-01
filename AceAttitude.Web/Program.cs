@@ -1,5 +1,10 @@
 using AceAttitude.Data;
-
+using AceAttitude.Data.Repositories;
+using AceAttitude.Data.Repositories.Contracts;
+using AceAttitude.Services;
+using AceAttitude.Services.Contracts;
+using AceAttitude.Services.Mapping;
+using AceAttitude.Services.Mapping.Contracts;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 
@@ -20,10 +25,10 @@ namespace AceAttitude.Web
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
             {
                 //Alexander's connection string:
-                //string connectionString = @"Server=DESKTOP-RBKNIJ9\SQLEXPRESS;Database=AceAttitude;Trusted_Connection=True;";
+                string connectionString = @"Server=DESKTOP-RBKNIJ9\SQLEXPRESS;Database=AceAttitude;Trusted_Connection=True;";
 
                 //Alexei's connection string:
-                string connectionString = @"Server=DESKTOP-C2DTSUG\SQLEXPRESS;Database=AceAttitude;Trusted_Connection=True;";
+                //string connectionString = @"Server=DESKTOP-C2DTSUG\SQLEXPRESS;Database=AceAttitude;Trusted_Connection=True;";
 
                 options.UseSqlServer(connectionString);
                 options.EnableSensitiveDataLogging();
@@ -48,6 +53,16 @@ namespace AceAttitude.Web
             });
 
             builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddScoped<IModelMapper, ModelMapper>();
+
+            builder.Services.AddScoped<IAuthService, AuthService>();
+
+            builder.Services.AddScoped<IUserRepository, UserRepository>();
+            builder.Services.AddScoped<IUserService, UserService>();
+
+            builder.Services.AddScoped<ICourseRepository, CourseRepository>();
+            builder.Services.AddScoped<ICourseService, CourseService>();
 
             var app = builder.Build();
 

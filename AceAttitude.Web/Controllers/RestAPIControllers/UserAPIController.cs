@@ -18,7 +18,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         //UserId should be replaced with proper credentials.
 
         [HttpGet("{id}")]
-        public IActionResult GetLectureById(int id)
+        public IActionResult GetUserById(int id)
         {
             return Ok(userService.GetById(id));
         }
