@@ -1,12 +1,18 @@
 ﻿using AceAttitude.Data.Models;
-using AceAttitude.Data.Models.Contracts;
+
 using AceAttitude.Data.Repositories.Contracts;
 
 namespace AceAttitude.Data.Repositories
 {
     public class CourseRepository : ICourseRepository
     {
-        public CourseRepository() { }
+        private readonly ApplicationDbContext context;
+
+        public CourseRepository(ApplicationDbContext context)
+        {
+            this.context = context;
+        }
+
         public Course CreateCourse(Course course)
         {
             throw new NotImplementedException();

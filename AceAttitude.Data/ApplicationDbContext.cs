@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Identity;
 
 namespace AceAttitude.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, string>
+    public class ApplicationDbContext : DbContext
     {
         public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options)
             : base(options)
         {
         }
+
+        public DbSet<ApplicationUser> Users { get; set; }
 
         public DbSet<Comment> Comments { get; set; }
 
@@ -35,13 +37,6 @@ namespace AceAttitude.Data
             {
                 relationship.DeleteBehavior = DeleteBehavior.Restrict;
             }
-
-            //// Seed roles
-            //modelBuilder.Entity<IdentityRole>().HasData(
-            //    new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Student", NormalizedName = "STUDENT" },
-            //    new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Teacher", NormalizedName = "TEACHER" },
-            //    new IdentityRole { Id = Guid.NewGuid().ToString(), Name = "Admin", NormalizedName = "ADMIN" }
-            //);
         }
     }
 }
