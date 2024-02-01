@@ -5,12 +5,28 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AceAttitude.Data.Models
 {
-    public class ApplicationUser : IdentityUser<string>, IsCreatable, IsModifiable, IsDeletable
+    public class ApplicationUser : IsCreatable, IsModifiable, IsDeletable
     {
         public ApplicationUser()
         {
             this.Id = Guid.NewGuid().ToString();
         }
+
+        [Key]
+        [Required]
+        public string Id { get; set; }
+
+        [Required]
+        public string FirstName { get; set; } = null!;
+
+        [Required]
+        public string LastName { get; set; } = null!;
+
+        [Required]
+        public string Email { get; set; } = null!;
+
+        [Required]
+        public string PasswordHash { get; set; } = null!;
 
         [ForeignKey("Teacher")]
         public string? TeacherId { get; set; }
@@ -42,11 +58,5 @@ namespace AceAttitude.Data.Models
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public ICollection<CommentLike> CommentLikes { get; set; } = new List<CommentLike>();
-
-        public virtual ICollection<IdentityUserRole<string>> Roles { get; set; } = new HashSet<IdentityUserRole<string>>();
-
-        //public virtual ICollection<IdentityUserClaim<string>> Claims { get; set; } = new HashSet<IdentityUserClaim<string>>();
-
-        //public virtual ICollection<IdentityUserLogin<string>> Logins { get; set; } = new HashSet<IdentityUserLogin<string>>();
     }
 }

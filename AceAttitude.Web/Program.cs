@@ -1,7 +1,7 @@
 using AceAttitude.Data;
-using AceAttitude.Data.Models;
-using Microsoft.AspNetCore.Identity;
+
 using Microsoft.EntityFrameworkCore;
+using Newtonsoft.Json;
 
 namespace AceAttitude.Web
 {
@@ -11,45 +11,69 @@ namespace AceAttitude.Web
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            builder.Services.AddControllersWithViews()
+                .AddNewtonsoftJson(options =>
+                {
+                    options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+                });
+
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                options.UseSqlServer(connectionString));
-            builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+            {
+                //Alexander's connection string:
+                string connectionString = @"Server=DESKTOP-RBKNIJ9\SQLEXPRESS;Database=AfterPartyDB;Trusted_Connection=True;";
 
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = true)
-                .AddRoles<ApplicationRole>()
-                .AddSignInManager<SignInManager<ApplicationUser>>()
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                //Alexei's connection string:
+                //string connectionString = @"Server=DESKTOP-C2DTSUG\SQLEXPRESS;Database=AfterPartyDB;Trusted_Connection=True;";
 
-            builder.Services.AddControllersWithViews();
+                options.UseSqlServer(connectionString);
+                options.EnableSensitiveDataLogging();
+            });
+
+            // Add services to the container.
+
+            builder.Services.AddControllers();
+            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+            builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddSwaggerGen();
+
+            // Http Session
+            builder.Services.AddSession(options =>
+            {
+                // With IdleTimeout you can change the number of seconds after which the session expires.
+                // The seconds reset every time you access the session.
+                // This only applies to the session, not the cookie.
+                options.IdleTimeout = TimeSpan.FromSeconds(600);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
+
+            builder.Services.AddHttpContextAccessor();
 
             var app = builder.Build();
 
-            // Configure the HTTP request pipeline.
-            if (app.Environment.IsDevelopment())
+            app.UseDeveloperExceptionPage();
+            app.UseRouting();
+            app.UseSession();
+            app.UseSwagger();
+            app.UseSwaggerUI(options =>
             {
-                app.UseMigrationsEndPoint();
-            }
-            else
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
+                options.SwaggerEndpoint("/swagger/v1/swagger.json", "AceAttitude API V1");
+                options.RoutePrefix = "api/swagger";
+            });
 
             app.UseHttpsRedirection();
-            app.UseStaticFiles();
 
-            app.UseRouting();
-
-            app.UseAuthentication();
             app.UseAuthorization();
 
-            app.MapControllerRoute(
-                name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}");
-            app.MapRazorPages();
+            // Enables the views to use resources from wwwroot
+            app.UseStaticFiles();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapDefaultControllerRoute();
+            });
+
+            app.MapControllers();
 
             app.Run();
         }

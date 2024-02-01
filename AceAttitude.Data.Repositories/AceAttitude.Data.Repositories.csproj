@@ -8,6 +8,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AceAttitude.Data.Models\AceAttitude.Data.Models.csproj" />
+    <ProjectReference Include="..\AceAttitude.Data\AceAttitude.Data.csproj" />
   </ItemGroup>
 
 </Project>
