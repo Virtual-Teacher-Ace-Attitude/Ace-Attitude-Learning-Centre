@@ -53,8 +53,11 @@ namespace AceAttitude.Data.Repositories
         {
             Comment commentToLike = GetById(id);
             commentToLike.Likes++;
-            commentContext.CommentLikes.Add(new CommentLike() { ApplicationUserId = user.Id, User = user });
+            commentContext.CommentLikes.Add(new CommentLike()
+            { ApplicationUserId = user.Id, User = user, IsLiked = true }); 
+
             commentContext.SaveChanges();
+
             return commentToLike;
         }
     }
