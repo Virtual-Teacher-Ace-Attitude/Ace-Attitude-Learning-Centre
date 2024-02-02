@@ -25,6 +25,11 @@ namespace AceAttitude.Services
             return commentRepository.DeleteComment(id);
         }
 
+        public List<Comment> GetComments(Course course)
+        {
+            return commentRepository.GetComments(course);
+        }
+
         public Comment GetById(int id)
         {
             return commentRepository.GetById(id);

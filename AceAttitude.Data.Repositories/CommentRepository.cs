@@ -60,5 +60,11 @@ namespace AceAttitude.Data.Repositories
 
             return commentToLike;
         }
+
+        public List<Comment> GetComments(Course course)
+        {
+            List<Comment> comments = course.Comments.Where(c => c.DeletedOn.HasValue == false).ToList();
+            return comments;
+        }
     }
 }
