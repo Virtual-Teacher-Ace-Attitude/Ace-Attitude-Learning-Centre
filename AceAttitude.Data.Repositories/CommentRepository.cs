@@ -1,4 +1,4 @@
-﻿using AceAttitude.Data.Exceptions;
+﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 
@@ -54,11 +54,17 @@ namespace AceAttitude.Data.Repositories
             Comment commentToLike = GetById(id);
             commentToLike.Likes++;
             commentContext.CommentLikes.Add(new CommentLike()
-            { ApplicationUserId = user.Id, User = user, IsLiked = true }); 
+            { ApplicationUserId = user.Id, User = user, IsLiked = true });
 
             commentContext.SaveChanges();
 
             return commentToLike;
+        }
+
+        public List<Comment> GetComments(Course course)
+        {
+            List<Comment> comments = course.Comments.Where(c => c.DeletedOn.HasValue == false).ToList();
+            return comments;
         }
     }
 }
