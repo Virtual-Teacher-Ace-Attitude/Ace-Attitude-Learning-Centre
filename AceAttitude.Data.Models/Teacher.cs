@@ -1,9 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AceAttitude.Data.Models.Contracts.Role;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AceAttitude.Data.Models
 {
-    public class Teacher
+    public class Teacher : IsCreatable, IsModifiable, IsDeletable
     {
         public Teacher()
         {
@@ -23,5 +24,12 @@ namespace AceAttitude.Data.Models
         public bool IsAdmin { get; set; }
 
         public ICollection<Course> CreatedCourses { get; set; } = new List<Course>();
+
+        [Required]
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public DateTime? DeletedOn { get; set; }
     }
 }

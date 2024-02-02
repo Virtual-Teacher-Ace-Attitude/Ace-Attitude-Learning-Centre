@@ -1,8 +1,9 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using AceAttitude.Data.Models.Contracts.Role;
+using System.ComponentModel.DataAnnotations;
 
 namespace AceAttitude.Data.Models
 {
-    public class StudentCourses
+    public class StudentCourses : IsCreatable
     {
         [Required]
         public int Id { get; set; }
@@ -18,5 +19,8 @@ namespace AceAttitude.Data.Models
         public Course Course { get; set; } = null!;
 
         public bool IsCompleted { get; set; }
+
+        [Required]
+        public DateTime CreatedOn { get; set; }
     }
 }

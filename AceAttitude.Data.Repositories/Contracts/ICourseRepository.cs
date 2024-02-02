@@ -1,5 +1,3 @@
-﻿
-
 using AceAttitude.Data.Models;
 
 namespace AceAttitude.Data.Repositories.Contracts
@@ -19,6 +17,5 @@ namespace AceAttitude.Data.Repositories.Contracts
         decimal GetRating(int Id);
 
         List<Course> GetFilteredCourses(string filterParam, string filterParamValue, string sortParam);
-
     }
 }

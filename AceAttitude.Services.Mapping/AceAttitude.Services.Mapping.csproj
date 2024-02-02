@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -7,9 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\AceAttitude.Common.Exceptions\AceAttitude.Common.Exceptions.csproj" />
     <ProjectReference Include="..\AceAttitude.Data.Models\AceAttitude.Data.Models.csproj" />
-    <ProjectReference Include="..\AceAttitude.Data\AceAttitude.Data.csproj" />
+    <ProjectReference Include="..\AceAttitude.Web.DTO\AceAttitude.Web.DTO.csproj" />
   </ItemGroup>
 
 </Project>

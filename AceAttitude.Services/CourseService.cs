@@ -1,6 +1,4 @@
-﻿
-
-using AceAttitude.Data.Models;
+﻿using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
 
@@ -37,7 +35,7 @@ namespace AceAttitude.Services
             return courseRepository.UpdateCourse(id, course);
         }
 
-        public List<Course> GetAll(string filterParam, string filterParamValue, string sortParam) 
+        public List<Course> GetAll(string filterParam, string filterParamValue, string sortParam)
         {
             return courseRepository.GetFilteredCourses(filterParam, filterParamValue, sortParam);
         }

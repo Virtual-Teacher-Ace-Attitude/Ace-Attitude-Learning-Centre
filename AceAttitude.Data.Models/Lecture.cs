@@ -1,9 +1,10 @@
-﻿using AceAttitude.Data.Models.Misc;
+﻿using AceAttitude.Data.Models.Contracts.Role;
+using AceAttitude.Data.Models.Misc;
 using System.ComponentModel.DataAnnotations;
 
 namespace AceAttitude.Data.Models
 {
-    public class Lecture
+    public class Lecture : IsCreatable, IsModifiable, IsDeletable
     {
         [Required]
         public int Id { get; set; }
@@ -24,11 +25,7 @@ namespace AceAttitude.Data.Models
 
         public Course Course { get; set; } = null!;
 
-        public bool IsModified => ModifiedOn.HasValue;
-
         public DateTime? ModifiedOn { get; set; }
-
-        public bool IsDeleted => DeletedOn.HasValue;
 
         public DateTime? DeletedOn { get; set; }
     }
