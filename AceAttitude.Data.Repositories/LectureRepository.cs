@@ -1,34 +1,52 @@
-﻿using AceAttitude.Data.Models;
-using AceAttitude.Data.Models.Contracts;
+﻿
+using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace AceAttitude.Data.Repositories
 {
     public class LectureRepository : ILectureRepository
     {
-        public Lecture CreateLecture(Lecture lecture)
+        private readonly ApplicationDbContext lectureContext;
+        public LectureRepository(ApplicationDbContext lectureContext)
         {
-            throw new NotImplementedException();
+            this.lectureContext = lectureContext;
+        }
+        public Lecture CreateLecture(Lecture lecture, Course course)
+        {
+            lecture.Course = course;
+            lecture.CreatedOn = DateTime.Now;
+            lectureContext.Lectures.Add(lecture);
+            lectureContext.SaveChanges();
+            return lecture;
         }
 
         public Lecture DeleteLecture(int id)
         {
-            throw new NotImplementedException();
+            Lecture lectureToDelete = GetById(id);
+            lectureToDelete.DeletedOn = DateTime.Now;
+            lectureContext.SaveChanges();
+            return lectureToDelete;
         }
 
         public Lecture GetById(int id)
         {
-            throw new NotImplementedException();
+            Lecture lecture = lectureContext.Lectures.FirstOrDefault(l => l.Id == id && l.IsDeleted == false)
+                ?? throw new EntityNotFoundException($"A lecture with id: {id} does not exist.");
+            return lecture;
         }
 
-        public Lecture UpdateLecture(Lecture lecture)
+        public Lecture UpdateLecture(int id, Lecture lecture)
         {
-            throw new NotImplementedException();
+            Lecture lectureToUpdate = GetById(id);
+
+            lectureToUpdate.Title = lecture.Title;
+            lectureToUpdate.Description = lecture.Description;
+            lectureToUpdate.VideoFilePath = lecture.VideoFilePath;
+            lectureToUpdate.TextFilePath = lecture.TextFilePath;
+            lectureToUpdate.ModifiedOn = DateTime.Now;
+            lectureContext.SaveChanges();
+
+            return lectureToUpdate;
         }
     }
 }

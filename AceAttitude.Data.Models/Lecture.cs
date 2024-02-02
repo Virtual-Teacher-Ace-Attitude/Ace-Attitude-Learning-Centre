@@ -23,6 +23,8 @@ namespace AceAttitude.Data.Models
         [Required]
         public DateTime CreatedOn { get; set; }
 
+        public Course Course { get; set; } = null!;
+
         public DateTime? ModifiedOn { get; set; }
 
         public DateTime? DeletedOn { get; set; }

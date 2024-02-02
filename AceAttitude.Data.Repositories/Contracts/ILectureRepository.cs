@@ -1,5 +1,4 @@
 ﻿using AceAttitude.Data.Models;
-using AceAttitude.Data.Models.Contracts;
 
 
 namespace AceAttitude.Data.Repositories.Contracts
@@ -8,10 +7,10 @@ namespace AceAttitude.Data.Repositories.Contracts
     {
         public Lecture GetById(int id);
 
-        public Lecture CreateLecture (Lecture lecture);
+        public Lecture CreateLecture(Lecture lecture, Course course);
 
-        public Lecture UpdateLecture (Lecture lecture);
+        public Lecture UpdateLecture(int id, Lecture lecture);
 
-        public Lecture DeleteLecture (int id);
+        public Lecture DeleteLecture(int id);
     }
 }

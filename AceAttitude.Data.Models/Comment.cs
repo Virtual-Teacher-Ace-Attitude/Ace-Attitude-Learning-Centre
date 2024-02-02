@@ -1,10 +1,11 @@
-﻿using AceAttitude.Data.Models.Contracts.Role;
+using AceAttitude.Data.Models.Contracts.Role;
 using AceAttitude.Data.Models.Misc;
 
 using System.ComponentModel.DataAnnotations;
 
 namespace AceAttitude.Data.Models
 {
+
     public class Comment : IsCreatable, IsDeletable, IsModifiable
     {
         public int Id { get; set; }

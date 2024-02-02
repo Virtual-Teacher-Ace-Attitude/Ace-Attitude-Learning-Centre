@@ -1,7 +1,9 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Services.Contracts;
+
 using AceAttitude.Services.Mapping;
+
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.DTO.Request;
 using AceAttitude.Web.DTO.Response;
