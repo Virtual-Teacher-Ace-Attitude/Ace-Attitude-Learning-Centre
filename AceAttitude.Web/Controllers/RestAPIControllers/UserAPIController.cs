@@ -1,5 +1,8 @@
 ﻿using AceAttitude.Data.Models;
 using AceAttitude.Services.Contracts;
+using AceAttitude.Services.Mapping.Contracts;
+using AceAttitude.Web.DTO.Request;
+using AceAttitude.Web.DTO.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AceAttitude.Web.Controllers.RestAPIControllers

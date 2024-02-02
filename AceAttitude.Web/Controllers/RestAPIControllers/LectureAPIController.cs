@@ -5,16 +5,18 @@ using Microsoft.AspNetCore.Mvc;
 namespace AceAttitude.Web.Controllers.RestAPIControllers
 {
     [ApiController]
-    [Route("api/lectures")]
+    [Route("api/courses/{courseId}/lectures")]
     public class LectureAPIController : ControllerBase
     {
         private readonly ILectureService lectureService;
         private readonly IUserService userService;
+        private readonly ICourseService courseService;
 
-        public LectureAPIController(ILectureService lectureService, IUserService userService)
+        public LectureAPIController(ILectureService lectureService, IUserService userService, ICourseService courseService)
         {
             this.lectureService = lectureService;
             this.userService = userService;
+            this.courseService = courseService; 
         }
         //These are placeholder methods to be properly implemented with authentication, authorization and exception handling!
         //UserId should be replaced with proper credentials.
@@ -26,15 +28,16 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult CreateCourse(Lecture lecture, [FromHeader] int userId)
+        public IActionResult CreateLecture(Lecture lecture, int courseId, [FromHeader] int userId)
         {
             var user = userService.GetById(userId);
-            var createdLecture = lectureService.CreateLecture(lecture, user);
+            var course = courseService.GetById(courseId);
+            var createdLecture = lectureService.CreateLecture(lecture, course, user);
             return StatusCode(StatusCodes.Status201Created, createdLecture);
         }
 
-        [HttpPut("{id}/edit")]
-        public IActionResult UpdateCourse(int id, [FromBody] Lecture lecture, [FromHeader] int userId)
+        [HttpPost("{id}")]
+        public IActionResult UpdateLecture(int id, [FromBody] Lecture lecture, [FromHeader] int userId)
         {
             var user = userService.GetById(userId);
             var updatedLecture = lectureService.UpdateLecture(id, lecture, user);

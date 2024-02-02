@@ -18,5 +18,18 @@ namespace AceAttitude.Data.Models
         public string? VideoFilePath { get; set; }
 
         public string? TextFilePath { get; set; }
+
+        [Required]
+        public DateTime CreatedOn { get; set; }
+
+        public Course Course { get; set; } = null!;
+
+        public bool IsModified => ModifiedOn.HasValue;
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public bool IsDeleted => DeletedOn.HasValue;
+
+        public DateTime? DeletedOn { get; set; }
     }
 }

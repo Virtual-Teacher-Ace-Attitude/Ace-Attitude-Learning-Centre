@@ -7,17 +7,18 @@ namespace AceAttitude.Data.Repositories
 {
     public class CourseRepository : ICourseRepository
     {
-        private readonly ApplicationDbContext context;
+        private readonly ApplicationDbContext courseContext;
 
         public CourseRepository(ApplicationDbContext context)
         {
-            this.context = context;
+            this.courseContext = context;
         }
 
         public Course CreateCourse(Course course)
         {
-            context.Courses.Add(course);
-            context.SaveChanges();
+            course.CreatedOn = DateTime.Now;
+            courseContext.Courses.Add(course);
+            courseContext.SaveChanges();
             return course;
         }
 
@@ -27,13 +28,13 @@ namespace AceAttitude.Data.Repositories
         {
             Course courseToDelete = GetById(id);
             courseToDelete.DeletedOn = DateTime.Now;
-            context.SaveChanges();
+            courseContext.SaveChanges();
             return courseToDelete;
         }
 
         public Course GetById(int id)
         {
-            Course course = context.Courses.FirstOrDefault(c => c.Id == id && c.IsDeleted == false)
+            Course course = context.Courses.FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException($"Course with id: {id} does not exist!");
             return course;
         }
@@ -49,7 +50,7 @@ namespace AceAttitude.Data.Repositories
             courseToUpdate.Level = course.Level;
             courseToUpdate.ModifiedOn = DateTime.Now;
 
-            context.SaveChanges();
+            courseContext.SaveChanges();
 
             return courseToUpdate;
         }
@@ -64,13 +65,13 @@ namespace AceAttitude.Data.Repositories
             Course courseToRate = GetById(id);
             courseToRate.Ratings.Add(rating);
             rating.IsRated = true;
-            context.SaveChanges();
+            courseContext.SaveChanges();
             return courseToRate;
         }
 
         public IQueryable<Course> GetAll()
         {
-            IQueryable<Course> allCourses = context.Courses.Where(c => c.IsDeleted == false);
+            IQueryable<Course> allCourses = context.Courses.Where(c => c.DeletedOn.HasValue == false);
             return allCourses;
         }
 
@@ -105,7 +106,6 @@ namespace AceAttitude.Data.Repositories
             }
         }
 
-        //name and rating
         private IQueryable<Course> SortCourses(string sortParam, IQueryable<Course> filteredCourses)
         {
             switch (sortParam)
