@@ -1,10 +1,10 @@
-﻿using AceAttitude.Data.Models.Misc;
-
+﻿using AceAttitude.Data.Models.Contracts.Role;
+using AceAttitude.Data.Models.Misc;
 using System.ComponentModel.DataAnnotations;
 
 namespace AceAttitude.Data.Models
 {
-    public class Comment
+    public class Comment : IsCreatable, IsModifiable, IsDeletable
     {
         public int Id { get; set; }
 
@@ -25,5 +25,14 @@ namespace AceAttitude.Data.Models
         public int Likes { get; set; }
 
         public ICollection<CommentLike> CommentLikes { get; set; } = new List<CommentLike>();
+        public DateTime CreatedOn { get; set; }
+
+        public bool IsModified => ModifiedOn.HasValue;
+
+        public DateTime? ModifiedOn { get ; set ; }
+
+        public bool IsDeleted => DeletedOn.HasValue;
+
+        public DateTime? DeletedOn { get ; set ; }
     }
 }
