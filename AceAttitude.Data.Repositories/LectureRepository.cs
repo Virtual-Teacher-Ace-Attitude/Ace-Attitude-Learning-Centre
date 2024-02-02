@@ -1,4 +1,5 @@
 ﻿
+using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 
@@ -30,7 +31,7 @@ namespace AceAttitude.Data.Repositories
 
         public Lecture GetById(int id)
         {
-            Lecture lecture = lectureContext.Lectures.FirstOrDefault(l => l.Id == id && l.IsDeleted == false)
+            Lecture lecture = lectureContext.Lectures.FirstOrDefault(l => l.Id == id && l.DeletedOn.HasValue)
                 ?? throw new EntityNotFoundException($"A lecture with id: {id} does not exist.");
             return lecture;
         }
