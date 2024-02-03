@@ -2,7 +2,6 @@
 
 using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
-using AceAttitude.Data.Models.Contracts;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
 
@@ -13,7 +12,7 @@ namespace AceAttitude.Services
         private readonly string DuplicateEmailRegisterErrorMessage = "The email provided is already registered under an existing account!";
 
         private readonly IUserRepository userRepository;
-        public UserService(IUserRepository userRepository) 
+        public UserService(IUserRepository userRepository)
         {
             this.userRepository = userRepository;
         }
