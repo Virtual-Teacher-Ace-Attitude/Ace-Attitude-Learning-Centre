@@ -1,5 +1,4 @@
-﻿
-
+﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Contracts;
 using AceAttitude.Data.Repositories.Contracts;

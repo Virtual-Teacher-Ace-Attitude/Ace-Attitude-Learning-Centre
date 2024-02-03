@@ -23,6 +23,36 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             return Ok(userService.GetById(id));
         }
 
+        [HttpPost("Register/Student")]
+        public IActionResult RegisterStudent([FromBody] UserRegisterRequestDTO userDTO)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    throw new InvalidUserInputException(InvalidUserCreationErrorMessage);
+                }
+
+                ApplicationUser user = authService.ValidateUserCanRegister(userDTO);
+
+
+
+                Student student = this.modelMapper.MapToStudent(user);
+
+                UserResponseDTO userResponseDTO = modelMapper.MapToResponseUserDTO(userService.Create(user));
+
+                return StatusCode(StatusCodes.Status201Created, userResponseDTO);
+            }
+            catch (DuplicateEntityException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
+
         [HttpPost("")]
         public IActionResult CreateUser(ApplicationUser user)
         {
