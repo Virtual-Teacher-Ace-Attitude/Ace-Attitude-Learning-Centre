@@ -35,9 +35,6 @@ namespace AceAttitude.Data.Models
 
         public ICollection<Lecture> Lectures { get; set; } = new List<Lecture>();
 
-        [Range(1, 5)]
-        public decimal? Rating { get; set; }
-
         public ICollection<Comment> Comments { get; set; } = new List<Comment>();
 
         public ICollection<Rating> Ratings { get; set; } = new List<Rating>();

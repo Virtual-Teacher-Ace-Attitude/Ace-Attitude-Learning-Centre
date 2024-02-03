@@ -99,7 +99,7 @@ namespace AceAttitude.Data.Repositories
                                             || c.Teacher.User.FirstName == paramValue);
                 case "rating":
                     decimal rating = ParseRating(paramValue);
-                    return GetAll().Where(c => c.Rating >= rating);
+                    return GetAll().Where(c => GetRating(c.Id) >= rating);
                 default:
                     return GetAll();
 
@@ -113,9 +113,9 @@ namespace AceAttitude.Data.Repositories
                 case "name":
                     return filteredCourses.OrderByDescending(c => c.Title);
                 case "rating":
-                    return filteredCourses.OrderByDescending(c => c.Rating);
+                    return filteredCourses.OrderByDescending(c => GetRating(c.Id));
                 case "name and rating":
-                    return filteredCourses.OrderByDescending(c => c.Rating)
+                    return filteredCourses.OrderByDescending(c => GetRating(c.Id))
                         .ThenByDescending(c => c.Title);
                 default:
                     return filteredCourses.OrderByDescending(c => c.StartingDate);
