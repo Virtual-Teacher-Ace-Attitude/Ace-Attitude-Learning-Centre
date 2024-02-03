@@ -30,5 +30,16 @@ namespace AceAttitude.Services.Mapping
                 CreatedOn = user.CreatedOn,
             };
         }
+
+        public Student MapToStudent(ApplicationUser User)
+        {
+            return new Student
+            {
+                User = User,
+                ApplicationUserId = User.Id,
+                Id = User.Id,
+                CreatedOn = DateTime.Now,
+            };
+        }
     }
 }

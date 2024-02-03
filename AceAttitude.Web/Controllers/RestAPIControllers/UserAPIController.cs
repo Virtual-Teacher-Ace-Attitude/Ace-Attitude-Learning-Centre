@@ -37,7 +37,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             return Ok(userService.GetById(id));
         }
 
-        [HttpPost("register")]
+        [HttpPost("Register/Student")]
         public IActionResult RegisterUser([FromBody] UserRegisterRequestDTO userDTO)
         {
             try
@@ -48,6 +48,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 }
 
                 ApplicationUser user = authService.ValidateUserCanRegister(userDTO);
+
+
+
+                Student student = this.modelMapper.MapToStudent(user);
 
                 UserResponseDTO userResponseDTO = modelMapper.MapToResponseUserDTO(userService.Create(user));
 
@@ -70,7 +74,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             return StatusCode(StatusCodes.Status201Created, createdUser);
         }
 
-        [HttpPut("{id}/edit")]
+        [HttpPut("{id}/Edit")]
         public IActionResult UpdateUser(int id, [FromBody] ApplicationUser user)
         {
             var updatedUser = userService.Update(id, user);

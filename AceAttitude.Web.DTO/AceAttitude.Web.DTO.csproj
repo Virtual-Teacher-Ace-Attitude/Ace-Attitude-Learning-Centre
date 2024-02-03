@@ -7,10 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Response\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\AceAttitude.Common.Constants\AceAttitude.Common.Constants.csproj" />
   </ItemGroup>
 

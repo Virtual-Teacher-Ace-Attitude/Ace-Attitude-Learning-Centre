@@ -6,6 +6,8 @@ namespace AceAttitude.Services.Mapping.Contracts
 {
     public interface IModelMapper
     {
+        public Student MapToStudent(ApplicationUser User);
+
         public ApplicationUser MapToUser(UserRegisterRequestDTO userDTO, string passwordHash);
 
         public UserResponseDTO MapToResponseUserDTO(ApplicationUser user);
