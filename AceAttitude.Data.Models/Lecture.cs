@@ -25,6 +25,9 @@ namespace AceAttitude.Data.Models
 
         public Course Course { get; set; } = null!;
 
+        [Required]
+        public int CourseId { get; set; }
+
         public DateTime? ModifiedOn { get; set; }
 
         public DateTime? DeletedOn { get; set; }
