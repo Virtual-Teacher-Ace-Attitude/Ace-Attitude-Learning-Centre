@@ -23,6 +23,8 @@ namespace AceAttitude.Data.Models
 
         public bool IsAdmin { get; set; }
 
+        public bool IsApproved { get; set; }
+
         public ICollection<Course> CreatedCourses { get; set; } = new List<Course>();
 
         [Required]

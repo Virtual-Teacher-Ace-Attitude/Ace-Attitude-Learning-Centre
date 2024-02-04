@@ -4,6 +4,7 @@ using AceAttitude.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AceAttitude.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240203201803_TeacherIsApprovedProp")]
+    partial class TeacherIsApprovedProp
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,61 +82,61 @@ namespace AceAttitude.Data.Migrations
                         new
                         {
                             Id = "64dfe826-08e8-4dcf-888b-c441fead8803",
-                            CreatedOn = new DateTime(2024, 2, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Email = "student1@abv.bg",
                             FirstName = "Student",
                             LastName = "One",
-                            PasswordHash = "$2a$11$p4falukZH9ovaApIH6O1T.TbAbwVphyDAVkg2YaFYF7LE6/f79a.6",
+                            PasswordHash = "2a$11$2Wp6Wd8XCZRnMj9WoPYeCeiQTL9Xv7OQmYtaiKgGCvmUzgbUUYQsa",
                             StudentId = "64dfe826-08e8-4dcf-888b-c441fead8803"
                         },
                         new
                         {
                             Id = "11d15832-b94e-4be4-a892-14a07641adc3",
-                            CreatedOn = new DateTime(2024, 2, 5, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 4, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Email = "student2@abv.bg",
                             FirstName = "Student",
                             LastName = "Two",
-                            PasswordHash = "$2a$11$p4falukZH9ovaApIH6O1T.TbAbwVphyDAVkg2YaFYF7LE6/f79a.6",
+                            PasswordHash = "2a$11$2Wp6Wd8XCZRnMj9WoPYeCeiQTL9Xv7OQmYtaiKgGCvmUzgbUUYQsa",
                             StudentId = "11d15832-b94e-4be4-a892-14a07641adc3"
                         },
                         new
                         {
                             Id = "5422e8d8-d114-42b1-b878-f410f14e0be7",
-                            CreatedOn = new DateTime(2024, 2, 6, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 5, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Email = "student3@abv.bg",
                             FirstName = "Student",
                             LastName = "Three",
-                            PasswordHash = "$2a$11$p4falukZH9ovaApIH6O1T.TbAbwVphyDAVkg2YaFYF7LE6/f79a.6",
+                            PasswordHash = "2a$11$2Wp6Wd8XCZRnMj9WoPYeCeiQTL9Xv7OQmYtaiKgGCvmUzgbUUYQsa",
                             StudentId = "5422e8d8-d114-42b1-b878-f410f14e0be7"
                         },
                         new
                         {
                             Id = "22cbe4de-2827-4458-b55f-779a19400ab5",
-                            CreatedOn = new DateTime(2024, 2, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Email = "teacher1@abv.bg",
                             FirstName = "Alexei",
                             LastName = "Kalionski",
-                            PasswordHash = "$2a$11$p4falukZH9ovaApIH6O1T.TbAbwVphyDAVkg2YaFYF7LE6/f79a.6",
+                            PasswordHash = "2a$11$2Wp6Wd8XCZRnMj9WoPYeCeiQTL9Xv7OQmYtaiKgGCvmUzgbUUYQsa",
                             TeacherId = "22cbe4de-2827-4458-b55f-779a19400ab5"
                         },
                         new
                         {
                             Id = "aba81718-3f23-42ca-ba84-fcd9b4f4f944",
-                            CreatedOn = new DateTime(2024, 2, 5, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 4, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Email = "teacher2@abv.bg",
                             FirstName = "Alexander",
                             LastName = "Arabadzhiev",
-                            PasswordHash = "$2a$11$p4falukZH9ovaApIH6O1T.TbAbwVphyDAVkg2YaFYF7LE6/f79a.6",
+                            PasswordHash = "2a$11$2Wp6Wd8XCZRnMj9WoPYeCeiQTL9Xv7OQmYtaiKgGCvmUzgbUUYQsa",
                             TeacherId = "aba81718-3f23-42ca-ba84-fcd9b4f4f944"
                         },
                         new
                         {
                             Id = "89beab74-07ac-446a-8dc6-b0291b5ff68b",
-                            CreatedOn = new DateTime(2024, 2, 6, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 5, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Email = "teacher3@abv.bg",
                             FirstName = "Georgi",
                             LastName = "Aleksandrov",
-                            PasswordHash = "$2a$11$p4falukZH9ovaApIH6O1T.TbAbwVphyDAVkg2YaFYF7LE6/f79a.6",
+                            PasswordHash = "2a$11$2Wp6Wd8XCZRnMj9WoPYeCeiQTL9Xv7OQmYtaiKgGCvmUzgbUUYQsa",
                             TeacherId = "89beab74-07ac-446a-8dc6-b0291b5ff68b"
                         });
                 });
@@ -186,7 +188,7 @@ namespace AceAttitude.Data.Migrations
                             ApplicationUserId = "64dfe826-08e8-4dcf-888b-c441fead8803",
                             Content = "Content of comment 1.",
                             CourseId = 1,
-                            CreatedOn = new DateTime(2024, 2, 5, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 4, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Likes = 1
                         },
                         new
@@ -195,7 +197,7 @@ namespace AceAttitude.Data.Migrations
                             ApplicationUserId = "11d15832-b94e-4be4-a892-14a07641adc3",
                             Content = "Content of comment 2.",
                             CourseId = 2,
-                            CreatedOn = new DateTime(2024, 2, 18, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 17, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Likes = 2
                         },
                         new
@@ -204,7 +206,7 @@ namespace AceAttitude.Data.Migrations
                             ApplicationUserId = "5422e8d8-d114-42b1-b878-f410f14e0be7",
                             Content = "Content of comment 3.",
                             CourseId = 3,
-                            CreatedOn = new DateTime(2024, 3, 7, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 3, 6, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Likes = 3
                         });
                 });
@@ -244,7 +246,7 @@ namespace AceAttitude.Data.Migrations
                             Id = 1,
                             ApplicationUserId = "64dfe826-08e8-4dcf-888b-c441fead8803",
                             CommentId = 1,
-                            CreatedOn = new DateTime(2024, 2, 5, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 4, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsLiked = true
                         },
                         new
@@ -252,7 +254,7 @@ namespace AceAttitude.Data.Migrations
                             Id = 2,
                             ApplicationUserId = "11d15832-b94e-4be4-a892-14a07641adc3",
                             CommentId = 2,
-                            CreatedOn = new DateTime(2024, 2, 19, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 18, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsLiked = true
                         },
                         new
@@ -260,7 +262,7 @@ namespace AceAttitude.Data.Migrations
                             Id = 3,
                             ApplicationUserId = "5422e8d8-d114-42b1-b878-f410f14e0be7",
                             CommentId = 3,
-                            CreatedOn = new DateTime(2024, 3, 9, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 3, 8, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsLiked = true
                         },
                         new
@@ -268,7 +270,7 @@ namespace AceAttitude.Data.Migrations
                             Id = 4,
                             ApplicationUserId = "89beab74-07ac-446a-8dc6-b0291b5ff68b",
                             CommentId = 3,
-                            CreatedOn = new DateTime(2024, 3, 10, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 3, 9, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsLiked = false
                         });
                 });
@@ -330,12 +332,12 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 1,
                             AgeGroup = 0,
-                            CreatedOn = new DateTime(2024, 2, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Description = "Description of course 1.",
                             IsCompleted = true,
                             IsDraft = false,
                             Level = 1,
-                            StartingDate = new DateTime(2024, 2, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            StartingDate = new DateTime(2024, 2, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             TeacherId = "22cbe4de-2827-4458-b55f-779a19400ab5",
                             Title = "Course 1"
                         },
@@ -343,12 +345,12 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 2,
                             AgeGroup = 1,
-                            CreatedOn = new DateTime(2024, 2, 11, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 10, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Description = "Description of course 2.",
                             IsCompleted = false,
                             IsDraft = false,
                             Level = 3,
-                            StartingDate = new DateTime(2024, 3, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            StartingDate = new DateTime(2024, 3, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             TeacherId = "aba81718-3f23-42ca-ba84-fcd9b4f4f944",
                             Title = "Course 2"
                         },
@@ -356,12 +358,12 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 3,
                             AgeGroup = 2,
-                            CreatedOn = new DateTime(2024, 3, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 3, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Description = "Description of course 3.",
                             IsCompleted = false,
                             IsDraft = true,
                             Level = 5,
-                            StartingDate = new DateTime(2024, 4, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            StartingDate = new DateTime(2024, 4, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             TeacherId = "89beab74-07ac-446a-8dc6-b0291b5ff68b",
                             Title = "Course 3"
                         });
@@ -413,7 +415,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
-                            CreatedOn = new DateTime(2024, 2, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Description = "Description of lecture 1.",
                             Title = "Lecture 1"
                         },
@@ -421,7 +423,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 2,
                             CourseId = 2,
-                            CreatedOn = new DateTime(2024, 2, 5, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 4, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Description = "Description of lecture 2.",
                             Title = "Lecture 2"
                         },
@@ -429,7 +431,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 3,
                             CourseId = 3,
-                            CreatedOn = new DateTime(2024, 2, 6, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 5, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             Description = "Description of lecture 3.",
                             Title = "Lecture 3"
                         });
@@ -472,7 +474,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
-                            CreatedOn = new DateTime(2024, 2, 7, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 6, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsRated = true,
                             StudentId = "64dfe826-08e8-4dcf-888b-c441fead8803",
                             Value = 5.0m
@@ -481,7 +483,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 2,
                             CourseId = 1,
-                            CreatedOn = new DateTime(2024, 2, 8, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 7, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsRated = true,
                             StudentId = "11d15832-b94e-4be4-a892-14a07641adc3",
                             Value = 4.5m
@@ -490,7 +492,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 3,
                             CourseId = 1,
-                            CreatedOn = new DateTime(2024, 2, 9, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 8, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsRated = false,
                             StudentId = "5422e8d8-d114-42b1-b878-f410f14e0be7",
                             Value = 4.5m
@@ -524,19 +526,19 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = "64dfe826-08e8-4dcf-888b-c441fead8803",
                             ApplicationUserId = "64dfe826-08e8-4dcf-888b-c441fead8803",
-                            CreatedOn = new DateTime(2024, 2, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764)
+                            CreatedOn = new DateTime(2024, 2, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879)
                         },
                         new
                         {
                             Id = "11d15832-b94e-4be4-a892-14a07641adc3",
                             ApplicationUserId = "11d15832-b94e-4be4-a892-14a07641adc3",
-                            CreatedOn = new DateTime(2024, 2, 5, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764)
+                            CreatedOn = new DateTime(2024, 2, 4, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879)
                         },
                         new
                         {
                             Id = "5422e8d8-d114-42b1-b878-f410f14e0be7",
                             ApplicationUserId = "5422e8d8-d114-42b1-b878-f410f14e0be7",
-                            CreatedOn = new DateTime(2024, 2, 6, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764)
+                            CreatedOn = new DateTime(2024, 2, 5, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879)
                         });
                 });
 
@@ -574,7 +576,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 1,
                             CourseId = 1,
-                            CreatedOn = new DateTime(2024, 2, 1, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 1, 31, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsCompleted = true,
                             StudentId = "64dfe826-08e8-4dcf-888b-c441fead8803"
                         },
@@ -582,7 +584,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 2,
                             CourseId = 1,
-                            CreatedOn = new DateTime(2024, 1, 31, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 1, 30, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsCompleted = true,
                             StudentId = "11d15832-b94e-4be4-a892-14a07641adc3"
                         },
@@ -590,7 +592,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 3,
                             CourseId = 1,
-                            CreatedOn = new DateTime(2024, 1, 30, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 1, 29, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsCompleted = true,
                             StudentId = "5422e8d8-d114-42b1-b878-f410f14e0be7"
                         },
@@ -598,7 +600,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 4,
                             CourseId = 2,
-                            CreatedOn = new DateTime(2024, 2, 12, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 11, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsCompleted = false,
                             StudentId = "64dfe826-08e8-4dcf-888b-c441fead8803"
                         },
@@ -606,7 +608,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 5,
                             CourseId = 2,
-                            CreatedOn = new DateTime(2024, 2, 13, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 12, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsCompleted = false,
                             StudentId = "11d15832-b94e-4be4-a892-14a07641adc3"
                         },
@@ -614,7 +616,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = 6,
                             CourseId = 2,
-                            CreatedOn = new DateTime(2024, 2, 14, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 13, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsCompleted = false,
                             StudentId = "5422e8d8-d114-42b1-b878-f410f14e0be7"
                         });
@@ -653,7 +655,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = "22cbe4de-2827-4458-b55f-779a19400ab5",
                             ApplicationUserId = "22cbe4de-2827-4458-b55f-779a19400ab5",
-                            CreatedOn = new DateTime(2024, 2, 4, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 3, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsAdmin = true,
                             IsApproved = true
                         },
@@ -661,7 +663,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = "aba81718-3f23-42ca-ba84-fcd9b4f4f944",
                             ApplicationUserId = "aba81718-3f23-42ca-ba84-fcd9b4f4f944",
-                            CreatedOn = new DateTime(2024, 2, 5, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 4, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsAdmin = true,
                             IsApproved = true
                         },
@@ -669,7 +671,7 @@ namespace AceAttitude.Data.Migrations
                         {
                             Id = "89beab74-07ac-446a-8dc6-b0291b5ff68b",
                             ApplicationUserId = "89beab74-07ac-446a-8dc6-b0291b5ff68b",
-                            CreatedOn = new DateTime(2024, 2, 6, 18, 52, 15, 712, DateTimeKind.Local).AddTicks(3764),
+                            CreatedOn = new DateTime(2024, 2, 5, 22, 18, 3, 389, DateTimeKind.Local).AddTicks(9879),
                             IsAdmin = false,
                             IsApproved = true
                         });
