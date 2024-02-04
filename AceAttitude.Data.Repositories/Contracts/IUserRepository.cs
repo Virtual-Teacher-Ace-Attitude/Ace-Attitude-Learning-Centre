@@ -4,15 +4,23 @@ namespace AceAttitude.Data.Repositories.Contracts
 {
     public interface IUserRepository
     {
-        ApplicationUser GetById(int id);
+        ApplicationUser GetById(string id);
+
+        Student GetStudentById(string id);
+
+        Teacher GetTeacherById(string id);
 
         ApplicationUser GetByEmail(string email);
 
         ApplicationUser Create(ApplicationUser user);
 
-        ApplicationUser Update(int id, ApplicationUser user);
+        ApplicationUser Update(string id, ApplicationUser user);
 
-        ApplicationUser Delete(int id);
+        ApplicationUser Delete(string id);
+
+        ApplicationUser CreateTeacher(ApplicationUser user);
+
+        ApplicationUser CreateStudent(ApplicationUser user);
 
         public bool CheckEmailExists(string email);
     }

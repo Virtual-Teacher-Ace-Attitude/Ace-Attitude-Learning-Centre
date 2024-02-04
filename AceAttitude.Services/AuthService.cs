@@ -8,7 +8,10 @@ namespace AceAttitude.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly string IncorrectCredentialsErrorMessage = "The username or password provided are incorrect.";
+        private readonly string IncorrectCredentialsErrorMessage = "The username or password provided are incorrect!";
+
+        private readonly string NotStudentErrorMessage = "The following action can only be performed by a student!";
+        private readonly string NotTeacherErrorMessage = "The following action can only be performed by a teacher!";
 
         private readonly IModelMapper modelMapper;
         private readonly IUserService userService;
@@ -51,6 +54,30 @@ namespace AceAttitude.Services
             {
                 throw new UnauthorizedOperationException(IncorrectCredentialsErrorMessage);
             }
+        }
+
+        public Student TryGetStudent(string credentials)
+        {
+            ApplicationUser user = this.TryGetUser(credentials);
+
+            if (user.StudentId is null)
+            {
+                throw new UnauthorizedOperationException(NotStudentErrorMessage);
+            }
+
+            return this.modelMapper.MapToStudentLite(user);
+        }
+
+        public Teacher TryGetTeacher(string credentials)
+        {
+            ApplicationUser user = this.TryGetUser(credentials);
+
+            if (user.TeacherId is null)
+            {
+                throw new UnauthorizedOperationException(NotTeacherErrorMessage);
+            }
+
+            return this.modelMapper.MapToTeacherLite(user);
         }
 
         public string GeneratePasswordHash(string password)

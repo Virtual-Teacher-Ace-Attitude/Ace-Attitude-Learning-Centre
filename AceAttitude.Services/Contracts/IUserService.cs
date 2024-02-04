@@ -6,13 +6,17 @@ namespace AceAttitude.Services.Contracts
 {
     public interface IUserService
     {
-        ApplicationUser GetById(int id);
+        ApplicationUser GetById(string id);
 
         ApplicationUser Create(ApplicationUser user);
 
-        ApplicationUser Update(int id, ApplicationUser user);
+        ApplicationUser CreateTeacher(ApplicationUser user);
 
-        ApplicationUser Delete(int id);
+        ApplicationUser CreateStudent(ApplicationUser user);
+
+        ApplicationUser Update(string id, ApplicationUser user);
+
+        ApplicationUser Delete(string id);
 
         public void CheckEmailExists(string email);
 

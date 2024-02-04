@@ -1,12 +1,10 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Services.Contracts;
-
-using AceAttitude.Services.Mapping;
-
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.DTO.Request;
 using AceAttitude.Web.DTO.Response;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace AceAttitude.Web.Controllers.RestAPIControllers
@@ -32,13 +30,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         //UserId should be replaced with proper credentials.
 
         [HttpGet("{id}")]
-        public IActionResult GetUserById(int id)
+        public IActionResult GetUserById(string id)
         {
             return Ok(userService.GetById(id));
         }
 
         [HttpPost("Register/Student")]
-        public IActionResult RegisterUser([FromBody] UserRegisterRequestDTO userDTO)
+        public IActionResult RegisterStudent([FromBody] UserRegisterRequestDTO userDTO)
         {
             try
             {
@@ -49,13 +47,9 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
 
                 ApplicationUser user = authService.ValidateUserCanRegister(userDTO);
 
+                UserResponseDTO userResponseDto = modelMapper.MapToResponseUserDTO(userService.CreateStudent(user), "Student");
 
-
-                Student student = this.modelMapper.MapToStudent(user);
-
-                UserResponseDTO userResponseDTO = modelMapper.MapToResponseUserDTO(userService.Create(user));
-
-                return StatusCode(StatusCodes.Status201Created, userResponseDTO);
+                return StatusCode(StatusCodes.Status201Created, userResponseDto);
             }
             catch (DuplicateEntityException e)
             {
@@ -67,22 +61,48 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPost("")]
-        public IActionResult CreateUser(ApplicationUser user)
+        [HttpPost("Register/Teacher")]
+        public IActionResult RegisterTeacher([FromBody] UserRegisterRequestDTO userDTO)
         {
-            var createdUser = userService.Create(user);
-            return StatusCode(StatusCodes.Status201Created, createdUser);
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    throw new InvalidUserInputException(InvalidUserCreationErrorMessage);
+                }
+
+                ApplicationUser user = authService.ValidateUserCanRegister(userDTO);
+
+                UserResponseDTO teacherResponseDto = modelMapper.MapToResponseUserDTO(userService.CreateTeacher(user), "Teacher - Awaiting Approval");
+
+                return StatusCode(StatusCodes.Status201Created, teacherResponseDto);
+            }
+            catch (DuplicateEntityException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Conflict(e.Message);
+            }
         }
 
+        //[HttpPost("")]
+        //public IActionResult CreateUser(ApplicationUser user)
+        //{
+        //    var createdUser = userService.Create(user);
+        //    return StatusCode(StatusCodes.Status201Created, createdUser);
+        //}
+
         [HttpPut("{id}/Edit")]
-        public IActionResult UpdateUser(int id, [FromBody] ApplicationUser user)
+        public IActionResult UpdateUser(string id, [FromBody] ApplicationUser user)
         {
             var updatedUser = userService.Update(id, user);
             return Ok(updatedUser);
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCourse(int id)
+        public IActionResult DeleteCourse(string id)
         {
             var deletedUser = userService.Delete(id);
             return Ok(deletedUser);
