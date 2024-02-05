@@ -32,7 +32,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult CreateCourse(Course course, [FromHeader] int userId)
+        public IActionResult CreateCourse(Course course, [FromHeader] string userId)
         {
             var user = userService.GetById(userId);
             var createdCourse = courseService.CreateCourse(course, user);
@@ -40,7 +40,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("{id}")]
-        public IActionResult UpdateCourse(int id, [FromBody] Course course, [FromHeader] int userId)
+        public IActionResult UpdateCourse(int id, [FromBody] Course course, [FromHeader] string userId)
         {
             var user = userService.GetById(userId);
             var updatedCourse = courseService.UpdateCourse(id, course, user);
@@ -49,7 +49,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult RateCourse(int id, [FromBody] Rating rating, [FromHeader] int userId) 
+        public IActionResult RateCourse(int id, [FromBody] Rating rating, [FromHeader] string userId) 
         {
             var user = userService.GetById(userId);
             var ratedCourse = courseService.RateCourse(id, rating, user);
@@ -58,7 +58,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCourse(int id, [FromHeader] int userId)
+        public IActionResult DeleteCourse(int id, [FromHeader] string userId)
         {
             var user = userService.GetById(userId);
             var deletedCourse = courseService.DeleteCourse(id, user);

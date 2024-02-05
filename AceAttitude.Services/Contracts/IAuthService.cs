@@ -6,12 +6,19 @@ namespace AceAttitude.Services.Contracts
     public interface IAuthService
     {
         //User CurrentUser { get; }
+
         ApplicationUser TryGetUser(string credentials);
+
+        Student TryGetStudent(string credentials);
+
+        Teacher TryGetTeacher(string credentials);
+
         ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO);
 
         //ApplicationUser LoginUser(UserRegisterDTO userDTO);
 
         string GeneratePasswordHash(string password);
+
 
         //void EnsureUserAdmin();
 

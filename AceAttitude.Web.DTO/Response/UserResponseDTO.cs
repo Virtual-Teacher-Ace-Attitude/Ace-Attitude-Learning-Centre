@@ -11,5 +11,7 @@
         public string Email { get; set; } = null!;
 
         public DateTime CreatedOn { get; set; }
+
+        public string UserType { get; set; } = null!;
     }
 }

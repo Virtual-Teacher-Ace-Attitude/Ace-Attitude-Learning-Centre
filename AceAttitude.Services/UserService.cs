@@ -1,6 +1,4 @@
-﻿
-
-using AceAttitude.Common.Exceptions;
+﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
@@ -16,24 +14,48 @@ namespace AceAttitude.Services
         {
             this.userRepository = userRepository;
         }
+
+        public ApplicationUser GetById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ApplicationUser GetByEmail(string email)
+        {
+            return this.userRepository.GetByEmail(email);
+        }
+
+        public Student GetStudentById(string id)
+        {
+            return this.userRepository.GetStudentById(id);
+        }
+
+        public Teacher GetTeacherById(string id)
+        {
+            return this.userRepository.GetTeacherById(id);
+        }
+
+        public ApplicationUser CreateStudent(ApplicationUser user)
+        {
+            return this.userRepository.CreateStudent(user);
+        }
+
+        public ApplicationUser CreateTeacher(ApplicationUser user)
+        {
+            return this.userRepository.CreateTeacher(user);
+        }
+
         public ApplicationUser Create(ApplicationUser user)
         {
-            this.userRepository.Create(user);
-
-            return user;
+            return this.userRepository.Create(user); ;
         }
 
-        public ApplicationUser Delete(int id)
+        public ApplicationUser Delete(string id)
         {
             throw new NotImplementedException();
         }
 
-        public ApplicationUser GetById(int id)
-        {
-            throw new NotImplementedException();
-        }
-
-        public ApplicationUser Update(int id, ApplicationUser user)
+        public ApplicationUser Update(string id, ApplicationUser user)
         {
             throw new NotImplementedException();
         }
@@ -44,11 +66,6 @@ namespace AceAttitude.Services
             {
                 throw new DuplicateEntityException(DuplicateEmailRegisterErrorMessage);
             }
-        }
-
-        public ApplicationUser GetByEmail(string email)
-        {
-            return this.userRepository.GetByEmail(email);
         }
     }
 }

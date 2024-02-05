@@ -28,7 +28,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult PostComment(int courseId, [FromBody] Comment comment, [FromHeader] int userId)
+        public IActionResult PostComment(int courseId, [FromBody] Comment comment, [FromHeader] string userId)
         {
             var user = userService.GetById(userId);
             var course = courseService.GetById(courseId);
@@ -37,7 +37,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteComment(int id, [FromHeader] int userId)
+        public IActionResult DeleteComment(int id, [FromHeader] string userId)
         {
             var user = userService.GetById(userId);
             var deletedComment = commentService.DeleteComment(id, user);
@@ -45,7 +45,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("{id}")]
-        public IActionResult EditComment(int id, [FromBody] string content, [FromHeader] int userId)
+        public IActionResult EditComment(int id, [FromBody] string content, [FromHeader] string userId)
         {
             var user = userService.GetById(userId);
             var updatedComment = commentService.UpdateComment(id, content, user);
@@ -53,7 +53,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult LikeComment(int id, [FromHeader] int userId)
+        public IActionResult LikeComment(int id, [FromHeader] string userId)
         {
             var user = userService.GetById(userId);
             var comment = commentService.LikeComment(id, user);

@@ -46,7 +46,7 @@ namespace AceAttitude.Data
             string teacher2Id = "aba81718-3f23-42ca-ba84-fcd9b4f4f944";
             string teacher3Id = "89beab74-07ac-446a-8dc6-b0291b5ff68b";
 
-            string standardPassword = "2a$11$2Wp6Wd8XCZRnMj9WoPYeCeiQTL9Xv7OQmYtaiKgGCvmUzgbUUYQsa"; // Telerik*01
+            string standardPassword = "$2a$11$p4falukZH9ovaApIH6O1T.TbAbwVphyDAVkg2YaFYF7LE6/f79a.6"; // Telerik*01
 
             DateTime standardCreationDate = DateTime.Now;
 
@@ -157,6 +157,7 @@ namespace AceAttitude.Data
                     ApplicationUserId = teacher1Id,
                     CreatedOn = standardCreationDate,
                     IsAdmin = true,
+                    IsApproved = true,
                 },
 
                 new Teacher
@@ -165,6 +166,7 @@ namespace AceAttitude.Data
                     ApplicationUserId = teacher2Id,
                     CreatedOn = standardCreationDate.AddDays(1),
                     IsAdmin = true,
+                    IsApproved = true,
                 },
 
                 new Teacher
@@ -173,6 +175,7 @@ namespace AceAttitude.Data
                     ApplicationUserId = teacher3Id,
                     CreatedOn = standardCreationDate.AddDays(2),
                     IsAdmin = false,
+                    IsApproved = true,
                 }
             };
 

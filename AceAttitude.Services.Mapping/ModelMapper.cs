@@ -7,6 +7,8 @@ namespace AceAttitude.Services.Mapping
 {
     public class ModelMapper : IModelMapper
     {
+        // Map to base entity
+
         public ApplicationUser MapToUser(UserRegisterRequestDTO userDTO, string passwordHash)
         {
             return new ApplicationUser
@@ -19,7 +21,72 @@ namespace AceAttitude.Services.Mapping
             };
         }
 
-        public UserResponseDTO MapToResponseUserDTO(ApplicationUser user)
+        public Student MapToStudent(ApplicationUser user)
+        {
+            return new Student
+            {
+                User = user,
+                ApplicationUserId = user.Id,
+                Id = user.Id,
+                CreatedOn = DateTime.Now,
+                Ratings = user.Student.Ratings,
+                StudentCourses = user.Student.StudentCourses,
+            };
+        }
+
+        public Student MapToStudentLite(ApplicationUser user)
+        {
+            return new Student
+            {
+                User = user,
+                ApplicationUserId = user.Id,
+                Id = user.Id,
+                CreatedOn = DateTime.Now,
+            };
+        }
+
+        public Teacher MapToTeacher(ApplicationUser user)
+        {
+            return new Teacher
+            {
+                User = user,
+                ApplicationUserId = user.Id,
+                Id = user.Id,
+                CreatedOn = DateTime.Now,
+                IsAdmin = user.Teacher.IsAdmin,
+                IsApproved = user.Teacher.IsApproved,
+                CreatedCourses = user.Teacher.CreatedCourses,
+            };
+        }
+
+        public Teacher MapToTeacherLite(ApplicationUser user)
+        {
+            return new Teacher
+            {
+                User = user,
+                ApplicationUserId = user.Id,
+                Id = user.Id,
+                CreatedOn = DateTime.Now,
+                IsAdmin = false,
+            };
+        }
+
+        public Lecture MapToLecture(LectureRequestDTO lectureRequestDTO, Course course)
+        {
+            return new Lecture
+            {
+                Title = lectureRequestDTO.Title,
+                Description = lectureRequestDTO.Description,
+                VideoFilePath = lectureRequestDTO.VideoFilePath,
+                TextFilePath = lectureRequestDTO.TextFilePath,
+                CreatedOn = DateTime.Now,
+                Course = course,
+                CourseId = course.Id,
+            };
+        }
+
+        // Map to DTO
+        public UserResponseDTO MapToResponseUserDTO(ApplicationUser user, string userType)
         {
             return new UserResponseDTO
             {
@@ -28,17 +95,51 @@ namespace AceAttitude.Services.Mapping
                 LastName = user.LastName,
                 Email = user.Email,
                 CreatedOn = user.CreatedOn,
+                UserType = userType,
             };
         }
 
-        public Student MapToStudent(ApplicationUser User)
+        public StudentResponseDTO MapToStudentResponseDTO(Student student)
         {
-            return new Student
+            return new StudentResponseDTO
             {
-                User = User,
-                ApplicationUserId = User.Id,
-                Id = User.Id,
-                CreatedOn = DateTime.Now,
+                UserType = "Student",
+                Id = student.Id,
+                Email = student.User.Email,
+                FirstName = student.User.FirstName,
+                LastName = student.User.LastName,
+                CreatedOn = student.CreatedOn,
+                StudentCourses = student.StudentCourses,
+                Ratings = student.Ratings,
+            };
+        }
+
+        public TeacherResponseDTO MapToTeacherResponseDTO(Teacher teacher)
+        {
+            return new TeacherResponseDTO
+            {
+                UserType = "Teacher",
+                Id = teacher.Id,
+                Email = teacher.User.Email,
+                FirstName = teacher.User.FirstName,
+                LastName = teacher.User.LastName,
+                CreatedOn = teacher.CreatedOn,
+                IsAdmin = teacher.IsAdmin,
+                IsApproved = teacher.IsApproved,
+                CreatedCourses = teacher.CreatedCourses,
+            };
+        }
+
+        public LectureResponseDTO MapToLectureResponseDTO(Lecture lecture)
+        {
+            return new LectureResponseDTO
+            {
+                Course = lecture.Course.Title,
+                Title = lecture.Title,
+                Description = lecture.Description,
+                VideoFilePath = lecture.VideoFilePath,
+                TextFilePath = lecture.TextFilePath,
+                CreatedOn = lecture.CreatedOn,
             };
         }
     }
