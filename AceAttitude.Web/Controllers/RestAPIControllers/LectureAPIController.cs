@@ -21,7 +21,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         private readonly ILectureService lectureService;
         private readonly ICourseService courseService;
 
-        public LectureAPIController(ILectureService lectureService, IUserService userService, ICourseService courseService, 
+        public LectureAPIController(ILectureService lectureService, IUserService userService, ICourseService courseService,
             IAuthService authService, IModelMapper modelMapper)
         {
             this.lectureService = lectureService;
@@ -97,30 +97,54 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         [HttpPut("{id}")]
         public IActionResult UpdateLecture([FromHeader] string credentials, int lectureId, [FromBody] Lecture lecture, [FromHeader] string userId, [FromQuery] int courseId)
         {
-            var user = userService.GetById(userId);
-            var updatedLecture = lectureService.UpdateLecture(lectureId, courseId,lecture, user);
-            return Ok(updatedLecture);
+            try
+            {
+                var teacher = authService.TryGetTeacher(credentials);
+                var updatedLecture = lectureService.UpdateLecture(lectureId, courseId, lecture, teacher);
+                return Ok(updatedLecture);
+            }
+            catch(EntityNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch(UnauthorizedOperationException e)
+            {
+                return Unauthorized(e.Message);
+            }
+
 
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteLecture([FromHeader] string credentials, int id, [FromHeader] string userId, [FromQuery] int courseId)
+        public IActionResult DeleteLecture([FromHeader] string credentials, int id, [FromQuery] int courseId)
         {
-            var user = userService.GetById(userId);
-            var deletedLecture = lectureService.DeleteLecture(id, courseId, user);
-            return Ok(deletedLecture);
+            try
+            {
+                var user = authService.TryGetTeacher(credentials);
+                var deletedLecture = lectureService.DeleteLecture(id, courseId, user);
+                return Ok(deletedLecture);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Unauthorized(e.Message);
+            }
+
         }
 
-        private int ParseId(string paramValue)
-        {
-            if (int.TryParse(paramValue, out int id))
+            private int ParseId(string paramValue)
             {
-                return id;
-            }
-            else
-            {
-                throw new InvalidUserInputException("Id must be an integer number.");
+                if (int.TryParse(paramValue, out int id))
+                {
+                    return id;
+                }
+                else
+                {
+                    throw new InvalidUserInputException("Id must be an integer number.");
+                }
             }
         }
     }
-}

@@ -1,10 +1,7 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
-using AceAttitude.Services;
 using AceAttitude.Services.Contracts;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
-using System.Reflection.Metadata;
 
 namespace AceAttitude.Web.Controllers.RestAPIControllers
 {
@@ -13,13 +10,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
     public class CourseAPIController : ControllerBase
     {
         private readonly ICourseService courseService;
-        private readonly IUserService userService;
         private readonly IAuthService authService;
 
-        public CourseAPIController(ICourseService courseService, IUserService userService, IAuthService authService)
+        public CourseAPIController(ICourseService courseService, IAuthService authService)
         {
             this.courseService = courseService;
-            this.userService = userService;
             this.authService = authService;
         }
         //These are placeholder methods to be properly implemented with authentication, authorization and exception handling!
@@ -128,11 +123,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 var deletedCourse = courseService.DeleteCourse(id, teacher);
                 return Ok(deletedCourse);
             }
-            catch(EntityNotFoundException ex)
+            catch (EntityNotFoundException ex)
             {
                 return NotFound(ex.Message);
             }
-            catch(UnauthorizedOperationException ex)
+            catch (UnauthorizedOperationException ex)
             {
                 return Unauthorized(ex.Message);
             }
