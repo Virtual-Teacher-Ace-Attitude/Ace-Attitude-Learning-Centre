@@ -7,14 +7,14 @@ namespace AceAttitude.Services.Contracts
     {
         Course GetById(int id);
 
-        Course CreateCourse(Course course, ApplicationUser user);
+        Course CreateCourse(Course course, Teacher teacher);
 
-        Course DeleteCourse(int id, ApplicationUser user);
+        Course DeleteCourse(int id, Teacher teacher);
 
-        Course UpdateCourse(int id, Course course, ApplicationUser user);
+        Course UpdateCourse(int id, Course course, Teacher teacher);
 
         List<Course> GetAll(string filterParam, string filterParamValue, string sortParam);
 
-        Course RateCourse(int id, Rating rating, ApplicationUser user);
+        Course RateCourse(int id, Rating rating, Student student);
     }
 }

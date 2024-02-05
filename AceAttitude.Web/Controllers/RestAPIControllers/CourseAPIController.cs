@@ -1,6 +1,10 @@
-﻿using AceAttitude.Data.Models;
+﻿using AceAttitude.Common.Exceptions;
+using AceAttitude.Data.Models;
+using AceAttitude.Services;
 using AceAttitude.Services.Contracts;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Mvc;
+using System.Reflection.Metadata;
 
 namespace AceAttitude.Web.Controllers.RestAPIControllers
 {
@@ -10,59 +14,129 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
     {
         private readonly ICourseService courseService;
         private readonly IUserService userService;
+        private readonly IAuthService authService;
 
-        public CourseAPIController(ICourseService courseService, IUserService userService)
+        public CourseAPIController(ICourseService courseService, IUserService userService, IAuthService authService)
         {
             this.courseService = courseService;
             this.userService = userService;
+            this.authService = authService;
         }
         //These are placeholder methods to be properly implemented with authentication, authorization and exception handling!
         //UserId should be replaced with proper credentials.
         [HttpGet("")]
-        public IActionResult GetAll([FromQuery] string filterParam, 
-            [FromQuery] string filterParamValue, [FromQuery] string sortParam) 
+        public IActionResult GetAll([FromQuery] string filterParam,
+            [FromQuery] string filterParamValue, [FromQuery] string sortParam)
         {
-            return Ok(courseService.GetAll(filterParam, filterParamValue, sortParam));
+            try
+            {
+                return Ok(courseService.GetAll(filterParam, filterParamValue, sortParam));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (InvalidUserInputException ex)
+            {
+                return BadRequest(ex.Message);
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult GetCourseById(int id)
         {
-            return Ok(courseService.GetById(id));
+            try
+            {
+                return Ok(courseService.GetById(id));
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+
         }
 
         [HttpPost("")]
-        public IActionResult CreateCourse(Course course, [FromHeader] string userId)
+        public IActionResult CreateCourse(Course course, [FromHeader] string credentials)
         {
-            var user = userService.GetById(userId);
-            var createdCourse = courseService.CreateCourse(course, user);
-            return StatusCode(StatusCodes.Status201Created, createdCourse);
+            try
+            {
+                var teacher = authService.TryGetTeacher(credentials);
+                var createdCourse = courseService.CreateCourse(course, teacher);
+                return StatusCode(StatusCodes.Status201Created, createdCourse);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+
         }
 
         [HttpPost("{id}")]
-        public IActionResult UpdateCourse(int id, [FromBody] Course course, [FromHeader] string userId)
+        public IActionResult UpdateCourse(int id, [FromBody] Course course, [FromHeader] string credentials)
         {
-            var user = userService.GetById(userId);
-            var updatedCourse = courseService.UpdateCourse(id, course, user);
-            return Ok(updatedCourse);
+            try
+            {
+                var teacher = authService.TryGetTeacher(credentials);
+                var updatedCourse = courseService.UpdateCourse(id, course, teacher);
+                return Ok(updatedCourse);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+
 
         }
 
         [HttpPut("{id}")]
-        public IActionResult RateCourse(int id, [FromBody] Rating rating, [FromHeader] string userId) 
+        public IActionResult RateCourse(int id, [FromBody] Rating rating, [FromHeader] string credentials)
         {
-            var user = userService.GetById(userId);
-            var ratedCourse = courseService.RateCourse(id, rating, user);
-            return Ok(ratedCourse);
+            try
+            {
+                var student = authService.TryGetStudent(credentials);
+                var ratedCourse = courseService.RateCourse(id, rating, student);
+                return Ok(ratedCourse);
+            }
+            catch (EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+
 
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteCourse(int id, [FromHeader] string userId)
+        public IActionResult DeleteCourse(int id, [FromHeader] string credentials)
         {
-            var user = userService.GetById(userId);
-            var deletedCourse = courseService.DeleteCourse(id, user);
-            return Ok(deletedCourse);
+            try
+            {
+                var teacher = authService.TryGetTeacher(credentials);
+                var deletedCourse = courseService.DeleteCourse(id, teacher);
+                return Ok(deletedCourse);
+            }
+            catch(EntityNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
+            catch(UnauthorizedOperationException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
+
         }
 
 

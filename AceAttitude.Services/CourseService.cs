@@ -12,13 +12,13 @@ namespace AceAttitude.Services
         {
             this.courseRepository = courseRepository;
         }
-        public Course CreateCourse(Course course, ApplicationUser user)
+        public Course CreateCourse(Course course, Teacher teacher)
         {
             //Must be a teacher or admin
             return courseRepository.CreateCourse(course);
         }
 
-        public Course DeleteCourse(int id, ApplicationUser user)
+        public Course DeleteCourse(int id, Teacher teacher)
         {
             //Must be a teacher or admin
             return courseRepository.DeleteCourse(id);
@@ -29,7 +29,7 @@ namespace AceAttitude.Services
             return courseRepository.GetById(id);
         }
 
-        public Course UpdateCourse(int id, Course course, ApplicationUser user)
+        public Course UpdateCourse(int id, Course course, Teacher teacher)
         {
             //must be a teacher or admin
             return courseRepository.UpdateCourse(id, course);
@@ -40,7 +40,7 @@ namespace AceAttitude.Services
             return courseRepository.GetFilteredCourses(filterParam, filterParamValue, sortParam);
         }
 
-        public Course RateCourse(int id, Rating rating, ApplicationUser user)
+        public Course RateCourse(int id, Rating rating, Student student)
         {
             //must be a student
             return courseRepository.RateCourse(id, rating);

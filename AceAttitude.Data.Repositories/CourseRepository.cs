@@ -143,7 +143,7 @@ namespace AceAttitude.Data.Repositories
             }
             else
             {
-                throw new ArgumentException($"{paramValue} is not a valid level.");
+                throw new InvalidUserInputException($"{paramValue} is not a valid level.");
             }
 
         }
@@ -156,7 +156,7 @@ namespace AceAttitude.Data.Repositories
             }
             else
             {
-                throw new ArgumentException("Rating must be a decimal number.");
+                throw new InvalidUserInputException("Rating must be a decimal number.");
             }
 
         }

@@ -9,8 +9,8 @@ namespace AceAttitude.Services.Contracts
 
         Lecture CreateLecture(LectureRequestDTO lecture, int courseId, Teacher teacher);
 
-        Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture, ApplicationUser user);
+        Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture, Teacher teacher);
 
-        Lecture DeleteLecture(int lectureId, int courseId, ApplicationUser user);
+        Lecture DeleteLecture(int lectureId, int courseId, Teacher teacher);
     }
 }
