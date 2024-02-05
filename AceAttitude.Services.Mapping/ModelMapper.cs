@@ -71,6 +71,20 @@ namespace AceAttitude.Services.Mapping
             };
         }
 
+        public Lecture MapToLecture(LectureRequestDTO lectureRequestDTO, Course course)
+        {
+            return new Lecture
+            {
+                Title = lectureRequestDTO.Title,
+                Description = lectureRequestDTO.Description,
+                VideoFilePath = lectureRequestDTO.VideoFilePath,
+                TextFilePath = lectureRequestDTO.TextFilePath,
+                CreatedOn = DateTime.Now,
+                Course = course,
+                CourseId = course.Id,
+            };
+        }
+
         // Map to DTO
         public UserResponseDTO MapToResponseUserDTO(ApplicationUser user, string userType)
         {
@@ -113,6 +127,19 @@ namespace AceAttitude.Services.Mapping
                 IsAdmin = teacher.IsAdmin,
                 IsApproved = teacher.IsApproved,
                 CreatedCourses = teacher.CreatedCourses,
+            };
+        }
+
+        public LectureResponseDTO MapToLectureResponseDTO(Lecture lecture)
+        {
+            return new LectureResponseDTO
+            {
+                Course = lecture.Course.Title,
+                Title = lecture.Title,
+                Description = lecture.Description,
+                VideoFilePath = lecture.VideoFilePath,
+                TextFilePath = lecture.TextFilePath,
+                CreatedOn = lecture.CreatedOn,
             };
         }
     }

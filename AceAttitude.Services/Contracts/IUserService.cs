@@ -8,6 +8,10 @@ namespace AceAttitude.Services.Contracts
     {
         ApplicationUser GetById(string id);
 
+        Student GetStudentById(string id);
+
+        Teacher GetTeacherById(string id);
+
         ApplicationUser Create(ApplicationUser user);
 
         ApplicationUser CreateTeacher(ApplicationUser user);

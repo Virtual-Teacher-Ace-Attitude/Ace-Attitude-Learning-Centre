@@ -15,6 +15,26 @@ namespace AceAttitude.Services
             this.userRepository = userRepository;
         }
 
+        public ApplicationUser GetById(string id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public ApplicationUser GetByEmail(string email)
+        {
+            return this.userRepository.GetByEmail(email);
+        }
+
+        public Student GetStudentById(string id)
+        {
+            return this.userRepository.GetStudentById(id);
+        }
+
+        public Teacher GetTeacherById(string id)
+        {
+            return this.userRepository.GetTeacherById(id);
+        }
+
         public ApplicationUser CreateStudent(ApplicationUser user)
         {
             return this.userRepository.CreateStudent(user);
@@ -35,11 +55,6 @@ namespace AceAttitude.Services
             throw new NotImplementedException();
         }
 
-        public ApplicationUser GetById(string id)
-        {
-            throw new NotImplementedException();
-        }
-
         public ApplicationUser Update(string id, ApplicationUser user)
         {
             throw new NotImplementedException();
@@ -51,11 +66,6 @@ namespace AceAttitude.Services
             {
                 throw new DuplicateEntityException(DuplicateEmailRegisterErrorMessage);
             }
-        }
-
-        public ApplicationUser GetByEmail(string email)
-        {
-            return this.userRepository.GetByEmail(email);
         }
     }
 }

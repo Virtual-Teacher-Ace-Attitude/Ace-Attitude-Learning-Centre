@@ -14,6 +14,8 @@ namespace AceAttitude.Services.Mapping.Contracts
 
         public Teacher MapToTeacher(ApplicationUser user);
 
+        public Lecture MapToLecture(LectureRequestDTO lectureRequestDTO, Course course);
+
         public ApplicationUser MapToUser(UserRegisterRequestDTO userDTO, string passwordHash);
 
         public UserResponseDTO MapToResponseUserDTO(ApplicationUser user, string userType);
@@ -21,5 +23,7 @@ namespace AceAttitude.Services.Mapping.Contracts
         public StudentResponseDTO MapToStudentResponseDTO(Student student);
 
         public TeacherResponseDTO MapToTeacherResponseDTO(Teacher teacher);
+
+        public LectureResponseDTO MapToLectureResponseDTO(Lecture lecture);
     }
 }

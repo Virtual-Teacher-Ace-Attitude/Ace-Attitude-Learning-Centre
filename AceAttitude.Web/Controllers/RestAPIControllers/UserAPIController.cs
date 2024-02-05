@@ -53,11 +53,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
             catch (DuplicateEntityException e)
             {
-                return Conflict(e.Message);
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
             }
             catch (InvalidUserInputException e)
             {
-                return Conflict(e.Message);
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
         }
 
@@ -79,11 +79,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
             catch (DuplicateEntityException e)
             {
-                return Conflict(e.Message);
+                return StatusCode(StatusCodes.Status409Conflict, e.Message);
             }
             catch (InvalidUserInputException e)
             {
-                return Conflict(e.Message);
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
         }
 

@@ -2,7 +2,7 @@
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
-using AceAttitude.Services.Mapping.Contracts;
+using AceAttitude.Web.DTO.Request;
 
 namespace AceAttitude.Services
 {
@@ -10,22 +10,28 @@ namespace AceAttitude.Services
     {
         private const string StudentNotEnrolledErrorMessage = "You are not enrolled in this course!";
         private const string TeacherNotApprovedErrorMessage = "You are not an approved teacher!";
-
-        private readonly IModelMapper modelMapper;
+        private const string TeacherNotCourseCreator = "You are not the creator of this course!";
 
         private readonly IUserRepository userRepository;
         private readonly ILectureRepository lectureRepository;
+        private readonly ICourseRepository courseRepository;
 
-        public LectureService(ILectureRepository lectureRepository, IUserRepository userRepository, IModelMapper modelMapper)
+        public LectureService(ILectureRepository lectureRepository, IUserRepository userRepository, ICourseRepository courseRepository)
         {
             this.lectureRepository = lectureRepository;
             this.userRepository = userRepository;
-            this.modelMapper = modelMapper;
+            this.courseRepository = courseRepository;
         }
-        public Lecture CreateLecture(Lecture lecture, Course course, ApplicationUser user)
+        public Lecture CreateLecture(LectureRequestDTO lectureRequestDTO, int courseId, Teacher teacher)
         {
             //User must be a teacher and course creator!
-             return lectureRepository.CreateLecture(lecture, course);
+
+            Course course = this.courseRepository.GetById(courseId);
+
+            this.EnsureTeacherApproved(teacher);
+            this.EnsureTeacherIsCourseCreator(teacher, courseId);
+
+            return lectureRepository.CreateLecture(lectureRequestDTO, course);
         }
 
         public Lecture DeleteLecture(int lectureId, int courseId, ApplicationUser user)
@@ -42,11 +48,13 @@ namespace AceAttitude.Services
 
             if (userType == "student")
             {
-                this.EnsureStudentEnrolled(user, courseId);
+                Student student = this.userRepository.GetStudentById(user.Id);
+                this.EnsureStudentEnrolled(student, courseId);
             }
             else if (userType == "teacher")
             {
-                this.EnsureTeacherApproved(user);
+                Teacher teacher = this.userRepository.GetTeacherById(user.Id);
+                this.EnsureTeacherApproved(teacher);
             }
 
             return lectureRepository.GetById(lectureId, courseId);
@@ -58,20 +66,24 @@ namespace AceAttitude.Services
             return lectureRepository.UpdateLecture(lectureId, courseId, lecture);
         }
 
-        private void EnsureStudentEnrolled(ApplicationUser user, int courseId)
+        private void EnsureTeacherIsCourseCreator(Teacher teacher, int courseId)
         {
-            Student student = this.userRepository.GetStudentById(user.Id);
+            if (!teacher.CreatedCourses.Any(cc => cc.Id == courseId))
+            {
+                throw new UnauthorizedOperationException(TeacherNotCourseCreator);
+            }
+        }
 
+        private void EnsureStudentEnrolled(Student student, int courseId)
+        {
             if (!student.StudentCourses.Any(sc => sc.CourseId == courseId)) 
             {
                 throw new UnauthorizedOperationException(StudentNotEnrolledErrorMessage);
             }
         }
 
-        private void EnsureTeacherApproved(ApplicationUser user)
+        private void EnsureTeacherApproved(Teacher teacher)
         {
-            Teacher teacher = this.userRepository.GetTeacherById(user.Id);
-
             if (teacher.IsApproved == false)
             {
                 throw new UnauthorizedOperationException(TeacherNotApprovedErrorMessage);

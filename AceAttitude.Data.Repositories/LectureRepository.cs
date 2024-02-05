@@ -1,6 +1,8 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
+using AceAttitude.Services.Mapping.Contracts;
+using AceAttitude.Web.DTO.Request;
 
 namespace AceAttitude.Data.Repositories
 {
@@ -10,16 +12,22 @@ namespace AceAttitude.Data.Repositories
         private readonly string LectureDoesntExistErrorMessage = "A lecture with id: {0} does not exist.";
 
         private readonly ApplicationDbContext lectureContext;
-        public LectureRepository(ApplicationDbContext lectureContext)
+
+        private readonly IModelMapper modelMapper;
+
+        public LectureRepository(ApplicationDbContext lectureContext, IModelMapper modelMapper)
         {
             this.lectureContext = lectureContext;
+            this.modelMapper = modelMapper;
         }
-        public Lecture CreateLecture(Lecture lecture, Course course)
+        public Lecture CreateLecture(LectureRequestDTO lectureRequestDto, Course course)
         {
-            lecture.Course = course;
-            lecture.CreatedOn = DateTime.Now;
+            Lecture lecture = this.modelMapper.MapToLecture(lectureRequestDto, course);
+
             lectureContext.Lectures.Add(lecture);
+
             lectureContext.SaveChanges();
+
             return lecture;
         }
 
@@ -52,6 +60,7 @@ namespace AceAttitude.Data.Repositories
             lectureToUpdate.VideoFilePath = lecture.VideoFilePath;
             lectureToUpdate.TextFilePath = lecture.TextFilePath;
             lectureToUpdate.ModifiedOn = DateTime.Now;
+
             lectureContext.SaveChanges();
 
             return lectureToUpdate;

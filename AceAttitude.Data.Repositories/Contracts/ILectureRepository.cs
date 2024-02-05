@@ -1,5 +1,5 @@
 ﻿using AceAttitude.Data.Models;
-
+using AceAttitude.Web.DTO.Request;
 
 namespace AceAttitude.Data.Repositories.Contracts
 {
@@ -7,7 +7,7 @@ namespace AceAttitude.Data.Repositories.Contracts
     {
         public Lecture GetById(int lectureId, int courseId);
 
-        public Lecture CreateLecture(Lecture lecture, Course course);
+        public Lecture CreateLecture(LectureRequestDTO lectureRequestDTO, Course course);
 
         public Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture);
 

@@ -65,7 +65,7 @@ namespace AceAttitude.Services
                 throw new UnauthorizedOperationException(NotStudentErrorMessage);
             }
 
-            return this.modelMapper.MapToStudentLite(user);
+            return this.userService.GetStudentById(user.StudentId);
         }
 
         public Teacher TryGetTeacher(string credentials)
@@ -77,7 +77,7 @@ namespace AceAttitude.Services
                 throw new UnauthorizedOperationException(NotTeacherErrorMessage);
             }
 
-            return this.modelMapper.MapToTeacherLite(user);
+            return this.userService.GetTeacherById(user.TeacherId);
         }
 
         public string GeneratePasswordHash(string password)

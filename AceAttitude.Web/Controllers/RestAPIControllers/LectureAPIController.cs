@@ -2,6 +2,8 @@
 using AceAttitude.Data.Models;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
+using AceAttitude.Web.DTO.Request;
+using AceAttitude.Web.DTO.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AceAttitude.Web.Controllers.RestAPIControllers
@@ -10,6 +12,8 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
     [Route("api/courses/{courseId}/lectures")]
     public class LectureAPIController : ControllerBase
     {
+        private readonly string InvalidLectureCreationErrorMessage = "Unable to create lecture, invalid input data!";
+
         private readonly IAuthService authService;
         private readonly IModelMapper modelMapper;
 
@@ -33,7 +37,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         [HttpGet("{lectureId}")]
         public IActionResult GetLectureById([FromHeader] string credentials, int lectureId, [FromRoute] string courseId)
         {
-            // Needs a DTO
+            // Needs a DTO and model validation
 
             try
             {
@@ -58,15 +62,39 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult CreateLecture([FromHeader] string credentials, Lecture lecture, int courseId, [FromHeader] string userId)
+        public IActionResult CreateLecture([FromHeader] string credentials, [FromBody] LectureRequestDTO lectureRequestDTO, [FromRoute] int courseId)
         {
-            var user = userService.GetById(userId);
-            var course = courseService.GetById(courseId);
-            var createdLecture = lectureService.CreateLecture(lecture, course, user);
-            return StatusCode(StatusCodes.Status201Created, createdLecture);
+            // Needs a DTO and model validation
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    throw new InvalidUserInputException(InvalidLectureCreationErrorMessage);
+                }
+
+                Teacher teacher = authService.TryGetTeacher(credentials);
+
+                Lecture createdLecture = lectureService.CreateLecture(lectureRequestDTO, courseId, teacher);
+
+                LectureResponseDTO responseDTO = this.modelMapper.MapToLectureResponseDTO(createdLecture);
+
+                return StatusCode(StatusCodes.Status201Created, responseDTO);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, e.Message);
+            }
         }
 
-        [HttpPost("{id}")]
+        [HttpPut("{id}")]
         public IActionResult UpdateLecture([FromHeader] string credentials, int lectureId, [FromBody] Lecture lecture, [FromHeader] string userId, [FromQuery] int courseId)
         {
             var user = userService.GetById(userId);
