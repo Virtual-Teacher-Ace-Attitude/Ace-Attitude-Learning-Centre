@@ -1,6 +1,9 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Services.Contracts;
+using AceAttitude.Services.Mapping.Contracts;
+using AceAttitude.Web.DTO.Request;
+using AceAttitude.Web.DTO.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AceAttitude.Web.Controllers.RestAPIControllers
@@ -11,11 +14,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
     {
         private readonly ICourseService courseService;
         private readonly IAuthService authService;
+        private readonly IModelMapper modelMapper;
 
-        public CourseAPIController(ICourseService courseService, IAuthService authService)
+        public CourseAPIController(ICourseService courseService, IAuthService authService, IModelMapper modelMapper)
         {
             this.courseService = courseService;
             this.authService = authService;
+            this.modelMapper = modelMapper;
         }
         //These are placeholder methods to be properly implemented with authentication, authorization and exception handling!
         //UserId should be replaced with proper credentials.
@@ -25,7 +30,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
-                return Ok(courseService.GetAll(filterParam, filterParamValue, sortParam));
+                List<CourseResponseDTO> courses = courseService.GetAll(filterParam, filterParamValue, sortParam)
+                    .Select(course => modelMapper.MapToCourseResponseDTO(course))
+                    .ToList();
+                return Ok(courses);
             }
             catch (EntityNotFoundException ex)
             {
@@ -42,7 +50,9 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
-                return Ok(courseService.GetById(id));
+                var course = courseService.GetById(id); 
+                var responseDTO = modelMapper.MapToCourseResponseDTO(course);
+                return Ok(responseDTO);
             }
             catch (EntityNotFoundException ex)
             {
@@ -52,13 +62,15 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult CreateCourse(Course course, [FromHeader] string credentials)
+        public IActionResult CreateCourse(CourseRequestDTO courseRequestDTO, [FromHeader] string credentials)
         {
             try
             {
                 var teacher = authService.TryGetTeacher(credentials);
+                var course = modelMapper.MapToCourse(courseRequestDTO);
                 var createdCourse = courseService.CreateCourse(course, teacher);
-                return StatusCode(StatusCodes.Status201Created, createdCourse);
+                var responseDTO = modelMapper.MapToCourseResponseDTO(createdCourse);
+                return StatusCode(StatusCodes.Status201Created, responseDTO);
             }
             catch (EntityNotFoundException ex)
             {
@@ -72,13 +84,15 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("{id}")]
-        public IActionResult UpdateCourse(int id, [FromBody] Course course, [FromHeader] string credentials)
+        public IActionResult UpdateCourse(int id, [FromBody] CourseRequestDTO courseRequestDTO, [FromHeader] string credentials)
         {
             try
             {
                 var teacher = authService.TryGetTeacher(credentials);
+                var course = modelMapper.MapToCourse(courseRequestDTO);
                 var updatedCourse = courseService.UpdateCourse(id, course, teacher);
-                return Ok(updatedCourse);
+                var responseDTO = modelMapper.MapToCourseResponseDTO(updatedCourse);
+                return Ok(responseDTO);
             }
             catch (EntityNotFoundException ex)
             {
@@ -99,7 +113,8 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 var student = authService.TryGetStudent(credentials);
                 var ratedCourse = courseService.RateCourse(id, rating, student);
-                return Ok(ratedCourse);
+                var responseDTO = modelMapper.MapToCourseResponseDTO(ratedCourse);
+                return Ok(responseDTO);
             }
             catch (EntityNotFoundException ex)
             {
@@ -121,7 +136,8 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 var teacher = authService.TryGetTeacher(credentials);
                 var deletedCourse = courseService.DeleteCourse(id, teacher);
-                return Ok(deletedCourse);
+                var responseDTO = modelMapper.MapToCourseResponseDTO(deletedCourse);
+                return Ok(responseDTO);
             }
             catch (EntityNotFoundException ex)
             {
