@@ -26,6 +26,8 @@ namespace AceAttitude.Services.Contracts
 
         public ApplicationUser GetByEmail(string email);
 
-        //public Teacher ViewTeacherProfile(int id, ApplicationUser requestUser);
+        public Teacher ViewTeacherProfile(string id, ApplicationUser requestUser);
+
+        public Student ViewStudentProfile(string id, ApplicationUser requestUser);
     }
 }

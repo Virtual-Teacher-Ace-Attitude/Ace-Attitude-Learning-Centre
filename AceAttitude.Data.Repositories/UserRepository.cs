@@ -33,6 +33,7 @@ namespace AceAttitude.Data.Repositories
                 .Include(student => student.User)
                 .Include(student => student.Ratings)
                 .Include(student => student.StudentCourses)
+                .ThenInclude(sc => sc.Course)
                 .FirstOrDefault(student => student.Id == id && student.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException(string.Format(UserNotFoundErrorMessage, "Student", "ID: ", id));
 

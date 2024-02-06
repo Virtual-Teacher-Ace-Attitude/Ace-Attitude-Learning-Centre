@@ -1,5 +1,6 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Misc;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.DTO.Request;
@@ -45,7 +46,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                     throw new InvalidUserInputException(InvalidUserCreationErrorMessage);
                 }
 
-                ApplicationUser user = authService.ValidateUserCanRegister(userDTO);
+                ApplicationUser user = authService.ValidateUserCanRegister(userDTO, UserType.Student);
 
                 UserResponseDTO userResponseDto = modelMapper.MapToResponseUserDTO(userService.CreateStudent(user), "Student");
 
@@ -71,7 +72,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                     throw new InvalidUserInputException(InvalidUserCreationErrorMessage);
                 }
 
-                ApplicationUser user = authService.ValidateUserCanRegister(userDTO);
+                ApplicationUser user = authService.ValidateUserCanRegister(userDTO, UserType.Teacher);
 
                 UserResponseDTO teacherResponseDto = modelMapper.MapToResponseUserDTO(userService.CreateTeacher(user), "Teacher - Awaiting Approval");
 
@@ -88,18 +89,41 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         // Author required
-        [HttpGet("{id}/profile")]
-        public IActionResult ViewProfile([FromHeader] string credentials, int id)
+        [HttpGet("{id}/teachers/profile")]
+        public IActionResult ViewTeacherProfile([FromHeader] string credentials, string id)
         {
             try
             {
                 ApplicationUser user = this.authService.TryGetUser(credentials);
 
-                //Teacher teacherToView = this.userService.ViewTeacherProfile(id, user);
+                Teacher teacherToView = this.userService.ViewTeacherProfile(id, user);
 
-                //TeacherResponseDTO teacherResponseDto = this.modelMapper.MapToTeacherResponseDTO(teacherToView);
+                TeacherResponseDTO teacherResponseDto = this.modelMapper.MapToTeacherResponseDTO(teacherToView);
 
-                return StatusCode(StatusCodes.Status200OK);
+                return StatusCode(StatusCodes.Status200OK, teacherResponseDto);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
+
+        [HttpGet("{id}/students/profile")]
+        public IActionResult ViewStudentProfile([FromHeader] string credentials, string id)
+        {
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                Student studentToView = this.userService.ViewStudentProfile(id, user);
+
+                StudentResponseDTO studentResponseDTO = this.modelMapper.MapToStudentResponseDTO(studentToView);
+
+                return StatusCode(StatusCodes.Status200OK, studentResponseDTO);
             }
             catch (EntityNotFoundException e)
             {

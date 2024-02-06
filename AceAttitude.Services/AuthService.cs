@@ -1,5 +1,6 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Misc;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.DTO.Request;
@@ -22,13 +23,14 @@ namespace AceAttitude.Services
             this.userService = userService;
         }
 
-        public ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO)
+        public ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO, UserType userType)
         {
             this.userService.CheckEmailExists(userDTO.Email);
 
             string passwordHash = this.GeneratePasswordHash(userDTO.Password);
 
             ApplicationUser user = this.modelMapper.MapToUser(userDTO, passwordHash);
+            user.UserType = userType;
 
             return user;
         }

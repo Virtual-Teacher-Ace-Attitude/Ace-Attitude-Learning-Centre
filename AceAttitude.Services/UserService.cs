@@ -1,5 +1,6 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
 
@@ -8,6 +9,7 @@ namespace AceAttitude.Services
     public class UserService : IUserService
     {
         private readonly string DuplicateEmailRegisterErrorMessage = "The email provided is already registered under an existing account!";
+        private readonly string UnableToViewProfileErrorMessage = "Only the creator of the profile or an admin can view it!";
 
         private readonly IUserRepository userRepository;
         public UserService(IUserRepository userRepository)
@@ -66,6 +68,26 @@ namespace AceAttitude.Services
             {
                 throw new DuplicateEntityException(DuplicateEmailRegisterErrorMessage);
             }
+        }
+
+        public Teacher ViewTeacherProfile(string id, ApplicationUser requestUser)
+        {
+            if (requestUser.Id != id && requestUser.UserType != UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(UnableToViewProfileErrorMessage);
+            }
+
+            return this.userRepository.GetTeacherById(id);
+        }
+
+        public Student ViewStudentProfile(string id, ApplicationUser requestUser)
+        {
+            if (requestUser.Id != id && requestUser.UserType != UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(UnableToViewProfileErrorMessage);
+            }
+
+            return this.userRepository.GetStudentById(id);
         }
     }
 }

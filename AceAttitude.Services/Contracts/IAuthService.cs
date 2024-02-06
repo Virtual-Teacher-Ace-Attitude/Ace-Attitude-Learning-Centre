@@ -1,4 +1,5 @@
 ﻿using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Misc;
 using AceAttitude.Web.DTO.Request;
 
 namespace AceAttitude.Services.Contracts
@@ -13,7 +14,7 @@ namespace AceAttitude.Services.Contracts
 
         Teacher TryGetTeacher(string credentials);
 
-        ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO);
+        ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO, UserType userType);
 
         //ApplicationUser LoginUser(UserRegisterDTO userDTO);
 
