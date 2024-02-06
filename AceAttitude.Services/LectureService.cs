@@ -1,17 +1,15 @@
-﻿using AceAttitude.Common.Exceptions;
-using AceAttitude.Data.Models;
+﻿using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Web.DTO.Request;
+using Helpers;
 
 namespace AceAttitude.Services
 {
     public class LectureService : ILectureService
     {
-        private const string StudentNotEnrolledErrorMessage = "You are not enrolled in this course!";
-        private const string TeacherNotApprovedErrorMessage = "You are not an approved teacher!";
-        private const string TeacherNotCourseCreator = "You are not the creator of this course!";
 
+        private readonly AuthHelper authHelper;
         private readonly IUserRepository userRepository;
         private readonly ILectureRepository lectureRepository;
         private readonly ICourseRepository courseRepository;
@@ -28,15 +26,16 @@ namespace AceAttitude.Services
 
             Course course = this.courseRepository.GetById(courseId);
 
-            this.EnsureTeacherApproved(teacher);
-            this.EnsureTeacherIsCourseCreator(teacher, courseId);
+            authHelper.EnsureTeacherApproved(teacher);
+            authHelper.EnsureTeacherIsCourseCreator(teacher, courseId);
 
             return lectureRepository.CreateLecture(lectureRequestDTO, course);
         }
 
-        public Lecture DeleteLecture(int lectureId, int courseId, ApplicationUser user)
+        public Lecture DeleteLecture(int lectureId, int courseId, Teacher teacher)
         {
-            //User must be a teacher and course creator!
+            authHelper.EnsureTeacherApproved(teacher);
+            authHelper.EnsureTeacherIsCourseCreator(teacher, courseId);
             return lectureRepository.DeleteLecture(lectureId, courseId);
         }
 
@@ -44,74 +43,28 @@ namespace AceAttitude.Services
         public Lecture GetById(int lectureId, int courseId, ApplicationUser user)
         {
             //Must be enrolled in the course OR teacher
-            string userType = this.ReturnUserType(user);
+            string userType = authHelper.ReturnUserType(user);
 
             if (userType == "student")
             {
                 Student student = this.userRepository.GetStudentById(user.Id);
-                this.EnsureStudentEnrolled(student, courseId);
+                authHelper.EnsureStudentEnrolled(student, courseId);
             }
             else if (userType == "teacher")
             {
                 Teacher teacher = this.userRepository.GetTeacherById(user.Id);
-                this.EnsureTeacherApproved(teacher);
+                authHelper.EnsureTeacherApproved(teacher);
             }
 
             return lectureRepository.GetById(lectureId, courseId);
         }
 
-        public Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture, ApplicationUser user)
+        public Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture, Teacher teacher)
         {
-            //User must be a teacher and course creator!
+            authHelper.EnsureTeacherApproved(teacher);
+            authHelper.EnsureTeacherIsCourseCreator(teacher, courseId);
             return lectureRepository.UpdateLecture(lectureId, courseId, lecture);
         }
 
-        private void EnsureTeacherIsCourseCreator(Teacher teacher, int courseId)
-        {
-            if (!teacher.CreatedCourses.Any(cc => cc.Id == courseId))
-            {
-                throw new UnauthorizedOperationException(TeacherNotCourseCreator);
-            }
-        }
-
-        private void EnsureStudentEnrolled(Student student, int courseId)
-        {
-            if (!student.StudentCourses.Any(sc => sc.CourseId == courseId)) 
-            {
-                throw new UnauthorizedOperationException(StudentNotEnrolledErrorMessage);
-            }
-        }
-
-        private void EnsureTeacherApproved(Teacher teacher)
-        {
-            if (teacher.IsApproved == false)
-            {
-                throw new UnauthorizedOperationException(TeacherNotApprovedErrorMessage);
-            }
-        }
-
-        private string ReturnUserType(ApplicationUser user)
-        {
-            if (user.TeacherId is null)
-            {
-                return "student";
-            }
-            else
-            {
-                return "teacher";
-            }
-        }
-
-
-        // Inherited interface to avoid 
-        public Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture, Teacher teacher)
-        {
-            throw new NotImplementedException();
-        }
-
-        public Lecture DeleteLecture(int lectureId, int courseId, Teacher teacher)
-        {
-            throw new NotImplementedException();
-        }
     }
 }
