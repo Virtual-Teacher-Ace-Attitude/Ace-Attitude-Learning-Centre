@@ -29,5 +29,7 @@ namespace AceAttitude.Services.Contracts
         public Teacher ViewTeacherProfile(string id, ApplicationUser requestUser);
 
         public Student ViewStudentProfile(string id, ApplicationUser requestUser);
+
+        public ICollection<Teacher> GetUnapprovedTeachers(ApplicationUser requestUser);
     }
 }

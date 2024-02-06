@@ -1,24 +1,26 @@
-﻿using AceAttitude.Data.Models;
+﻿using AceAttitude.Common.Helpers.Contracts;
+using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Web.DTO.Request;
-using Helpers;
 
 namespace AceAttitude.Services
 {
     public class LectureService : ILectureService
     {
 
-        private readonly AuthHelper authHelper;
+        private readonly IAuthHelper authHelper;
         private readonly IUserRepository userRepository;
         private readonly ILectureRepository lectureRepository;
         private readonly ICourseRepository courseRepository;
 
-        public LectureService(ILectureRepository lectureRepository, IUserRepository userRepository, ICourseRepository courseRepository)
+        public LectureService(ILectureRepository lectureRepository, IUserRepository userRepository, ICourseRepository courseRepository, IAuthHelper authHelper)
         {
             this.lectureRepository = lectureRepository;
             this.userRepository = userRepository;
             this.courseRepository = courseRepository;
+            this.authHelper = authHelper;
         }
         public Lecture CreateLecture(LectureRequestDTO lectureRequestDTO, int courseId, Teacher teacher)
         {
@@ -27,7 +29,7 @@ namespace AceAttitude.Services
             Course course = this.courseRepository.GetById(courseId);
 
             authHelper.EnsureTeacherApproved(teacher);
-            authHelper.EnsureTeacherIsCourseCreator(teacher, courseId);
+            authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, courseId);
 
             return lectureRepository.CreateLecture(lectureRequestDTO, course);
         }
@@ -35,7 +37,7 @@ namespace AceAttitude.Services
         public Lecture DeleteLecture(int lectureId, int courseId, Teacher teacher)
         {
             authHelper.EnsureTeacherApproved(teacher);
-            authHelper.EnsureTeacherIsCourseCreator(teacher, courseId);
+            authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, courseId);
             return lectureRepository.DeleteLecture(lectureId, courseId);
         }
 
@@ -43,14 +45,12 @@ namespace AceAttitude.Services
         public Lecture GetById(int lectureId, int courseId, ApplicationUser user)
         {
             //Must be enrolled in the course OR teacher
-            string userType = authHelper.ReturnUserType(user);
-
-            if (userType == "student")
+            if (user.UserType == UserType.Student)
             {
                 Student student = this.userRepository.GetStudentById(user.Id);
                 authHelper.EnsureStudentEnrolled(student, courseId);
             }
-            else if (userType == "teacher")
+            else if (user.UserType == UserType.Teacher)
             {
                 Teacher teacher = this.userRepository.GetTeacherById(user.Id);
                 authHelper.EnsureTeacherApproved(teacher);
@@ -62,7 +62,7 @@ namespace AceAttitude.Services
         public Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture, Teacher teacher)
         {
             authHelper.EnsureTeacherApproved(teacher);
-            authHelper.EnsureTeacherIsCourseCreator(teacher, courseId);
+            authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, courseId);
             return lectureRepository.UpdateLecture(lectureId, courseId, lecture);
         }
 

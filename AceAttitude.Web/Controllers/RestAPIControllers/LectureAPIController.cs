@@ -35,17 +35,15 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         //UserId should be replaced with proper credentials.
 
         [HttpGet("{lectureId}")]
-        public IActionResult GetLectureById([FromHeader] string credentials, int lectureId, [FromRoute] string courseId)
+        public IActionResult GetLectureById([FromHeader] string credentials, int lectureId, [FromRoute] int courseId)
         {
             // Needs a DTO and model validation
 
             try
             {
-                int parsedCourseId = this.ParseId(courseId);
-
                 ApplicationUser user = this.authService.TryGetUser(credentials);
 
-                return Ok(lectureService.GetById(lectureId, parsedCourseId, user));
+                return Ok(lectureService.GetById(lectureId, courseId, user));
             }
             catch (EntityNotFoundException e)
             {
@@ -133,18 +131,6 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 return Unauthorized(e.Message);
             }
 
-        }
-
-        private int ParseId(string paramValue)
-        {
-            if (int.TryParse(paramValue, out int id))
-            {
-                return id;
-            }
-            else
-            {
-                throw new InvalidUserInputException("Id must be an integer number.");
-            }
         }
     }
 }

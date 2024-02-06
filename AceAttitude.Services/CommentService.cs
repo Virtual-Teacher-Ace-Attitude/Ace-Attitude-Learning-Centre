@@ -8,6 +8,8 @@ namespace AceAttitude.Services
 {
     public class CommentService : ICommentService
     {
+        private const string UnableToModifyCommentErrorMessage = "You must be the comment creator or an admin in order to modify or delete this comment.";
+
         private readonly ICommentRepository commentRepository;
 
         public CommentService(ICommentRepository commentRepository)
@@ -53,7 +55,7 @@ namespace AceAttitude.Services
             if (user.UserType != UserType.Admin && comment.User != user)
             {
                 throw new UnauthorizedOperationException
-                    ("You must be the comment creator or an admin in order to modify or delete this comment.");
+                    (UnableToModifyCommentErrorMessage);
             }
         }
     }

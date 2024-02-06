@@ -1,3 +1,5 @@
+using AceAttitude.Common.Helpers;
+using AceAttitude.Common.Helpers.Contracts;
 using AceAttitude.Data;
 using AceAttitude.Data.Repositories;
 using AceAttitude.Data.Repositories.Contracts;
@@ -53,6 +55,8 @@ namespace AceAttitude.Web
             });
 
             builder.Services.AddHttpContextAccessor();
+
+            builder.Services.AddScoped<IAuthHelper, AuthHelper>();
 
             builder.Services.AddScoped<IModelMapper, ModelMapper>();
 

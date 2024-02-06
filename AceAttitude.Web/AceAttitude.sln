@@ -32,7 +32,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceAttitude.Common.Constant
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceAttitude.Services.Mapping", "..\AceAttitude.Services.Mapping\AceAttitude.Services.Mapping.csproj", "{2CC12A69-C127-4704-8089-F25AEA470872}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Helpers", "..\Helpers\Helpers.csproj", "{74A960E2-26A6-47E5-B631-87FD65383668}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceAttitude.Common.Helpers", "..\Helpers\AceAttitude.Common.Helpers.csproj", "{74A960E2-26A6-47E5-B631-87FD65383668}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

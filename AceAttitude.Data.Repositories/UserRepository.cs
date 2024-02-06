@@ -10,6 +10,7 @@ namespace AceAttitude.Data.Repositories
     public class UserRepository : IUserRepository
     {
         private const string UserNotFoundErrorMessage = "{0} with {1} {2} does not exist!";
+        private const string TeachersNotAwaitingApprovalErrorMessage = "No teachers are currently awaiting approval.";
 
         private readonly ApplicationDbContext context;
         private readonly IModelMapper modelMapper;
@@ -57,6 +58,17 @@ namespace AceAttitude.Data.Repositories
                 ?? throw new EntityNotFoundException(string.Format(UserNotFoundErrorMessage, "User", "email:", email));
 
             return user;
+        }
+
+        public ICollection<Teacher> GetUnapprovedTeachers()
+        {
+            var unapprovedTeachers = context.Teachers
+                .Include(teacher => teacher.User)
+                .Include(teacher => teacher.CreatedCourses)
+                .Where(teacher => teacher.IsApproved == false && teacher.DeletedOn.HasValue == false).ToList() 
+                ?? throw new EntityNotFoundException(TeachersNotAwaitingApprovalErrorMessage);
+
+            return unapprovedTeachers;
         }
 
         public ApplicationUser Create(ApplicationUser user)

@@ -16,7 +16,7 @@
     <ProjectReference Include="..\AceAttitude.Data.Repositories\AceAttitude.Data.Repositories.csproj" />
     <ProjectReference Include="..\AceAttitude.Services.Mapping\AceAttitude.Services.Mapping.csproj" />
     <ProjectReference Include="..\AceAttitude.Web.DTO\AceAttitude.Web.DTO.csproj" />
-    <ProjectReference Include="..\Helpers\Helpers.csproj" />
+    <ProjectReference Include="..\Helpers\AceAttitude.Common.Helpers.csproj" />
   </ItemGroup>
 
 </Project>

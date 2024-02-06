@@ -1,16 +1,16 @@
 ﻿using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
-using Helpers;
+using AceAttitude.Common.Helpers.Contracts;
 
 namespace AceAttitude.Services
 {
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository courseRepository;
-        private readonly AuthHelper authHelper;
+        private readonly IAuthHelper authHelper;
 
-        public CourseService(ICourseRepository courseRepository, AuthHelper authHelper)
+        public CourseService(ICourseRepository courseRepository, IAuthHelper authHelper)
         {
             this.courseRepository = courseRepository;
             this.authHelper = authHelper;
@@ -24,7 +24,7 @@ namespace AceAttitude.Services
         public Course DeleteCourse(int id, Teacher teacher)
         {
             authHelper.EnsureTeacherApproved(teacher);
-            authHelper.EnsureTeacherIsCourseCreator(teacher, id);
+            authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, id);
             return courseRepository.DeleteCourse(id);
         }
 
@@ -36,7 +36,7 @@ namespace AceAttitude.Services
         public Course UpdateCourse(int id, Course course, Teacher teacher)
         {
             authHelper.EnsureTeacherApproved(teacher);
-            authHelper.EnsureTeacherIsCourseCreator(teacher, id);
+            authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, id);
             return courseRepository.UpdateCourse(id, course);
         }
 

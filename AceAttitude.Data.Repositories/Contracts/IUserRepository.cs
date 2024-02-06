@@ -12,6 +12,8 @@ namespace AceAttitude.Data.Repositories.Contracts
 
         ApplicationUser GetByEmail(string email);
 
+        ICollection<Teacher> GetUnapprovedTeachers();
+
         ApplicationUser Create(ApplicationUser user);
 
         ApplicationUser Update(string id, ApplicationUser user);

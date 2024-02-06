@@ -30,12 +30,6 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         //These are placeholder methods to be properly implemented with authentication, authorization and exception handling!
         //UserId should be replaced with proper credentials.
 
-        [HttpGet("{id}")]
-        public IActionResult GetUserById(string id)
-        {
-            return Ok(userService.GetById(id));
-        }
-
         [HttpPost("Register/Student")]
         public IActionResult RegisterStudent([FromBody] UserRegisterRequestDTO userDTO)
         {
@@ -135,19 +129,28 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-
-        [HttpPut("{id}/Edit")]
-        public IActionResult UpdateUser(string id, [FromBody] ApplicationUser user)
+        [HttpGet("teachers/unapproved")]
+        public IActionResult ViewUnapprovedTeachers([FromHeader] string credentials)
         {
-            var updatedUser = userService.Update(id, user);
-            return Ok(updatedUser);
-        }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteCourse(string id)
-        {
-            var deletedUser = userService.Delete(id);
-            return Ok(deletedUser);
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                ICollection<Teacher> unapprovedTeachers = this.userService.GetUnapprovedTeachers(user);
+
+                ICollection<TeacherResponseDTO> teachersAsDTO = unapprovedTeachers.Select(this.modelMapper.MapToTeacherResponseDTO).ToList();
+
+                return StatusCode(StatusCodes.Status200OK, teachersAsDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
         }
     }
 }

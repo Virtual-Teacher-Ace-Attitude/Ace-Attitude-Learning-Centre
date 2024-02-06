@@ -1,13 +1,18 @@
 ﻿using AceAttitude.Common.Exceptions;
+using AceAttitude.Common.Helpers.Contracts;
 using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Misc;
 
-namespace Helpers
+namespace AceAttitude.Common.Helpers
 {
-    public class AuthHelper
+    public class AuthHelper : IAuthHelper
     {
         private const string StudentNotEnrolledErrorMessage = "You are not enrolled in this course!";
         private const string TeacherNotApprovedErrorMessage = "You are not an approved teacher!";
         private const string TeacherNotCourseCreator = "You are not the creator of this course!";
+
+        private readonly string UnableToViewProfileErrorMessage = "Only the creator of the profile or an admin can view it!";
+
         public void EnsureTeacherIsCourseCreatorOrAdmin(Teacher teacher, int courseId)
         {
             if (!teacher.CreatedCourses.Any(cc => cc.Id == courseId) && teacher.IsAdmin == false)
@@ -32,15 +37,11 @@ namespace Helpers
             }
         }
 
-        public string ReturnUserType(ApplicationUser user)
+        public void EnsureIdMatchingOrAdmin(string id, ApplicationUser requestUser)
         {
-            if (user.TeacherId is null)
+            if (requestUser.Id != id && requestUser.UserType != UserType.Admin)
             {
-                return "student";
-            }
-            else
-            {
-                return "teacher";
+                throw new UnauthorizedOperationException(UnableToViewProfileErrorMessage);
             }
         }
     }
