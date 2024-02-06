@@ -2,16 +2,19 @@
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
+using AceAttitude.Common.Helpers.Contracts;
 
 namespace AceAttitude.Data.Repositories
 {
     public class CourseRepository : ICourseRepository
     {
         private readonly ApplicationDbContext courseContext;
+        private readonly IParseHelper parseHelper;
 
-        public CourseRepository(ApplicationDbContext context)
+        public CourseRepository(ApplicationDbContext context, IParseHelper parseHelper)
         {
             this.courseContext = context;
+            this.parseHelper = parseHelper;
         }
 
         public Course CreateCourse(Course course)
@@ -89,16 +92,16 @@ namespace AceAttitude.Data.Repositories
                 case "name":
                     return GetAll().Where(c => c.Title.Contains(paramValue));
                 case "level":
-                    Level level = ParseLevel(paramValue);
+                    Level level = parseHelper.ParseLevel(paramValue);
                     return GetAll().Where(c => c.Level == level);
                 case "age":
-                    AgeGroup age = ParseAge(paramValue);
+                    AgeGroup age = parseHelper.ParseAge(paramValue);
                     return GetAll().Where(c => c.AgeGroup == age);
                 case "teacher":
                     return GetAll().Where(c => c.Teacher.User.LastName == paramValue
                                             || c.Teacher.User.FirstName == paramValue);
                 case "rating":
-                    decimal rating = ParseRating(paramValue);
+                    decimal rating = parseHelper.ParseRating(paramValue);
                     return GetAll().Where(c => GetRating(c.Id) >= rating);
                 default:
                     return GetAll();
@@ -122,44 +125,7 @@ namespace AceAttitude.Data.Repositories
             }
         }
 
-        private AgeGroup ParseAge(string paramValue)
-        {
-            if (Enum.TryParse(paramValue, out AgeGroup age))
-            {
-                return age;
-            }
-            else
-            {
-                throw new ArgumentException($"{paramValue} is not a valid age group.");
-            }
 
-        }
-
-        private Level ParseLevel(string paramValue)
-        {
-            if (Enum.TryParse(paramValue, out Level level))
-            {
-                return level;
-            }
-            else
-            {
-                throw new InvalidUserInputException($"{paramValue} is not a valid level.");
-            }
-
-        }
-
-        private decimal ParseRating(string paramValue)
-        {
-            if (decimal.TryParse(paramValue, out decimal rating))
-            {
-                return rating;
-            }
-            else
-            {
-                throw new InvalidUserInputException("Rating must be a decimal number.");
-            }
-
-        }
 
     }
 }

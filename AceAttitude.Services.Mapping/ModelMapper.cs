@@ -1,15 +1,20 @@
-﻿using AceAttitude.Data.Models;
+﻿using AceAttitude.Common.Helpers.Contracts;
+using AceAttitude.Data.Models;
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.DTO.Request;
 using AceAttitude.Web.DTO.Response;
-using System.Linq;
 
 namespace AceAttitude.Services.Mapping
 {
     public class ModelMapper : IModelMapper
     {
-        // Map to base entity
 
+        private readonly IParseHelper parseHelper;
+        // Map to base entity
+        public ModelMapper(IParseHelper parseHelper)
+        {
+            this.parseHelper = parseHelper;
+        }
         public ApplicationUser MapToUser(UserRegisterRequestDTO userDTO, string passwordHash)
         {
             return new ApplicationUser
@@ -83,6 +88,17 @@ namespace AceAttitude.Services.Mapping
                 CreatedOn = DateTime.Now,
                 Course = course,
                 CourseId = course.Id,
+            };
+        }
+
+        public Course MapToCourse(CourseRequestDTO courseRequestDTO)
+        {
+            return new Course
+            {
+                Title = courseRequestDTO.Title,
+                Description = courseRequestDTO.Description,
+                Level = parseHelper.ParseLevel(courseRequestDTO.Level),
+                AgeGroup = parseHelper.ParseAge(courseRequestDTO.AgeGroup),
             };
         }
 

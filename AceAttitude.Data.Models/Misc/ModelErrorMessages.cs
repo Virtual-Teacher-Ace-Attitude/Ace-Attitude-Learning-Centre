@@ -1,6 +1,6 @@
 ﻿namespace AceAttitude.Data.Models.Misc
 {
-    internal static class ModelErrorMessages
+    public static class ModelErrorMessages
     {
         internal const string NameMinLengthErrorMessage = "Name must be at least 2 characters long";
         internal const string NameMaxLengthErrorMessage = "Name cannot be more than 20 characters long";
