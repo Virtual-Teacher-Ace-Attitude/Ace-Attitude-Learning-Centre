@@ -1,4 +1,6 @@
-﻿using AceAttitude.Data.Models;
+﻿using AceAttitude.Common.Exceptions;
+using AceAttitude.Data.Models;
+using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
 
@@ -15,13 +17,12 @@ namespace AceAttitude.Services
 
         public Comment CreateComment(Comment comment, Course course, ApplicationUser user)
         {
-            //Must be logged in.
             return commentRepository.CreateComment(comment, course);
         }
 
         public Comment DeleteComment(int id, ApplicationUser user)
         {
-            //Must be comment creator.
+            EnsureUserIsCreatorOrAdmin(user, id);
             return commentRepository.DeleteComment(id);
         }
 
@@ -37,14 +38,23 @@ namespace AceAttitude.Services
 
         public Comment LikeComment(int id, ApplicationUser user)
         {
-            //Must be logged in.
             return LikeComment(id, user);
         }
 
         public Comment UpdateComment(int id, string content, ApplicationUser user)
         {
-            //Must be comment creator.
+            EnsureUserIsCreatorOrAdmin(user, id);
             return commentRepository.UpdateComment(id, content);
+        }
+
+        private void EnsureUserIsCreatorOrAdmin(ApplicationUser user, int commentId)
+        {
+            Comment comment = commentRepository.GetById(commentId);
+            if (user.UserType != UserType.Admin && comment.User != user)
+            {
+                throw new UnauthorizedOperationException
+                    ("You must be the comment creator or an admin in order to modify or delete this comment.");
+            }
         }
     }
 }

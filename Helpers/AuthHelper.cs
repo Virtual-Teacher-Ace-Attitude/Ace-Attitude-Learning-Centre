@@ -8,9 +8,9 @@ namespace Helpers
         private const string StudentNotEnrolledErrorMessage = "You are not enrolled in this course!";
         private const string TeacherNotApprovedErrorMessage = "You are not an approved teacher!";
         private const string TeacherNotCourseCreator = "You are not the creator of this course!";
-        public void EnsureTeacherIsCourseCreator(Teacher teacher, int courseId)
+        public void EnsureTeacherIsCourseCreatorOrAdmin(Teacher teacher, int courseId)
         {
-            if (!teacher.CreatedCourses.Any(cc => cc.Id == courseId))
+            if (!teacher.CreatedCourses.Any(cc => cc.Id == courseId) && teacher.IsAdmin == false)
             {
                 throw new UnauthorizedOperationException(TeacherNotCourseCreator);
             }
