@@ -152,5 +152,86 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 return Conflict(e.Message);
             }
         }
+
+        [HttpPut("teachers/approve/{id}")]
+        public IActionResult ApproveTeacher([FromHeader] string credentials, string id)
+        {
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                Teacher teacher = this.userService.ApproveTeacher(id, user);
+
+                TeacherResponseDTO teacherResponseDTO = this.modelMapper.MapToTeacherResponseDTO(teacher);
+
+                return StatusCode(StatusCodes.Status200OK, teacherResponseDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
+
+        [HttpPut("teachers/promote/{id}")]
+        public IActionResult PromoteAdmin([FromHeader] string credentials, string id)
+        {
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                Teacher teacher = this.userService.PromoteAdmin(id, user);
+
+                TeacherResponseDTO teacherResponseDTO = this.modelMapper.MapToTeacherResponseDTO(teacher);
+
+                return StatusCode(StatusCodes.Status200OK, teacherResponseDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
+
+        [HttpDelete("delete/{id}")]
+        public IActionResult DeleteUser([FromHeader] string credentials, string id)
+        {
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                ApplicationUser deletedUser = this.userService.Delete(id, user);
+
+                UserResponseDTO userResponseDto = this.modelMapper.MapToResponseUserDTO(deletedUser, deletedUser.UserType.ToString());
+
+                return StatusCode(StatusCodes.Status200OK, userResponseDto);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
     }
 }

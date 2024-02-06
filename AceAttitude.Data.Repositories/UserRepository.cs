@@ -1,6 +1,6 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
-
+using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +10,12 @@ namespace AceAttitude.Data.Repositories
     public class UserRepository : IUserRepository
     {
         private const string UserNotFoundErrorMessage = "{0} with {1} {2} does not exist!";
+
         private const string TeachersNotAwaitingApprovalErrorMessage = "No teachers are currently awaiting approval.";
+        private const string TeacherAlreadyApprovedErrorMessage = "This teacher is already approved.";
+        private const string TeacherAlreadyAdminErrorMessage = "This teacher is already an admin.";
+
+        private const string UnableToDeleteAdminErrorMessage = "You are unable to delete other admins.";
 
         private readonly ApplicationDbContext context;
         private readonly IModelMapper modelMapper;
@@ -109,7 +114,34 @@ namespace AceAttitude.Data.Repositories
 
         public ApplicationUser Delete(string id)
         {
-            throw new NotImplementedException();
+            ApplicationUser userToDelete = this.GetById(id);
+
+            if (userToDelete.DeletedOn.HasValue)
+            {
+                throw new InvalidUserInputException(string.Format(UserNotFoundErrorMessage, "User", "id", id));
+            }
+
+            if (userToDelete.UserType == UserType.Admin)
+            {
+                throw new InvalidUserInputException(string.Format(UnableToDeleteAdminErrorMessage));
+            }
+
+            userToDelete.DeletedOn = DateTime.Now;
+
+            if (userToDelete.UserType == UserType.Student)
+            {
+                Student studentToDelete = this.GetStudentById(id);
+                studentToDelete.DeletedOn = DateTime.Now;
+            }
+            else if (userToDelete.UserType == UserType.Teacher)
+            {
+                Teacher teacherToDelete = this.GetTeacherById(id);
+                teacherToDelete.DeletedOn = DateTime.Now;
+            }
+
+            context.SaveChanges();
+
+            return userToDelete;
         }
 
         public ApplicationUser Update(string id, ApplicationUser user)
@@ -120,6 +152,37 @@ namespace AceAttitude.Data.Repositories
         public bool CheckEmailExists(string email)
         {
             return context.Users.Any(u => u.Email == email && u.DeletedOn.HasValue == false);
+        }
+
+        public Teacher ApproveTeacher(string id)
+        {
+            Teacher teacher = this.GetTeacherById(id);
+
+            if (teacher.IsApproved)
+            {
+                throw new InvalidUserInputException(TeacherAlreadyApprovedErrorMessage);
+            }
+
+            teacher.IsApproved = true;
+            context.SaveChanges();
+
+            return teacher;
+        }
+
+        public Teacher PromoteAdmin(string id)
+        {
+            Teacher teacher = this.GetTeacherById(id);
+
+            if (teacher.IsAdmin)
+            {
+                throw new InvalidUserInputException(TeacherAlreadyAdminErrorMessage);
+            }
+
+            teacher.IsAdmin = true;
+            teacher.User.UserType = UserType.Admin;
+            context.SaveChanges();
+
+            return teacher;
         }
     }
 }

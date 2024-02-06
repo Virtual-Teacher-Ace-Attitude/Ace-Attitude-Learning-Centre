@@ -20,7 +20,7 @@ namespace AceAttitude.Services.Contracts
 
         public ApplicationUser Update(string id, ApplicationUser user);
 
-        public ApplicationUser Delete(string id);
+        public ApplicationUser Delete(string id, ApplicationUser requestUser);
 
         public void CheckEmailExists(string email);
 
@@ -31,5 +31,9 @@ namespace AceAttitude.Services.Contracts
         public Student ViewStudentProfile(string id, ApplicationUser requestUser);
 
         public ICollection<Teacher> GetUnapprovedTeachers(ApplicationUser requestUser);
+
+        public Teacher ApproveTeacher(string id, ApplicationUser requestUser);
+
+        public Teacher PromoteAdmin(string id, ApplicationUser requestUser);
     }
 }

@@ -24,6 +24,10 @@ namespace AceAttitude.Data.Repositories.Contracts
 
         ApplicationUser CreateStudent(ApplicationUser user);
 
+        Teacher ApproveTeacher(string id);
+
+        Teacher PromoteAdmin(string id);
+
         public bool CheckEmailExists(string email);
     }
 }

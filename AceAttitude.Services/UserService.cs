@@ -56,9 +56,14 @@ namespace AceAttitude.Services
             return this.userRepository.Create(user); ;
         }
 
-        public ApplicationUser Delete(string id)
+        public ApplicationUser Delete(string id, ApplicationUser requestUser)
         {
-            throw new NotImplementedException();
+            if (requestUser.UserType != UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(AdminRequiredErrorMessage);
+            }
+
+            return this.userRepository.Delete(id);
         }
 
         public ApplicationUser Update(string id, ApplicationUser user)
@@ -96,6 +101,26 @@ namespace AceAttitude.Services
             }
 
             return this.userRepository.GetUnapprovedTeachers();
+        }
+
+        public Teacher ApproveTeacher(string id, ApplicationUser requestUser)
+        {
+            if (requestUser.UserType != UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(AdminRequiredErrorMessage);
+            }
+
+            return this.userRepository.ApproveTeacher(id);
+        }
+
+        public Teacher PromoteAdmin(string id, ApplicationUser requestUser)
+        {
+            if (requestUser.UserType != UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(AdminRequiredErrorMessage);
+            }
+
+            return this.userRepository.PromoteAdmin(id);
         }
     }
 }
