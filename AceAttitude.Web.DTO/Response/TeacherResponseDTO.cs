@@ -8,6 +8,6 @@ namespace AceAttitude.Web.DTO.Response
 
         public bool IsApproved { get; set; }
 
-        public ICollection<Course> CreatedCourses { get; set; } = new List<Course>();
+        public ICollection<CourseResponseDTO> CreatedCourses { get; set; } = new List<CourseResponseDTO>();
     }
 }

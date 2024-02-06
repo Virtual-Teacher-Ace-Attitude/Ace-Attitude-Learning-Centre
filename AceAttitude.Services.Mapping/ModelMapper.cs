@@ -2,6 +2,7 @@
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.DTO.Request;
 using AceAttitude.Web.DTO.Response;
+using System.Linq;
 
 namespace AceAttitude.Services.Mapping
 {
@@ -109,8 +110,8 @@ namespace AceAttitude.Services.Mapping
                 FirstName = student.User.FirstName,
                 LastName = student.User.LastName,
                 CreatedOn = student.CreatedOn,
-                StudentCourses = student.StudentCourses,
-                Ratings = student.Ratings,
+                StudentCourses = student.StudentCourses.Select(this.MapToStudentCoursesResponseDTO).ToList(),
+                Ratings = student.Ratings.Select(this.MapToRatingResponseDTO).ToList(),
             };
         }
 
@@ -126,7 +127,7 @@ namespace AceAttitude.Services.Mapping
                 CreatedOn = teacher.CreatedOn,
                 IsAdmin = teacher.IsAdmin,
                 IsApproved = teacher.IsApproved,
-                CreatedCourses = teacher.CreatedCourses,
+                CreatedCourses = teacher.CreatedCourses.Select(this.MapToCourseResponseDTO).ToList(),
             };
         }
 
@@ -140,6 +141,41 @@ namespace AceAttitude.Services.Mapping
                 VideoFilePath = lecture.VideoFilePath,
                 TextFilePath = lecture.TextFilePath,
                 CreatedOn = lecture.CreatedOn,
+            };
+        }
+
+        public RatingResponseDTO MapToRatingResponseDTO(Rating rating)
+        {
+            return new RatingResponseDTO
+            {
+                Course = rating.Course.Title,
+                Value = rating.Value,
+                RatedOn = rating.CreatedOn,
+            };
+        }
+
+        public StudentCoursesResponseDTO MapToStudentCoursesResponseDTO(StudentCourses studentCourses)
+        {
+            return new StudentCoursesResponseDTO
+            {
+                Course = studentCourses.Course.Title,
+                IsCompleted = studentCourses.IsCompleted,
+                EnrollDate = studentCourses.CreatedOn,
+            };
+        }
+
+        public CourseResponseDTO MapToCourseResponseDTO(Course course)
+        {
+            return new CourseResponseDTO
+            {
+                Title = course.Title,
+                Description = course.Description,
+                IsDraft = course.IsDraft,
+                Level = course.Level,
+                AgeGroup = course.AgeGroup,
+                CreatedOn = course.CreatedOn,
+                StartingDate = course.StartingDate,
+                IsCompleted = course.IsCompleted,
             };
         }
     }

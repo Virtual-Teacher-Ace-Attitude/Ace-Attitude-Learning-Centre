@@ -103,11 +103,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 var updatedLecture = lectureService.UpdateLecture(lectureId, courseId, lecture, teacher);
                 return Ok(updatedLecture);
             }
-            catch(EntityNotFoundException e)
+            catch (EntityNotFoundException e)
             {
                 return NotFound(e.Message);
             }
-            catch(UnauthorizedOperationException e)
+            catch (UnauthorizedOperationException e)
             {
                 return Unauthorized(e.Message);
             }
@@ -135,16 +135,16 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
 
         }
 
-            private int ParseId(string paramValue)
+        private int ParseId(string paramValue)
+        {
+            if (int.TryParse(paramValue, out int id))
             {
-                if (int.TryParse(paramValue, out int id))
-                {
-                    return id;
-                }
-                else
-                {
-                    throw new InvalidUserInputException("Id must be an integer number.");
-                }
+                return id;
+            }
+            else
+            {
+                throw new InvalidUserInputException("Id must be an integer number.");
             }
         }
     }
+}
