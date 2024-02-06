@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 
 using AceAttitude.Data.Models;
-
+using AceAttitude.Data.Models.Misc;
 
 namespace AceAttitude.Data
 {
@@ -62,6 +62,7 @@ namespace AceAttitude.Data
                     LastName = "One",
                     StudentId = student1Id,
                     CreatedOn = standardCreationDate,
+                    UserType = UserType.Student,
                 },
 
                 new ApplicationUser
@@ -73,6 +74,7 @@ namespace AceAttitude.Data
                     LastName = "Two",
                     StudentId = student2Id,
                     CreatedOn = standardCreationDate.AddDays(1),
+                    UserType = UserType.Student,
                 },
 
                 new ApplicationUser
@@ -84,6 +86,7 @@ namespace AceAttitude.Data
                     LastName = "Three",
                     StudentId = student3Id,
                     CreatedOn = standardCreationDate.AddDays(2),
+                    UserType = UserType.Student,
                 },
 
                 // Teachers
@@ -96,6 +99,7 @@ namespace AceAttitude.Data
                     LastName = "Kalionski",
                     TeacherId = teacher1Id,
                     CreatedOn = standardCreationDate,
+                    UserType = UserType.Admin,
                 },
 
                 new ApplicationUser
@@ -107,6 +111,7 @@ namespace AceAttitude.Data
                     LastName = "Arabadzhiev",
                     TeacherId = teacher2Id,
                     CreatedOn = standardCreationDate.AddDays(1),
+                    UserType = UserType.Admin,
                 },
 
                 new ApplicationUser
@@ -118,6 +123,7 @@ namespace AceAttitude.Data
                     LastName = "Aleksandrov",
                     TeacherId = teacher3Id,
                     CreatedOn = standardCreationDate.AddDays(2),
+                    UserType = UserType.Teacher,
                 },
             };
 

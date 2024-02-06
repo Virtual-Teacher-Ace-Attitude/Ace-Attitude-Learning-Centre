@@ -87,12 +87,30 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        //[HttpPost("")]
-        //public IActionResult CreateUser(ApplicationUser user)
-        //{
-        //    var createdUser = userService.Create(user);
-        //    return StatusCode(StatusCodes.Status201Created, createdUser);
-        //}
+        // Author required
+        [HttpGet("{id}/profile")]
+        public IActionResult ViewProfile([FromHeader] string credentials, int id)
+        {
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                //Teacher teacherToView = this.userService.ViewTeacherProfile(id, user);
+
+                //TeacherResponseDTO teacherResponseDto = this.modelMapper.MapToTeacherResponseDTO(teacherToView);
+
+                return StatusCode(StatusCodes.Status200OK);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
+
 
         [HttpPut("{id}/Edit")]
         public IActionResult UpdateUser(string id, [FromBody] ApplicationUser user)

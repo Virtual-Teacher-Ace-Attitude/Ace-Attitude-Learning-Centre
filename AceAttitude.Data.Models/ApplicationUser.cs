@@ -1,5 +1,5 @@
 ﻿using AceAttitude.Data.Models.Contracts.Role;
-
+using AceAttitude.Data.Models.Misc;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,6 +15,8 @@ namespace AceAttitude.Data.Models
         [Key]
         [Required]
         public string Id { get; set; }
+
+        public UserType UserType { get; set; }
 
         [Required]
         public string FirstName { get; set; } = null!;

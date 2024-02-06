@@ -20,10 +20,16 @@ namespace AceAttitude.Services.Mapping.Contracts
 
         public UserResponseDTO MapToResponseUserDTO(ApplicationUser user, string userType);
 
+        public RatingResponseDTO MapToRatingResponseDTO(Rating rating);
+
+        public StudentCoursesResponseDTO MapToStudentCoursesResponseDTO(StudentCourses studentCourses);
+
         public StudentResponseDTO MapToStudentResponseDTO(Student student);
 
         public TeacherResponseDTO MapToTeacherResponseDTO(Teacher teacher);
 
         public LectureResponseDTO MapToLectureResponseDTO(Lecture lecture);
+
+        public CourseResponseDTO MapToCourseResponseDTO(Course course);
     }
 }

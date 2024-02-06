@@ -4,8 +4,8 @@ namespace AceAttitude.Web.DTO.Response
 {
     public class StudentResponseDTO : UserResponseDTO
     {
-        public ICollection<Rating> Ratings { get; set; } = new List<Rating>();
+        public ICollection<RatingResponseDTO> Ratings { get; set; } = new List<RatingResponseDTO>();
 
-        public ICollection<StudentCourses> StudentCourses { get; set; } = new List<StudentCourses>();
+        public ICollection<StudentCoursesResponseDTO> StudentCourses { get; set; } = new List<StudentCoursesResponseDTO>();
     }
 }

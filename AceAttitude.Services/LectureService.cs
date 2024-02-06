@@ -67,5 +67,28 @@ namespace AceAttitude.Services
         }
 
 
+        private string ReturnUserType(ApplicationUser user)
+        {
+            if (user.TeacherId is null)
+            {
+                return "student";
+            }
+            else
+            {
+                return "teacher";
+            }
+        }
+
+
+        // Inherited interface to avoid 
+        public Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture, Teacher teacher)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Lecture DeleteLecture(int lectureId, int courseId, Teacher teacher)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
