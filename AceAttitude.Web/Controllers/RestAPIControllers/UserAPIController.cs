@@ -233,5 +233,35 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 return Conflict(e.Message);
             }
         }
+
+        [HttpPut("update/{id}")]
+        public IActionResult UpdateUser([FromHeader] string credentials, string id, [FromBody] UserUpdateRequestDTO userUpdateRequestDTO)
+        {
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                string passwordHash = this.authService.GeneratePasswordHash(userUpdateRequestDTO.Password);
+                userUpdateRequestDTO.Password = passwordHash;
+
+                ApplicationUser updatedUser = this.userService.Update(id, user, userUpdateRequestDTO);
+
+                UserResponseDTO userResponseDto = this.modelMapper.MapToResponseUserDTO(updatedUser, updatedUser.UserType.ToString());
+
+                return StatusCode(StatusCodes.Status200OK, userResponseDto);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
     }
 }

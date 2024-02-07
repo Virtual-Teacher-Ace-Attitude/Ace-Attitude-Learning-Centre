@@ -1,4 +1,5 @@
 ﻿using AceAttitude.Data.Models;
+using AceAttitude.Web.DTO.Request;
 
 namespace AceAttitude.Data.Repositories.Contracts
 {
@@ -16,7 +17,7 @@ namespace AceAttitude.Data.Repositories.Contracts
 
         ApplicationUser Create(ApplicationUser user);
 
-        ApplicationUser Update(string id, ApplicationUser user);
+        ApplicationUser Update(string id, UserUpdateRequestDTO userUpdateRequestDTO);
 
         ApplicationUser Delete(string id);
 

@@ -1,6 +1,7 @@
 ﻿
 
 using AceAttitude.Data.Models;
+using AceAttitude.Web.DTO.Request;
 
 namespace AceAttitude.Services.Contracts
 {
@@ -18,7 +19,7 @@ namespace AceAttitude.Services.Contracts
 
         public ApplicationUser CreateStudent(ApplicationUser user);
 
-        public ApplicationUser Update(string id, ApplicationUser user);
+        public ApplicationUser Update(string id, ApplicationUser requestUser, UserUpdateRequestDTO userUpdateRequestDTO);
 
         public ApplicationUser Delete(string id, ApplicationUser requestUser);
 

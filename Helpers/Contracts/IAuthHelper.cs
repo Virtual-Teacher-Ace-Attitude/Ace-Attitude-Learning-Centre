@@ -11,6 +11,6 @@ namespace AceAttitude.Common.Helpers.Contracts
 
         public void EnsureTeacherApproved(Teacher teacher);
 
-        public void EnsureIdMatchingOrAdmin(string id, ApplicationUser requestUser);
+        public void EnsureIdMatchingOrAdmin(string id, ApplicationUser requestUser, string message);
     }
 }

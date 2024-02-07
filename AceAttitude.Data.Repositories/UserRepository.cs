@@ -3,6 +3,7 @@ using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
+using AceAttitude.Web.DTO.Request;
 using Microsoft.EntityFrameworkCore;
 
 namespace AceAttitude.Data.Repositories
@@ -16,6 +17,8 @@ namespace AceAttitude.Data.Repositories
         private const string TeacherAlreadyAdminErrorMessage = "This teacher is already an admin.";
 
         private const string UnableToDeleteAdminErrorMessage = "You are unable to delete other admins.";
+        private const string UnableToEditAdminErrorMessage = "You are unable to edit the profile of other admins.";
+
 
         private readonly ApplicationDbContext context;
         private readonly IModelMapper modelMapper;
@@ -116,37 +119,29 @@ namespace AceAttitude.Data.Repositories
         {
             ApplicationUser userToDelete = this.GetById(id);
 
-            if (userToDelete.DeletedOn.HasValue)
-            {
-                throw new InvalidUserInputException(string.Format(UserNotFoundErrorMessage, "User", "id", id));
-            }
-
-            if (userToDelete.UserType == UserType.Admin)
-            {
-                throw new InvalidUserInputException(string.Format(UnableToDeleteAdminErrorMessage));
-            }
+            this.EnsureNotDeleted(userToDelete.DeletedOn.HasValue, string.Format(UserNotFoundErrorMessage, "User", "id", id));
+            this.EnsureNotAdmin(userToDelete.UserType, UnableToDeleteAdminErrorMessage);
 
             userToDelete.DeletedOn = DateTime.Now;
-
-            if (userToDelete.UserType == UserType.Student)
-            {
-                Student studentToDelete = this.GetStudentById(id);
-                studentToDelete.DeletedOn = DateTime.Now;
-            }
-            else if (userToDelete.UserType == UserType.Teacher)
-            {
-                Teacher teacherToDelete = this.GetTeacherById(id);
-                teacherToDelete.DeletedOn = DateTime.Now;
-            }
+            this.DeleteRelatedEntity(userToDelete.UserType, id);
 
             context.SaveChanges();
 
             return userToDelete;
         }
 
-        public ApplicationUser Update(string id, ApplicationUser user)
+        public ApplicationUser Update(string id, UserUpdateRequestDTO userUpdateRequestDTO)
         {
-            throw new NotImplementedException();
+            ApplicationUser userToEdit = this.GetById(id);
+
+            this.EnsureNotDeleted(userToEdit.DeletedOn.HasValue, string.Format(UserNotFoundErrorMessage, "User", "id", id));
+            this.EnsureNotAdmin(userToEdit.UserType, UnableToDeleteAdminErrorMessage);
+
+            userToEdit = this.modelMapper.MapToUser(userUpdateRequestDTO, userToEdit);
+
+            context.SaveChanges();
+
+            return userToEdit;
         }
 
         public bool CheckEmailExists(string email)
@@ -183,6 +178,40 @@ namespace AceAttitude.Data.Repositories
             context.SaveChanges();
 
             return teacher;
+        }
+
+        private void DeleteRelatedEntity(UserType userType, string id)
+        {
+            if (userType == UserType.Student)
+            {
+                Student studentToDelete = this.GetStudentById(id);
+                studentToDelete.DeletedOn = DateTime.Now;
+            }
+            else if (userType == UserType.Teacher)
+            {
+                Teacher teacherToDelete = this.GetTeacherById(id);
+                teacherToDelete.DeletedOn = DateTime.Now;
+            }
+        }
+
+        private bool EnsureNotDeleted(bool isDeleted, string message)
+        {
+            if (isDeleted)
+            {
+                throw new EntityNotFoundException(message);
+            }
+
+            return true;
+        }
+
+        private bool EnsureNotAdmin(UserType userType, string message)
+        {
+            if (userType == UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(message);
+            }
+
+            return true;
         }
     }
 }

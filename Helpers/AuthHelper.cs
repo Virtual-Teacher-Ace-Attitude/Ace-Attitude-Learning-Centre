@@ -11,8 +11,6 @@ namespace AceAttitude.Common.Helpers
         private const string TeacherNotApprovedErrorMessage = "You are not an approved teacher!";
         private const string TeacherNotCourseCreator = "You are not the creator of this course!";
 
-        private readonly string UnableToViewProfileErrorMessage = "Only the creator of the profile or an admin can view it!";
-
         public void EnsureTeacherIsCourseCreatorOrAdmin(Teacher teacher, int courseId)
         {
             if (!teacher.CreatedCourses.Any(cc => cc.Id == courseId) && teacher.IsAdmin == false)
@@ -37,11 +35,11 @@ namespace AceAttitude.Common.Helpers
             }
         }
 
-        public void EnsureIdMatchingOrAdmin(string id, ApplicationUser requestUser)
+        public void EnsureIdMatchingOrAdmin(string id, ApplicationUser requestUser, string message)
         {
             if (requestUser.Id != id && requestUser.UserType != UserType.Admin)
             {
-                throw new UnauthorizedOperationException(UnableToViewProfileErrorMessage);
+                throw new UnauthorizedOperationException(message);
             }
         }
     }

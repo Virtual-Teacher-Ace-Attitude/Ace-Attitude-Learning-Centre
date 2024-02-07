@@ -20,6 +20,8 @@ namespace AceAttitude.Services.Mapping.Contracts
 
         public ApplicationUser MapToUser(UserRegisterRequestDTO userDTO, string passwordHash);
 
+        public ApplicationUser MapToUser(UserUpdateRequestDTO userDTO, ApplicationUser user);
+
         public UserResponseDTO MapToResponseUserDTO(ApplicationUser user, string userType);
 
         public RatingResponseDTO MapToRatingResponseDTO(Rating rating);

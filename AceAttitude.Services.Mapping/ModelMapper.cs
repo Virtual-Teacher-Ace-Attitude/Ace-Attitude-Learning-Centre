@@ -27,6 +27,16 @@ namespace AceAttitude.Services.Mapping
             };
         }
 
+        public ApplicationUser MapToUser(UserUpdateRequestDTO userDTO, ApplicationUser user)
+        {
+            user.FirstName = userDTO.FirstName;
+            user.LastName = userDTO.LastName;
+            user.PasswordHash = userDTO.Password;
+            user.ModifiedOn = DateTime.Now;
+
+            return user;
+        }
+
         public Student MapToStudent(ApplicationUser user)
         {
             return new Student
