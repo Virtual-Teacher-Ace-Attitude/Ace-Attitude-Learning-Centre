@@ -1,6 +1,9 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Services.Contracts;
+using AceAttitude.Services.Mapping.Contracts;
+using AceAttitude.Web.DTO.Request;
+using AceAttitude.Web.DTO.Response;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AceAttitude.Web.Controllers.RestAPIControllers
@@ -10,14 +13,18 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
     public class CommentAPIController : ControllerBase
     {
         private readonly IAuthService authService;
+
+        private readonly IModelMapper modelMapper;
+
         private readonly ICommentService commentService;
         private readonly ICourseService courseService;
 
-        public CommentAPIController(IAuthService authService, ICommentService commentService, ICourseService courseService)
+        public CommentAPIController(IAuthService authService, ICommentService commentService, ICourseService courseService, IModelMapper modelMapper)
         {
             this.authService = authService;
             this.commentService = commentService;
             this.courseService = courseService;
+            this.modelMapper = modelMapper;
         }
 
         [HttpGet("")]
@@ -25,9 +32,12 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
-                var course = courseService.GetById(courseId);
-                List<Comment> comments = commentService.GetComments(course);
-                return Ok(comments);
+                Course course = courseService.GetById(courseId);
+
+                ICollection<CommentResponseDTO> commentsAsDto = this.commentService.GetComments(course)
+                    .Select(this.modelMapper.MapToCommentResponseDTO).ToList();
+
+                return Ok(commentsAsDto);
             }
             catch (EntityNotFoundException e)
             {
@@ -37,14 +47,21 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("")]
-        public IActionResult PostComment(int courseId, [FromBody] Comment comment, [FromHeader] string credentials)
+        public IActionResult PostComment(int courseId, [FromBody] CommentRequestDTO commentRequestDTO, [FromHeader] string credentials)
         {
             try
             {
-                var user = authService.TryGetUser(credentials);
-                var course = courseService.GetById(courseId);
-                Comment createdComment = commentService.CreateComment(comment, course, user);
-                return StatusCode(StatusCodes.Status201Created, createdComment);
+                ApplicationUser user = authService.TryGetUser(credentials);
+                Course course = courseService.GetById(courseId);
+
+                Comment commentToCreate = this.modelMapper.MapToComment(commentRequestDTO);
+                commentToCreate.ApplicationUserId = user.Id;
+
+                Comment createdComment = commentService.CreateComment(commentToCreate, course, user);
+
+                CommentResponseDTO commentResponseDto = this.modelMapper.MapToCommentResponseDTO(createdComment);
+
+                return StatusCode(StatusCodes.Status201Created, commentResponseDto);
             }
             catch (EntityNotFoundException e)
             {
@@ -62,9 +79,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
-                var user = authService.TryGetUser(credentials);
-                var deletedComment = commentService.DeleteComment(id, user);
-                return Ok(deletedComment);
+                ApplicationUser user = authService.TryGetUser(credentials);
+
+                Comment deletedComment = commentService.DeleteComment(id, user);
+
+                CommentResponseDTO commentResponseDto = this.modelMapper.MapToCommentResponseDTO(deletedComment);
+
+                return Ok(commentResponseDto);
             }
             catch (EntityNotFoundException e)
             {
@@ -78,13 +99,17 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPost("{id}")]
-        public IActionResult EditComment(int id, [FromBody] string content, [FromHeader] string credentials)
+        public IActionResult EditComment(int id, [FromBody] CommentRequestDTO commentRequestDTO, [FromHeader] string credentials)
         {
             try
             {
-                var user = authService.TryGetUser(credentials);
-                var updatedComment = commentService.UpdateComment(id, content, user);
-                return Ok(updatedComment);
+                ApplicationUser user = authService.TryGetUser(credentials);
+
+                Comment updatedComment = commentService.UpdateComment(id, commentRequestDTO.Content, user);
+
+                CommentResponseDTO commentResponseDto = this.modelMapper.MapToCommentResponseDTO(updatedComment);
+
+                return Ok(commentResponseDto);
             }
             catch (EntityNotFoundException e)
             {
@@ -101,9 +126,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
-                var user = authService.TryGetUser(credentials);
-                var comment = commentService.LikeComment(id, user);
-                return Ok(comment);
+                ApplicationUser user = authService.TryGetUser(credentials);
+
+                Comment comment = commentService.LikeComment(id, user);
+
+                CommentResponseDTO commentResponseDto = this.modelMapper.MapToCommentResponseDTO(comment);
+
+                return Ok(commentResponseDto);
             }
             catch (EntityNotFoundException e)
             {

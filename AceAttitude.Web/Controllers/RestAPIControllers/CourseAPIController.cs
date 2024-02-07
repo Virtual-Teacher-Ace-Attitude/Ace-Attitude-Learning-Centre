@@ -12,6 +12,8 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
     [Route("api/courses")]
     public class CourseAPIController : ControllerBase
     {
+        private const string InvalidCourseCreationErrorMessage = "Unable to create course, invalid input data!";
+
         private readonly ICourseService courseService;
         private readonly IAuthService authService;
         private readonly IModelMapper modelMapper;
@@ -66,6 +68,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    throw new InvalidUserInputException(InvalidCourseCreationErrorMessage);
+                }
+
                 var teacher = authService.TryGetTeacher(credentials);
                 var course = modelMapper.MapToCourse(courseRequestDTO);
                 var createdCourse = courseService.CreateCourse(course, teacher);
@@ -80,7 +87,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(ex.Message);
             }
-
+            catch (InvalidUserInputException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         [HttpPost("{id}")]
@@ -88,6 +98,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
+                if (!this.ModelState.IsValid)
+                {
+                    throw new InvalidUserInputException(InvalidCourseCreationErrorMessage);
+                }
+
                 var teacher = authService.TryGetTeacher(credentials);
                 var course = modelMapper.MapToCourse(courseRequestDTO);
                 var updatedCourse = courseService.UpdateCourse(id, course, teacher);
@@ -102,8 +117,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(ex.Message);
             }
-
-
+            catch (InvalidUserInputException ex)
+            {
+                return Unauthorized(ex.Message);
+            }
         }
 
         [HttpPut("{id}")]
@@ -149,7 +166,5 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
 
         }
-
-
     }
 }

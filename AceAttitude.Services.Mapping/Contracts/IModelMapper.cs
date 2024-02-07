@@ -6,6 +6,7 @@ namespace AceAttitude.Services.Mapping.Contracts
 {
     public interface IModelMapper
     {
+        // Map to base entities
         public Student MapToStudentLite(ApplicationUser user);
 
         public Teacher MapToTeacherLite(ApplicationUser user);
@@ -22,6 +23,9 @@ namespace AceAttitude.Services.Mapping.Contracts
 
         public ApplicationUser MapToUser(UserUpdateRequestDTO userDTO, ApplicationUser user);
 
+        public Comment MapToComment(CommentRequestDTO commentRequestDTO);
+
+        // Map to DTOs
         public UserResponseDTO MapToResponseUserDTO(ApplicationUser user, string userType);
 
         public RatingResponseDTO MapToRatingResponseDTO(Rating rating);
@@ -35,5 +39,7 @@ namespace AceAttitude.Services.Mapping.Contracts
         public LectureResponseDTO MapToLectureResponseDTO(Lecture lecture);
 
         public CourseResponseDTO MapToCourseResponseDTO(Course course);
+
+        public CommentResponseDTO MapToCommentResponseDTO(Comment comment);
     }
 }

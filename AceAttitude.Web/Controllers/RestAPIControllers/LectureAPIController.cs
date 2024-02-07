@@ -17,15 +17,12 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         private readonly IAuthService authService;
         private readonly IModelMapper modelMapper;
 
-        private readonly IUserService userService;
         private readonly ILectureService lectureService;
         private readonly ICourseService courseService;
 
-        public LectureAPIController(ILectureService lectureService, IUserService userService, ICourseService courseService,
-            IAuthService authService, IModelMapper modelMapper)
+        public LectureAPIController(ILectureService lectureService, IAuthService authService, IModelMapper modelMapper, ICourseService courseService)
         {
             this.lectureService = lectureService;
-            this.userService = userService;
             this.courseService = courseService;
 
             this.authService = authService;
@@ -37,13 +34,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         [HttpGet("{lectureId}")]
         public IActionResult GetLectureById([FromHeader] string credentials, int lectureId, [FromRoute] int courseId)
         {
-            // Needs a DTO and model validation
-
             try
             {
                 ApplicationUser user = this.authService.TryGetUser(credentials);
 
-                return Ok(lectureService.GetById(lectureId, courseId, user));
+                LectureResponseDTO lectureResponseDTO = this.modelMapper.MapToLectureResponseDTO(lectureService.GetById(lectureId, courseId, user));
+
+                return Ok(lectureResponseDTO);
             }
             catch (EntityNotFoundException e)
             {
@@ -62,7 +59,6 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         [HttpPost("")]
         public IActionResult CreateLecture([FromHeader] string credentials, [FromBody] LectureRequestDTO lectureRequestDTO, [FromRoute] int courseId)
         {
-            // Needs a DTO and model validation
             try
             {
                 if (!this.ModelState.IsValid)
@@ -93,13 +89,20 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateLecture([FromHeader] string credentials, int lectureId, [FromBody] Lecture lecture, [FromHeader] string userId, [FromQuery] int courseId)
+        public IActionResult UpdateLecture([FromHeader] string credentials, int lectureId, [FromBody] LectureRequestDTO lectureRequestDto,
+            [FromHeader] string userId, [FromQuery] int courseId)
         {
             try
             {
-                var teacher = authService.TryGetTeacher(credentials);
-                var updatedLecture = lectureService.UpdateLecture(lectureId, courseId, lecture, teacher);
-                return Ok(updatedLecture);
+                Teacher teacher = authService.TryGetTeacher(credentials);
+
+                Lecture lectureToUpdate = this.modelMapper.MapToLecture(lectureRequestDto, this.courseService.GetById(courseId));
+
+                Lecture updatedLecture = lectureService.UpdateLecture(lectureId, courseId, lectureToUpdate, teacher);
+
+                LectureResponseDTO updatedLectureDto =  this.modelMapper.MapToLectureResponseDTO(updatedLecture);
+
+                return Ok(updatedLectureDto);
             }
             catch (EntityNotFoundException e)
             {
@@ -118,9 +121,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
-                var user = authService.TryGetTeacher(credentials);
-                var deletedLecture = lectureService.DeleteLecture(id, courseId, user);
-                return Ok(deletedLecture);
+                Teacher teacher = authService.TryGetTeacher(credentials);
+
+                Lecture deletedLecture = lectureService.DeleteLecture(id, courseId, teacher);
+
+                LectureResponseDTO lectureResponseDTO = this.modelMapper.MapToLectureResponseDTO(deletedLecture);
+
+                return Ok(lectureResponseDTO);
             }
             catch (EntityNotFoundException e)
             {

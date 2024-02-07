@@ -10,7 +10,7 @@ namespace AceAttitude.Services.Mapping
     {
 
         private readonly IParseHelper parseHelper;
-        // Map to base entity
+        // Map to base entities
         public ModelMapper(IParseHelper parseHelper)
         {
             this.parseHelper = parseHelper;
@@ -112,7 +112,16 @@ namespace AceAttitude.Services.Mapping
             };
         }
 
-        // Map to DTO
+        public Comment MapToComment(CommentRequestDTO commentRequestDTO)
+        {
+            return new Comment
+            {
+                Content = commentRequestDTO.Content,
+                Likes = 0,
+            };
+        }
+
+        // Map to DTOs
         public UserResponseDTO MapToResponseUserDTO(ApplicationUser user, string userType)
         {
             return new UserResponseDTO
@@ -202,6 +211,17 @@ namespace AceAttitude.Services.Mapping
                 CreatedOn = course.CreatedOn,
                 StartingDate = course.StartingDate,
                 IsCompleted = course.IsCompleted,
+            };
+        }
+
+        public CommentResponseDTO MapToCommentResponseDTO(Comment comment)
+        {
+            return new CommentResponseDTO
+            {
+                Content = comment.Content,
+                User = comment.User.FirstName + " " + comment.User.LastName,
+                Likes = comment.Likes,
+                CreatedOn = comment.CreatedOn,
             };
         }
     }

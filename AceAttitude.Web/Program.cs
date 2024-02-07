@@ -56,6 +56,8 @@ namespace AceAttitude.Web
 
             builder.Services.AddHttpContextAccessor();
 
+            builder.Services.AddScoped<IParseHelper, ParseHelper>();
+
             builder.Services.AddScoped<IAuthHelper, AuthHelper>();
 
             builder.Services.AddScoped<IModelMapper, ModelMapper>();

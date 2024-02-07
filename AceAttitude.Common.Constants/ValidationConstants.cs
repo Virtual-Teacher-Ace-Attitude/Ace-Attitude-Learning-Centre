@@ -13,5 +13,8 @@
         public const int TitleMaxLength = 50;
 
         public const int DescriptionMaxLength = 1000;
+
+        public const int CommentMinLength = 1;
+        public const int CommentMaxLength = 500;
     }
 }

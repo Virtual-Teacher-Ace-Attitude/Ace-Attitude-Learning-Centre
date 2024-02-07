@@ -135,7 +135,7 @@ namespace AceAttitude.Data.Repositories
             ApplicationUser userToEdit = this.GetById(id);
 
             this.EnsureNotDeleted(userToEdit.DeletedOn.HasValue, string.Format(UserNotFoundErrorMessage, "User", "id", id));
-            this.EnsureNotAdmin(userToEdit.UserType, UnableToDeleteAdminErrorMessage);
+            this.EnsureNotAdmin(userToEdit.UserType, UnableToEditAdminErrorMessage);
 
             userToEdit = this.modelMapper.MapToUser(userUpdateRequestDTO, userToEdit);
 
