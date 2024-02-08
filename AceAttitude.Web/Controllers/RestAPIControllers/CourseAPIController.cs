@@ -37,13 +37,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                     .ToList();
                 return Ok(courses);
             }
-            catch (EntityNotFoundException ex)
+            catch (EntityNotFoundException e)
             {
-                return NotFound(ex.Message);
+                return NotFound(e.Message);
             }
-            catch (InvalidUserInputException ex)
+            catch (InvalidUserInputException e)
             {
-                return BadRequest(ex.Message);
+                return BadRequest(e.Message);
             }
         }
 
@@ -56,9 +56,9 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 var responseDTO = modelMapper.MapToCourseResponseDTO(course);
                 return Ok(responseDTO);
             }
-            catch (EntityNotFoundException ex)
+            catch (EntityNotFoundException e)
             {
-                return NotFound(ex.Message);
+                return NotFound(e.Message);
             }
 
         }
@@ -73,23 +73,24 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                     throw new InvalidUserInputException(InvalidCourseCreationErrorMessage);
                 }
 
-                var teacher = authService.TryGetTeacher(credentials);
-                var course = modelMapper.MapToCourse(courseRequestDTO);
-                var createdCourse = courseService.CreateCourse(course, teacher);
-                var responseDTO = modelMapper.MapToCourseResponseDTO(createdCourse);
+                Teacher teacher = authService.TryGetTeacher(credentials);
+                Course course = modelMapper.MapToCourse(courseRequestDTO);
+                course.TeacherId = teacher.Id;
+                Course createdCourse = courseService.CreateCourse(course, teacher);
+                CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(createdCourse);
                 return StatusCode(StatusCodes.Status201Created, responseDTO);
             }
-            catch (EntityNotFoundException ex)
+            catch (EntityNotFoundException e)
             {
-                return NotFound(ex.Message);
+                return NotFound(e.Message);
             }
-            catch (UnauthorizedOperationException ex)
+            catch (UnauthorizedOperationException e)
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized(e.Message);
             }
-            catch (InvalidUserInputException ex)
+            catch (InvalidUserInputException e)
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized(e.Message);
             }
         }
 
@@ -103,23 +104,23 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                     throw new InvalidUserInputException(InvalidCourseCreationErrorMessage);
                 }
 
-                var teacher = authService.TryGetTeacher(credentials);
-                var course = modelMapper.MapToCourse(courseRequestDTO);
-                var updatedCourse = courseService.UpdateCourse(id, course, teacher);
-                var responseDTO = modelMapper.MapToCourseResponseDTO(updatedCourse);
+                Teacher teacher = authService.TryGetTeacher(credentials);
+                Course course = modelMapper.MapToCourse(courseRequestDTO);
+                Course updatedCourse = courseService.UpdateCourse(id, course, teacher);
+                CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(updatedCourse);
                 return Ok(responseDTO);
             }
-            catch (EntityNotFoundException ex)
+            catch (EntityNotFoundException e)
             {
-                return NotFound(ex.Message);
+                return NotFound(e.Message);
             }
-            catch (UnauthorizedOperationException ex)
+            catch (UnauthorizedOperationException e)
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized(e.Message);
             }
-            catch (InvalidUserInputException ex)
+            catch (InvalidUserInputException e)
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized(e.Message);
             }
         }
 
@@ -128,19 +129,19 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
-                var student = authService.TryGetStudent(credentials);
-                var ratedCourse = courseService.RateCourse(id, rating, student);
-                var responseDTO = modelMapper.MapToCourseResponseDTO(ratedCourse);
+                Student student = authService.TryGetStudent(credentials);
+                Course ratedCourse = courseService.RateCourse(id, rating, student);
+                CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(ratedCourse);
                 return Ok(responseDTO);
             }
-            catch (EntityNotFoundException ex)
+            catch (EntityNotFoundException e)
             {
-                return NotFound(ex.Message);
+                return NotFound(e.Message);
 
             }
-            catch (UnauthorizedOperationException ex)
+            catch (UnauthorizedOperationException e)
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized(e.Message);
             }
 
 
@@ -151,18 +152,18 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         {
             try
             {
-                var teacher = authService.TryGetTeacher(credentials);
-                var deletedCourse = courseService.DeleteCourse(id, teacher);
-                var responseDTO = modelMapper.MapToCourseResponseDTO(deletedCourse);
+                Teacher teacher = authService.TryGetTeacher(credentials);
+                Course deletedCourse = courseService.DeleteCourse(id, teacher);
+                CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(deletedCourse);
                 return Ok(responseDTO);
             }
-            catch (EntityNotFoundException ex)
+            catch (EntityNotFoundException e)
             {
-                return NotFound(ex.Message);
+                return NotFound(e.Message);
             }
-            catch (UnauthorizedOperationException ex)
+            catch (UnauthorizedOperationException e)
             {
-                return Unauthorized(ex.Message);
+                return Unauthorized(e.Message);
             }
 
         }

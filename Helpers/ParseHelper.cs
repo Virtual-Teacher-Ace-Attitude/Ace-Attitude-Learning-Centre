@@ -32,7 +32,7 @@ namespace AceAttitude.Common.Helpers
             }
             else
             {
-                throw new ArgumentException(string.Format(InvalidAgeGroupErrorMessage, paramValue));
+                throw new InvalidUserInputException(string.Format(InvalidAgeGroupErrorMessage, paramValue));
             }
 
         }
