@@ -19,7 +19,7 @@ namespace AceAttitude.Services.Contracts
 
         public ApplicationUser CreateStudent(ApplicationUser user);
 
-        public ApplicationUser Update(string id, ApplicationUser requestUser, UserUpdateRequestDTO userUpdateRequestDTO);
+        public ApplicationUser Update(string id, ApplicationUser requestUser, ApplicationUser userToUpdate);
 
         public ApplicationUser Delete(string id, ApplicationUser requestUser);
 
@@ -31,9 +31,15 @@ namespace AceAttitude.Services.Contracts
 
         public Student ViewStudentProfile(string id, ApplicationUser requestUser);
 
+        public Student ApplyForTeacher(string id, ApplicationUser requestUser);
+
         public ICollection<Teacher> GetUnapprovedTeachers(ApplicationUser requestUser);
 
+        public ICollection<Student> GetUnapprovedStudents(ApplicationUser requestUser);
+
         public Teacher ApproveTeacher(string id, ApplicationUser requestUser);
+
+        public Teacher PromoteStudent(string id, ApplicationUser requestUser);
 
         public Teacher PromoteAdmin(string id, ApplicationUser requestUser);
     }

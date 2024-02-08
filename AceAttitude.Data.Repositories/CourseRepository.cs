@@ -124,8 +124,5 @@ namespace AceAttitude.Data.Repositories
                     return filteredCourses.OrderByDescending(c => c.StartingDate);
             }
         }
-
-
-
     }
 }

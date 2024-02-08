@@ -1,10 +1,4 @@
-﻿using AceAttitude.Common.Exceptions;
-using AceAttitude.Data.Models.Misc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using AceAttitude.Data.Models.Misc;
 
 namespace AceAttitude.Common.Helpers.Contracts
 {
@@ -12,11 +6,10 @@ namespace AceAttitude.Common.Helpers.Contracts
     {
         public AgeGroup ParseAge(string paramValue);
 
-
         public Level ParseLevel(string paramValue);
-
 
         public decimal ParseRating(string paramValue);
 
+        public string EnsureValidCredentials(string credentials);
     }
 }

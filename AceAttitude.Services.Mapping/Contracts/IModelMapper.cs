@@ -7,10 +7,6 @@ namespace AceAttitude.Services.Mapping.Contracts
     public interface IModelMapper
     {
         // Map to base entities
-        public Student MapToStudentLite(ApplicationUser user);
-
-        public Teacher MapToTeacherLite(ApplicationUser user);
-
         public Student MapToStudent(ApplicationUser user);
 
         public Teacher MapToTeacher(ApplicationUser user);
@@ -21,7 +17,7 @@ namespace AceAttitude.Services.Mapping.Contracts
 
         public ApplicationUser MapToUser(UserRegisterRequestDTO userDTO, string passwordHash);
 
-        public ApplicationUser MapToUser(UserUpdateRequestDTO userDTO, ApplicationUser user);
+        public ApplicationUser MapToUser(UserUpdateRequestDTO userDTO);
 
         public Comment MapToComment(CommentRequestDTO commentRequestDTO);
 

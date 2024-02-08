@@ -62,7 +62,7 @@ namespace AceAttitude.Services
         {
             ApplicationUser user = this.TryGetUser(credentials);
 
-            if (user.StudentId is null)
+            if (user.UserType == UserType.Student)
             {
                 throw new UnauthorizedOperationException(NotStudentErrorMessage);
             }
@@ -74,7 +74,7 @@ namespace AceAttitude.Services
         {
             ApplicationUser user = this.TryGetUser(credentials);
 
-            if (user.TeacherId is null)
+            if (user.UserType == UserType.Teacher)
             {
                 throw new UnauthorizedOperationException(NotTeacherErrorMessage);
             }
