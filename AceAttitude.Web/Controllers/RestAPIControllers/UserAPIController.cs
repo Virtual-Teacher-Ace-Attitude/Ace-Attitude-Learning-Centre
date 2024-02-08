@@ -30,7 +30,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         //These are placeholder methods to be properly implemented with authentication, authorization and exception handling!
         //UserId should be replaced with proper credentials.
 
-        [HttpPost("Register/Student")]
+        [HttpPost("register/student")]
         public IActionResult RegisterStudent([FromBody] UserRegisterRequestDTO userDTO)
         {
             try
@@ -56,7 +56,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPost("Register/Teacher")]
+        [HttpPost("register/teacher")]
         public IActionResult RegisterTeacher([FromBody] UserRegisterRequestDTO userDTO)
         {
             try
@@ -83,7 +83,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         // Author required
-        [HttpGet("{id}/teachers/profile")]
+        [HttpGet("teachers/{id}")]
         public IActionResult ViewTeacherProfile([FromHeader] string credentials, string id)
         {
             try
@@ -106,7 +106,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpGet("{id}/students/profile")]
+        [HttpGet("students/{id}")]
         public IActionResult ViewStudentProfile([FromHeader] string credentials, string id)
         {
             try
@@ -207,7 +207,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpDelete("delete/{id}")]
+        [HttpDelete("{id}")]
         public IActionResult DeleteUser([FromHeader] string credentials, string id)
         {
             try
@@ -234,7 +234,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPut("update/{id}")]
+        [HttpPut("{id}")]
         public IActionResult UpdateUser([FromHeader] string credentials, string id, [FromBody] UserUpdateRequestDTO userUpdateRequestDTO)
         {
             try
