@@ -7,7 +7,7 @@ namespace AceAttitude.Services.Contracts
     {
         Lecture GetById(int lectureId, int courseId, ApplicationUser user);
 
-        Lecture CreateLecture(LectureRequestDTO lecture, int courseId, Teacher teacher);
+        Lecture CreateLecture(Lecture lecture, int courseId, Teacher teacher);
 
         Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture, Teacher teacher);
 

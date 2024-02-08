@@ -13,7 +13,7 @@ namespace AceAttitude.Common.Helpers
             }
             else
             {
-                throw new ArgumentException($"{paramValue} is not a valid age group.");
+                throw new InvalidUserInputException($"{paramValue} is not a valid age group.");
             }
 
         }

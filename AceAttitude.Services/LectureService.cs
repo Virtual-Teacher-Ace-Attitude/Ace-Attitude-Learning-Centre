@@ -3,7 +3,6 @@ using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
-using AceAttitude.Web.DTO.Request;
 
 namespace AceAttitude.Services
 {
@@ -13,25 +12,22 @@ namespace AceAttitude.Services
         private readonly IAuthHelper authHelper;
         private readonly IUserRepository userRepository;
         private readonly ILectureRepository lectureRepository;
-        private readonly ICourseRepository courseRepository;
 
-        public LectureService(ILectureRepository lectureRepository, IUserRepository userRepository, ICourseRepository courseRepository, IAuthHelper authHelper)
+        public LectureService(ILectureRepository lectureRepository, IUserRepository userRepository, IAuthHelper authHelper)
         {
             this.lectureRepository = lectureRepository;
             this.userRepository = userRepository;
-            this.courseRepository = courseRepository;
             this.authHelper = authHelper;
         }
-        public Lecture CreateLecture(LectureRequestDTO lectureRequestDTO, int courseId, Teacher teacher)
+        public Lecture CreateLecture(Lecture lecture, int courseId, Teacher teacher)
         {
             //User must be a teacher and course creator!
 
-            Course course = this.courseRepository.GetById(courseId);
 
             authHelper.EnsureTeacherApproved(teacher);
             authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, courseId);
 
-            return lectureRepository.CreateLecture(lectureRequestDTO, course);
+            return lectureRepository.CreateLecture(lecture);
         }
 
         public Lecture DeleteLecture(int lectureId, int courseId, Teacher teacher)

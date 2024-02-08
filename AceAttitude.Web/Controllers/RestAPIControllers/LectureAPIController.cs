@@ -70,6 +70,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
 
                 Lecture createdLecture = lectureService.CreateLecture(lectureRequestDTO, courseId, teacher);
 
+                createdLecture.CourseId = courseId;
+
+                createdLecture.CreatedOn = DateTime.Now;
+
                 LectureResponseDTO responseDTO = this.modelMapper.MapToLectureResponseDTO(createdLecture);
 
                 return StatusCode(StatusCodes.Status201Created, responseDTO);
@@ -99,6 +103,8 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 Lecture lectureToUpdate = this.modelMapper.MapToLecture(lectureRequestDto, this.courseService.GetById(courseId));
 
                 Lecture updatedLecture = lectureService.UpdateLecture(lectureId, courseId, lectureToUpdate, teacher);
+
+                lectureToUpdate.ModifiedOn = DateTime.Now;
 
                 LectureResponseDTO updatedLectureDto =  this.modelMapper.MapToLectureResponseDTO(updatedLecture);
 

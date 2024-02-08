@@ -52,6 +52,15 @@ namespace AceAttitude.Data.Repositories
         public Comment LikeComment(int id, ApplicationUser user)
         {
             Comment commentToLike = GetById(id);
+            if (IsLikedComment(commentToLike, user)) 
+            {
+                commentToLike.Likes--;
+                CommentLike commentLikeToRemove = commentContext.CommentLikes
+                    .FirstOrDefault(cl => cl.CommentId == id && cl.ApplicationUserId == user.Id);
+                commentContext.Remove(commentLikeToRemove);
+                commentContext.SaveChanges();
+                return commentToLike;
+            }
             commentToLike.Likes++;
             commentContext.CommentLikes.Add(new CommentLike()
             { ApplicationUserId = user.Id, User = user, IsLiked = true });
@@ -65,6 +74,15 @@ namespace AceAttitude.Data.Repositories
         {
             List<Comment> comments = course.Comments.Where(c => c.DeletedOn.HasValue == false).ToList();
             return comments;
+        }
+
+        private bool IsLikedComment(Comment comment, ApplicationUser user)
+        {
+            if (commentContext.CommentLikes.Any(c => c.CommentId == comment.Id && c.ApplicationUserId == user.Id && c.IsLiked))
+            {
+                return true;
+            }
+            return false;
         }
     }
 }

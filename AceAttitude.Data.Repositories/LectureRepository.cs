@@ -20,9 +20,9 @@ namespace AceAttitude.Data.Repositories
             this.lectureContext = lectureContext;
             this.modelMapper = modelMapper;
         }
-        public Lecture CreateLecture(LectureRequestDTO lectureRequestDto, Course course)
+        public Lecture CreateLecture(Lecture lecture)
         {
-            Lecture lecture = this.modelMapper.MapToLecture(lectureRequestDto, course);
+            lecture.CreatedOn = DateTime.Now;
 
             lectureContext.Lectures.Add(lecture);
 
@@ -34,6 +34,7 @@ namespace AceAttitude.Data.Repositories
         public Lecture DeleteLecture(int lectureId, int courseId)
         {
             Lecture lectureToDelete = GetById(lectureId, courseId);
+
             lectureToDelete.DeletedOn = DateTime.Now;
 
             lectureContext.SaveChanges();
