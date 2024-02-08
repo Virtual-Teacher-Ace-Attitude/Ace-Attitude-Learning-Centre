@@ -3,7 +3,7 @@ using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
-using AceAttitude.Web.DTO.Request;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace AceAttitude.Data.Repositories
@@ -12,8 +12,12 @@ namespace AceAttitude.Data.Repositories
     {
         private const string UserNotFoundErrorMessage = "{0} with {1} {2} does not exist!";
 
+        private const string StudentAlreadyApprovedErrorMessage = "This student has already been approved for teacher.";
+        private const string StudentNotAwaitingApprovalErrorMessage = "This student has not applied to become a teacher.";
+
         private const string TeachersNotAwaitingApprovalErrorMessage = "No teachers are currently awaiting approval.";
         private const string TeacherAlreadyApprovedErrorMessage = "This teacher is already approved.";
+
         private const string TeacherAlreadyAdminErrorMessage = "This teacher is already an admin.";
 
         private const string UnableToDeleteAdminErrorMessage = "You are unable to delete other admins.";
@@ -43,7 +47,7 @@ namespace AceAttitude.Data.Repositories
                 .Include(student => student.Ratings)
                 .Include(student => student.StudentCourses)
                 .ThenInclude(sc => sc.Course)
-                .FirstOrDefault(student => student.Id == id && student.DeletedOn.HasValue == false)
+                .FirstOrDefault(student => student.Id == id && student.User.DeletedOn.HasValue == false && student.IsPromoted == false)
                 ?? throw new EntityNotFoundException(string.Format(UserNotFoundErrorMessage, "Student", "ID: ", id));
 
             return student;
@@ -54,7 +58,7 @@ namespace AceAttitude.Data.Repositories
             var teacher = context.Teachers
                 .Include(teacher => teacher.User)
                 .Include(teacher => teacher.CreatedCourses)
-                .FirstOrDefault(teacher => teacher.Id == id && teacher.DeletedOn.HasValue == false)
+                .FirstOrDefault(teacher => teacher.Id == id && teacher.User.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException(string.Format(UserNotFoundErrorMessage, "Teacher", "ID: ", id));
 
             return teacher;
@@ -73,10 +77,23 @@ namespace AceAttitude.Data.Repositories
             var unapprovedTeachers = context.Teachers
                 .Include(teacher => teacher.User)
                 .Include(teacher => teacher.CreatedCourses)
-                .Where(teacher => teacher.IsApproved == false && teacher.DeletedOn.HasValue == false).ToList() 
+                .Where(teacher => teacher.IsApproved == false && teacher.User.DeletedOn.HasValue == false).ToList()
                 ?? throw new EntityNotFoundException(TeachersNotAwaitingApprovalErrorMessage);
 
             return unapprovedTeachers;
+        }
+
+        public ICollection<Student> GetUnapprovedStudents()
+        {
+            var unapprovedStudents = context.Students
+                .Include(student => student.User)
+                .Include(student => student.Ratings)
+                .Include(student => student.StudentCourses)
+                .ThenInclude(sc => sc.Course)
+                .Where(student => student.IsPromoted == false && student.AwaitingPromotion == true && student.User.DeletedOn.HasValue == false).ToList()
+                ?? throw new EntityNotFoundException(TeachersNotAwaitingApprovalErrorMessage);
+
+            return unapprovedStudents;
         }
 
         public ApplicationUser Create(ApplicationUser user)
@@ -92,7 +109,7 @@ namespace AceAttitude.Data.Repositories
         {
             context.Users.Add(user);
 
-            Teacher teacher = this.modelMapper.MapToTeacherLite(user);
+            Teacher teacher = this.modelMapper.MapToTeacher(user);
             teacher.IsApproved = false;
 
             context.Teachers.Add(teacher);
@@ -106,7 +123,7 @@ namespace AceAttitude.Data.Repositories
         {
             context.Users.Add(user);
 
-            Student student = this.modelMapper.MapToStudentLite(user);
+            Student student = this.modelMapper.MapToStudent(user);
 
             context.Students.Add(student);
 
@@ -123,21 +140,23 @@ namespace AceAttitude.Data.Repositories
             this.EnsureNotAdmin(userToDelete.UserType, UnableToDeleteAdminErrorMessage);
 
             userToDelete.DeletedOn = DateTime.Now;
-            this.DeleteRelatedEntity(userToDelete.UserType, id);
 
             context.SaveChanges();
 
             return userToDelete;
         }
 
-        public ApplicationUser Update(string id, UserUpdateRequestDTO userUpdateRequestDTO)
+        public ApplicationUser Update(string id, ApplicationUser userToUpdate)
         {
             ApplicationUser userToEdit = this.GetById(id);
 
             this.EnsureNotDeleted(userToEdit.DeletedOn.HasValue, string.Format(UserNotFoundErrorMessage, "User", "id", id));
             this.EnsureNotAdmin(userToEdit.UserType, UnableToEditAdminErrorMessage);
 
-            userToEdit = this.modelMapper.MapToUser(userUpdateRequestDTO, userToEdit);
+            userToEdit.PasswordHash = userToUpdate.PasswordHash;
+            userToEdit.FirstName = userToUpdate.FirstName;
+            userToEdit.LastName = userToUpdate.LastName;
+            userToEdit.PictureFilePath = userToUpdate.PictureFilePath;
 
             context.SaveChanges();
 
@@ -147,6 +166,17 @@ namespace AceAttitude.Data.Repositories
         public bool CheckEmailExists(string email)
         {
             return context.Users.Any(u => u.Email == email && u.DeletedOn.HasValue == false);
+        }
+
+        public Student ApplyForTeacher(string id)
+        {
+            Student student = this.GetStudentById(id);
+
+            student.AwaitingPromotion = true;
+
+            context.SaveChanges();
+
+            return student;
         }
 
         public Teacher ApproveTeacher(string id)
@@ -164,6 +194,32 @@ namespace AceAttitude.Data.Repositories
             return teacher;
         }
 
+        public Teacher PromoteStudent(string id)
+        {
+            ApplicationUser user = this.GetById(id);
+
+            Student student = this.GetStudentById(id);
+
+            if (student.IsPromoted)
+            {
+                throw new UnauthorizedOperationException(StudentAlreadyApprovedErrorMessage);
+            }
+
+            if (student.AwaitingPromotion == false)
+            {
+                throw new UnauthorizedOperationException(StudentNotAwaitingApprovalErrorMessage);
+            }
+
+            student.IsPromoted = true;
+            student.AwaitingPromotion = false;
+
+            Teacher newTeacher = this.modelMapper.MapToTeacher(user);
+
+            context.SaveChanges();
+
+            return newTeacher;
+        }
+
         public Teacher PromoteAdmin(string id)
         {
             Teacher teacher = this.GetTeacherById(id);
@@ -178,20 +234,6 @@ namespace AceAttitude.Data.Repositories
             context.SaveChanges();
 
             return teacher;
-        }
-
-        private void DeleteRelatedEntity(UserType userType, string id)
-        {
-            if (userType == UserType.Student)
-            {
-                Student studentToDelete = this.GetStudentById(id);
-                studentToDelete.DeletedOn = DateTime.Now;
-            }
-            else if (userType == UserType.Teacher)
-            {
-                Teacher teacherToDelete = this.GetTeacherById(id);
-                teacherToDelete.DeletedOn = DateTime.Now;
-            }
         }
 
         private bool EnsureNotDeleted(bool isDeleted, string message)

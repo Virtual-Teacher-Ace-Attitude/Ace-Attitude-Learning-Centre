@@ -27,14 +27,15 @@ namespace AceAttitude.Services.Mapping
             };
         }
 
-        public ApplicationUser MapToUser(UserUpdateRequestDTO userDTO, ApplicationUser user)
+        public ApplicationUser MapToUser(UserUpdateRequestDTO userDTO)
         {
-            user.FirstName = userDTO.FirstName;
-            user.LastName = userDTO.LastName;
-            user.PasswordHash = userDTO.Password;
-            user.ModifiedOn = DateTime.Now;
-
-            return user;
+            return new ApplicationUser
+            {
+                FirstName = userDTO.FirstName,
+                LastName = userDTO.LastName,
+                PasswordHash = userDTO.Password,
+                ModifiedOn = DateTime.Now,
+            };
         }
 
         public Student MapToStudent(ApplicationUser user)
@@ -44,20 +45,8 @@ namespace AceAttitude.Services.Mapping
                 User = user,
                 ApplicationUserId = user.Id,
                 Id = user.Id,
-                CreatedOn = DateTime.Now,
-                Ratings = user.Student.Ratings,
-                StudentCourses = user.Student.StudentCourses,
-            };
-        }
-
-        public Student MapToStudentLite(ApplicationUser user)
-        {
-            return new Student
-            {
-                User = user,
-                ApplicationUserId = user.Id,
-                Id = user.Id,
-                CreatedOn = DateTime.Now,
+                IsPromoted = false,
+                AwaitingPromotion = false,
             };
         }
 
@@ -68,21 +57,6 @@ namespace AceAttitude.Services.Mapping
                 User = user,
                 ApplicationUserId = user.Id,
                 Id = user.Id,
-                CreatedOn = DateTime.Now,
-                IsAdmin = user.Teacher.IsAdmin,
-                IsApproved = user.Teacher.IsApproved,
-                CreatedCourses = user.Teacher.CreatedCourses,
-            };
-        }
-
-        public Teacher MapToTeacherLite(ApplicationUser user)
-        {
-            return new Teacher
-            {
-                User = user,
-                ApplicationUserId = user.Id,
-                Id = user.Id,
-                CreatedOn = DateTime.Now,
                 IsAdmin = false,
             };
         }
@@ -144,7 +118,7 @@ namespace AceAttitude.Services.Mapping
                 Email = student.User.Email,
                 FirstName = student.User.FirstName,
                 LastName = student.User.LastName,
-                CreatedOn = student.CreatedOn,
+                CreatedOn = student.User.CreatedOn,
                 StudentCourses = student.StudentCourses.Select(this.MapToStudentCoursesResponseDTO).ToList(),
                 Ratings = student.Ratings.Select(this.MapToRatingResponseDTO).ToList(),
             };
@@ -159,7 +133,7 @@ namespace AceAttitude.Services.Mapping
                 Email = teacher.User.Email,
                 FirstName = teacher.User.FirstName,
                 LastName = teacher.User.LastName,
-                CreatedOn = teacher.CreatedOn,
+                CreatedOn = teacher.User.CreatedOn,
                 IsAdmin = teacher.IsAdmin,
                 IsApproved = teacher.IsApproved,
                 CreatedCourses = teacher.CreatedCourses.Select(this.MapToCourseResponseDTO).ToList(),

@@ -129,6 +129,29 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
+        [HttpPut("student/{id}/apply/")]
+        public IActionResult ApplyForTeacher([FromHeader] string credentials, string id)
+        {
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                Student student = this.userService.ApplyForTeacher(id, user);
+
+                StudentResponseDTO studentResponseDTO = this.modelMapper.MapToStudentResponseDTO(student);
+
+                return StatusCode(StatusCodes.Status200OK, studentResponseDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return StatusCode(StatusCodes.Status404NotFound, e);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return StatusCode(StatusCodes.Status401Unauthorized, e);
+            }
+        }
+
         [HttpGet("teachers/unapproved")]
         public IActionResult ViewUnapprovedTeachers([FromHeader] string credentials)
         {
@@ -153,6 +176,30 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
+        [HttpGet("students/unapproved")]
+        public IActionResult ViewUnapprovedStudents([FromHeader] string credentials)
+        {
+
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                ICollection<Student> unapprovedStudents = this.userService.GetUnapprovedStudents(user);
+
+                ICollection<StudentResponseDTO> studentsAsDTO = unapprovedStudents.Select(this.modelMapper.MapToStudentResponseDTO).ToList();
+
+                return StatusCode(StatusCodes.Status200OK, studentsAsDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
+
         [HttpPut("teachers/approve/{id}")]
         public IActionResult ApproveTeacher([FromHeader] string credentials, string id)
         {
@@ -161,6 +208,33 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 ApplicationUser user = this.authService.TryGetUser(credentials);
 
                 Teacher teacher = this.userService.ApproveTeacher(id, user);
+
+                TeacherResponseDTO teacherResponseDTO = this.modelMapper.MapToTeacherResponseDTO(teacher);
+
+                return StatusCode(StatusCodes.Status200OK, teacherResponseDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
+
+        [HttpPut("students/promote/{id}")]
+        public IActionResult PromoteStudent([FromHeader] string credentials, string id)
+        {
+            try
+            {
+                ApplicationUser user = this.authService.TryGetUser(credentials);
+
+                Teacher teacher = this.userService.PromoteStudent(id, user);
 
                 TeacherResponseDTO teacherResponseDTO = this.modelMapper.MapToTeacherResponseDTO(teacher);
 
@@ -244,7 +318,9 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 string passwordHash = this.authService.GeneratePasswordHash(userUpdateRequestDTO.Password);
                 userUpdateRequestDTO.Password = passwordHash;
 
-                ApplicationUser updatedUser = this.userService.Update(id, user, userUpdateRequestDTO);
+                ApplicationUser userToUpdate = this.modelMapper.MapToUser(userUpdateRequestDTO);
+
+                ApplicationUser updatedUser = this.userService.Update(id, user, userToUpdate);
 
                 UserResponseDTO userResponseDto = this.modelMapper.MapToResponseUserDTO(updatedUser, updatedUser.UserType.ToString());
 

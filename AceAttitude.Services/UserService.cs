@@ -16,6 +16,8 @@ namespace AceAttitude.Services
         private readonly string UnableToViewProfileErrorMessage = "Only the creator of the profile or an admin can view it!";
         private readonly string UnableToEditProfileErrorMessage = "Only the creator of the profile or an admin can edit it!";
 
+        private readonly string UnableToApplyErrorMessage = "Only the creator of the profile can apply for teacher!";
+
         private readonly IUserRepository userRepository;
         private readonly IAuthHelper authHelper;
 
@@ -70,11 +72,11 @@ namespace AceAttitude.Services
             return this.userRepository.Delete(id);
         }
 
-        public ApplicationUser Update(string id, ApplicationUser requestUser, UserUpdateRequestDTO userUpdateRequestDTO)
+        public ApplicationUser Update(string id, ApplicationUser requestUser, ApplicationUser userToUpdate)
         {
             this.authHelper.EnsureIdMatchingOrAdmin(id, requestUser, UnableToEditProfileErrorMessage);
 
-            return this.userRepository.Update(id, userUpdateRequestDTO);
+            return this.userRepository.Update(id, userToUpdate);
         }
 
         public void CheckEmailExists(string email)
@@ -99,6 +101,16 @@ namespace AceAttitude.Services
             return this.userRepository.GetStudentById(id);
         }
 
+        public Student ApplyForTeacher(string id, ApplicationUser requestUser)
+        {
+            if (requestUser.Id != id)
+            {
+                throw new UnauthorizedOperationException(UnableToApplyErrorMessage);
+            }
+
+            return this.userRepository.ApplyForTeacher(id);
+        }
+
         public ICollection<Teacher> GetUnapprovedTeachers(ApplicationUser requestUser)
         {
             if (requestUser.UserType != UserType.Admin)
@@ -109,6 +121,16 @@ namespace AceAttitude.Services
             return this.userRepository.GetUnapprovedTeachers();
         }
 
+        public ICollection<Student> GetUnapprovedStudents(ApplicationUser requestUser)
+        {
+            if (requestUser.UserType != UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(AdminRequiredErrorMessage);
+            }
+
+            return this.userRepository.GetUnapprovedStudents();
+        }
+
         public Teacher ApproveTeacher(string id, ApplicationUser requestUser)
         {
             if (requestUser.UserType != UserType.Admin)
@@ -117,6 +139,16 @@ namespace AceAttitude.Services
             }
 
             return this.userRepository.ApproveTeacher(id);
+        }
+
+        public Teacher PromoteStudent(string id, ApplicationUser requestUser)
+        {
+            if (requestUser.UserType != UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(AdminRequiredErrorMessage);
+            }
+
+            return this.userRepository.PromoteStudent(id);
         }
 
         public Teacher PromoteAdmin(string id, ApplicationUser requestUser)
