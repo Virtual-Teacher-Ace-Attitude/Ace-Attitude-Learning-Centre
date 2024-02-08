@@ -18,13 +18,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         private readonly IModelMapper modelMapper;
 
         private readonly ILectureService lectureService;
-        private readonly ICourseService courseService;
 
-        public LectureAPIController(ILectureService lectureService, IAuthService authService, IModelMapper modelMapper, ICourseService courseService)
+        public LectureAPIController(ILectureService lectureService, IAuthService authService, IModelMapper modelMapper)
         {
             this.lectureService = lectureService;
-            this.courseService = courseService;
-
             this.authService = authService;
             this.modelMapper = modelMapper;
         }
@@ -68,12 +65,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
 
                 Teacher teacher = authService.TryGetTeacher(credentials);
 
-                Lecture createdLecture = lectureService.CreateLecture(lectureRequestDTO, courseId, teacher);
+                Lecture lectureToCreate = modelMapper.MapToLecture(lectureRequestDTO);  
 
-                createdLecture.CourseId = courseId;
+                lectureToCreate.CourseId = courseId;
 
-                createdLecture.CreatedOn = DateTime.Now;
-
+                Lecture createdLecture = lectureService.CreateLecture(lectureToCreate, courseId, teacher);
                 LectureResponseDTO responseDTO = this.modelMapper.MapToLectureResponseDTO(createdLecture);
 
                 return StatusCode(StatusCodes.Status201Created, responseDTO);
@@ -93,18 +89,16 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPut("{id}")]
-        public IActionResult UpdateLecture([FromHeader] string credentials, int lectureId, [FromBody] LectureRequestDTO lectureRequestDto,
-            [FromHeader] string userId, [FromQuery] int courseId)
+        public IActionResult UpdateLecture([FromHeader] string credentials, int lectureId, [FromBody]
+                                            LectureRequestDTO lectureRequestDto, [FromRoute] int courseId)
         {
             try
             {
                 Teacher teacher = authService.TryGetTeacher(credentials);
 
-                Lecture lectureToUpdate = this.modelMapper.MapToLecture(lectureRequestDto, this.courseService.GetById(courseId));
+                Lecture lectureToUpdate = this.modelMapper.MapToLecture(lectureRequestDto);
 
                 Lecture updatedLecture = lectureService.UpdateLecture(lectureId, courseId, lectureToUpdate, teacher);
-
-                lectureToUpdate.ModifiedOn = DateTime.Now;
 
                 LectureResponseDTO updatedLectureDto =  this.modelMapper.MapToLectureResponseDTO(updatedLecture);
 
@@ -123,7 +117,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpDelete("{id}")]
-        public IActionResult DeleteLecture([FromHeader] string credentials, int id, [FromQuery] int courseId)
+        public IActionResult DeleteLecture([FromHeader] string credentials, int id, [FromRoute] int courseId)
         {
             try
             {

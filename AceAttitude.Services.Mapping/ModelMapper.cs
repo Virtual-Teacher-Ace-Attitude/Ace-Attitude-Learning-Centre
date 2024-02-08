@@ -87,7 +87,7 @@ namespace AceAttitude.Services.Mapping
             };
         }
 
-        public Lecture MapToLecture(LectureRequestDTO lectureRequestDTO, Course course)
+        public Lecture MapToLecture(LectureRequestDTO lectureRequestDTO)
         {
             return new Lecture
             {
@@ -96,8 +96,6 @@ namespace AceAttitude.Services.Mapping
                 VideoFilePath = lectureRequestDTO.VideoFilePath,
                 TextFilePath = lectureRequestDTO.TextFilePath,
                 CreatedOn = DateTime.Now,
-                Course = course,
-                CourseId = course.Id,
             };
         }
 

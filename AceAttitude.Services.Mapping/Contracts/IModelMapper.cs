@@ -15,7 +15,7 @@ namespace AceAttitude.Services.Mapping.Contracts
 
         public Teacher MapToTeacher(ApplicationUser user);
 
-        public Lecture MapToLecture(LectureRequestDTO lectureRequestDTO, Course course);
+        public Lecture MapToLecture(LectureRequestDTO lectureRequestDTO);
 
         public Course MapToCourse(CourseRequestDTO courseRequestDTO);
 
