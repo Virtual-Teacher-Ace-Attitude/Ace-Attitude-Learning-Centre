@@ -135,21 +135,18 @@ namespace AceAttitude.Data
                 {
                     Id = student1Id,
                     ApplicationUserId = student1Id,
-                    CreatedOn = standardCreationDate,
                 },
 
                 new Student
                 {
                     Id = student2Id,
                     ApplicationUserId = student2Id,
-                    CreatedOn = standardCreationDate.AddDays(1),
                 },
 
                 new Student
                 {
                     Id = student3Id,
                     ApplicationUserId = student3Id,
-                    CreatedOn = standardCreationDate.AddDays(2),
                 },
             };
 
@@ -161,7 +158,6 @@ namespace AceAttitude.Data
                 {
                     Id = teacher1Id,
                     ApplicationUserId = teacher1Id,
-                    CreatedOn = standardCreationDate,
                     IsAdmin = true,
                     IsApproved = true,
                 },
@@ -170,7 +166,6 @@ namespace AceAttitude.Data
                 {
                     Id = teacher2Id,
                     ApplicationUserId = teacher2Id,
-                    CreatedOn = standardCreationDate.AddDays(1),
                     IsAdmin = true,
                     IsApproved = true,
                 },
@@ -179,7 +174,6 @@ namespace AceAttitude.Data
                 {
                     Id = teacher3Id,
                     ApplicationUserId = teacher3Id,
-                    CreatedOn = standardCreationDate.AddDays(2),
                     IsAdmin = false,
                     IsApproved = true,
                 }

@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AceAttitude.Data.Models
 {
-    public class Teacher : IsCreatable, IsModifiable, IsDeletable
+    public class Teacher
     {
         public Teacher()
         {
@@ -26,12 +26,5 @@ namespace AceAttitude.Data.Models
         public bool IsApproved { get; set; }
 
         public ICollection<Course> CreatedCourses { get; set; } = new List<Course>();
-
-        [Required]
-        public DateTime CreatedOn { get; set; }
-
-        public DateTime? ModifiedOn { get; set; }
-
-        public DateTime? DeletedOn { get; set; }
     }
 }
