@@ -8,5 +8,10 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         {
             return View();
         }
+
+        public IActionResult About() 
+        {
+            return View();
+        }
     }
 }
