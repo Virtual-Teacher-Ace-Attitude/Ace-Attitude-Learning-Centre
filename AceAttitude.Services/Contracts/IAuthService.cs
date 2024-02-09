@@ -6,27 +6,25 @@ namespace AceAttitude.Services.Contracts
 {
     public interface IAuthService
     {
-        //User CurrentUser { get; }
+        public ApplicationUser TryGetUser(string credentials);
 
-        ApplicationUser TryGetUser(string credentials);
+        public Student TryGetStudent(string credentials);
 
-        Student TryGetStudent(string credentials);
+        public Teacher TryGetTeacher(string credentials);
 
-        Teacher TryGetTeacher(string credentials);
+        public ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO, UserType userType);
 
-        ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO, UserType userType);
+        public string GeneratePasswordHash(string password);
 
-        //ApplicationUser LoginUser(UserRegisterDTO userDTO);
+        // Front-End auth methods
+        public ApplicationUser CurrentUser { get; }
 
-        string GeneratePasswordHash(string password);
+        public void EnsureUserAdmin();
 
+        public void Logout();
 
-        //void EnsureUserAdmin();
+        public void Login(string username, string password);
 
-        //public void Logout();
-
-        //public void Login(string username, string password);
-
-        //public bool EnsureUserLoggedIn();
+        public bool EnsureUserLoggedIn();
     }
 }
