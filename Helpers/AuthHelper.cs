@@ -9,7 +9,7 @@ namespace AceAttitude.Common.Helpers
     {
         private const string StudentNotEnrolledErrorMessage = "You are not enrolled in this course!";
         private const string TeacherNotApprovedErrorMessage = "You are not an approved teacher!";
-        private const string TeacherNotCourseCreator = "You are not the creator of this course!";
+        private const string TeacherNotCourseCreator = "You are not the creator of this course or an admin!";
 
         public void EnsureTeacherIsCourseCreatorOrAdmin(Teacher teacher, int courseId)
         {

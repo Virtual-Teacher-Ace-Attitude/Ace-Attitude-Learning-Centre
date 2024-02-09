@@ -1,4 +1,5 @@
 ﻿using AceAttitude.Common.Exceptions;
+using AceAttitude.Common.Helpers.Contracts;
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 using AceAttitude.Services.Contracts;
@@ -16,11 +17,13 @@ namespace AceAttitude.Services
 
         private readonly IModelMapper modelMapper;
         private readonly IUserService userService;
+        private readonly IParseHelper parseHelper;
 
-        public AuthService(IModelMapper modelMapper, IUserService userService)
+        public AuthService(IModelMapper modelMapper, IUserService userService, IParseHelper parseHelper)
         {
             this.modelMapper = modelMapper;
             this.userService = userService;
+            this.parseHelper = parseHelper;
         }
 
         public ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO, UserType userType)
@@ -39,6 +42,8 @@ namespace AceAttitude.Services
         {
             try
             {
+                credentials = this.parseHelper.ParseCredentials(credentials);
+
                 string[] splitCredentials = credentials.Split('|');
                 string email = splitCredentials[0];
                 string password = splitCredentials[1];
@@ -67,7 +72,7 @@ namespace AceAttitude.Services
                 throw new UnauthorizedOperationException(NotStudentErrorMessage);
             }
 
-            return this.userService.GetStudentById(user.StudentId);
+            return this.userService.GetStudentById(user.Id);
         }
 
         public Teacher TryGetTeacher(string credentials)
@@ -79,7 +84,7 @@ namespace AceAttitude.Services
                 throw new UnauthorizedOperationException(NotTeacherErrorMessage);
             }
 
-            return this.userService.GetTeacherById(user.TeacherId);
+            return this.userService.GetTeacherById(user.Id);
         }
 
         public string GeneratePasswordHash(string password)

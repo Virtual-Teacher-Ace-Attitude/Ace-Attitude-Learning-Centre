@@ -10,6 +10,6 @@ namespace AceAttitude.Common.Helpers.Contracts
 
         public decimal ParseRating(string paramValue);
 
-        public string EnsureValidCredentials(string credentials);
+        public string ParseCredentials(string credentials);
     }
 }

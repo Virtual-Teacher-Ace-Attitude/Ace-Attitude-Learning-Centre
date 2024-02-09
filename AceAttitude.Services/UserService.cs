@@ -18,6 +18,9 @@ namespace AceAttitude.Services
 
         private readonly string UnableToApplyErrorMessage = "Only the creator of the profile can apply for teacher!";
 
+        private readonly string InvalidUserTypeErrorMessage = "This action can only be performed by a {0} or admin!";
+        private readonly string StudentRequiredForApplicationErrorMessage = "You are already marked as a teacher!";
+
         private readonly IUserRepository userRepository;
         private readonly IAuthHelper authHelper;
 
@@ -89,6 +92,11 @@ namespace AceAttitude.Services
 
         public Teacher ViewTeacherProfile(string id, ApplicationUser requestUser)
         {
+            if (requestUser.UserType != UserType.Teacher)
+            {
+                throw new UnauthorizedOperationException(string.Format(InvalidUserTypeErrorMessage, UserType.Teacher));
+            }
+
             this.authHelper.EnsureIdMatchingOrAdmin(id, requestUser, UnableToViewProfileErrorMessage);
 
             return this.userRepository.GetTeacherById(id);
@@ -96,6 +104,11 @@ namespace AceAttitude.Services
 
         public Student ViewStudentProfile(string id, ApplicationUser requestUser)
         {
+            if (requestUser.UserType != UserType.Student && requestUser.UserType != UserType.Admin)
+            {
+                throw new UnauthorizedOperationException(string.Format(InvalidUserTypeErrorMessage, UserType.Student));
+            }
+
             this.authHelper.EnsureIdMatchingOrAdmin(id, requestUser, UnableToViewProfileErrorMessage);
 
             return this.userRepository.GetStudentById(id);
@@ -103,6 +116,11 @@ namespace AceAttitude.Services
 
         public Student ApplyForTeacher(string id, ApplicationUser requestUser)
         {
+            if (requestUser.UserType != UserType.Student)
+            {
+                throw new UnauthorizedOperationException(StudentRequiredForApplicationErrorMessage);
+            }
+
             if (requestUser.Id != id)
             {
                 throw new UnauthorizedOperationException(UnableToApplyErrorMessage);

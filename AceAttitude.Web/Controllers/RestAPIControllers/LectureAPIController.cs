@@ -88,8 +88,8 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateLecture([FromHeader] string credentials, int lectureId, [FromBody]
+        [HttpPut("{lectureId}")]
+        public IActionResult UpdateLecture([FromHeader] string credentials, [FromRoute]int lectureId, [FromBody]
                                             LectureRequestDTO lectureRequestDto, [FromRoute] int courseId)
         {
             try
@@ -112,18 +112,20 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(e.Message);
             }
-
-
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteLecture([FromHeader] string credentials, int id, [FromRoute] int courseId)
+        [HttpDelete("{lectureId}")]
+        public IActionResult DeleteLecture([FromHeader] string credentials,[FromRoute] int lectureId, [FromRoute] int courseId)
         {
             try
             {
                 Teacher teacher = authService.TryGetTeacher(credentials);
 
-                Lecture deletedLecture = lectureService.DeleteLecture(id, courseId, teacher);
+                Lecture deletedLecture = lectureService.DeleteLecture(lectureId, courseId, teacher);
 
                 LectureResponseDTO lectureResponseDTO = this.modelMapper.MapToLectureResponseDTO(deletedLecture);
 
@@ -137,7 +139,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(e.Message);
             }
-
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
     }
 }

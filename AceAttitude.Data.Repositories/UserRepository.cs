@@ -12,6 +12,7 @@ namespace AceAttitude.Data.Repositories
     {
         private const string UserNotFoundErrorMessage = "{0} with {1} {2} does not exist!";
 
+        private const string StudentAlreadyAppliedErrorMessage = "This student has already applied to be a teacher!";
         private const string StudentAlreadyApprovedErrorMessage = "This student has already been approved for teacher.";
         private const string StudentNotAwaitingApprovalErrorMessage = "This student has not applied to become a teacher.";
 
@@ -58,7 +59,7 @@ namespace AceAttitude.Data.Repositories
             var teacher = context.Teachers
                 .Include(teacher => teacher.User)
                 .Include(teacher => teacher.CreatedCourses)
-                .FirstOrDefault(teacher => teacher.Id == id && teacher.User.DeletedOn.HasValue == false)
+                .FirstOrDefault(teacher => teacher.Id == id && teacher.User.DeletedOn.HasValue == false && teacher.IsApproved)
                 ?? throw new EntityNotFoundException(string.Format(UserNotFoundErrorMessage, "Teacher", "ID: ", id));
 
             return teacher;
@@ -171,6 +172,11 @@ namespace AceAttitude.Data.Repositories
         public Student ApplyForTeacher(string id)
         {
             Student student = this.GetStudentById(id);
+
+            if (student.AwaitingPromotion)
+            {
+                throw new UnauthorizedOperationException(StudentAlreadyAppliedErrorMessage);
+            }
 
             student.AwaitingPromotion = true;
 

@@ -14,7 +14,7 @@ namespace AceAttitude.Common.Helpers
 
         private const string InvalidRatingErrorMessage = "Rating must be a decimal number.";
 
-        public string EnsureValidCredentials(string credentials)
+        public string ParseCredentials(string credentials)
         {
             if (!credentials.Contains('|')) 
             {

@@ -60,7 +60,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return NotFound(e.Message);
             }
-
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
         [HttpPost("")]
@@ -94,7 +97,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPost("{id}")]
+        [HttpPut("{id}")]
         public IActionResult UpdateCourse(int id, [FromBody] CourseRequestDTO courseRequestDTO, [FromHeader] string credentials)
         {
             try
@@ -124,7 +127,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/rate")]
         public IActionResult RateCourse(int id, [FromBody] Rating rating, [FromHeader] string credentials)
         {
             try
@@ -143,8 +146,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(e.Message);
             }
-
-
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -165,7 +170,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(e.Message);
             }
-
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
     }
 }

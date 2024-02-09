@@ -1,6 +1,7 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace AceAttitude.Data.Repositories
 {
@@ -72,7 +73,11 @@ namespace AceAttitude.Data.Repositories
 
         public List<Comment> GetComments(Course course)
         {
-            List<Comment> comments = course.Comments.Where(c => c.DeletedOn.HasValue == false).ToList();
+            var comments = commentContext.Comments
+                .Include(c => c.User)
+                .Where(c => c.DeletedOn.HasValue == false)
+                .ToList();
+
             return comments;
         }
 

@@ -43,7 +43,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return NotFound(e.Message);
             }
-
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
         [HttpPost("")]
@@ -71,7 +74,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(e.Message);
             }
-
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
         [HttpDelete("{id}")]
@@ -95,17 +101,21 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(e.Message);
             }
-
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
-        [HttpPost("{id}")]
-        public IActionResult EditComment(int id, [FromBody] CommentRequestDTO commentRequestDTO, [FromHeader] string credentials)
+        [HttpPut("{commentId}")]
+        public IActionResult EditComment([FromRoute]int commentId, [FromRoute] int courseId, 
+            [FromBody] CommentRequestDTO commentRequestDTO, [FromHeader] string credentials)
         {
             try
             {
                 ApplicationUser user = authService.TryGetUser(credentials);
 
-                Comment updatedComment = commentService.UpdateComment(id, commentRequestDTO.Content, user);
+                Comment updatedComment = commentService.UpdateComment(commentId, commentRequestDTO.Content, user);
 
                 CommentResponseDTO commentResponseDto = this.modelMapper.MapToCommentResponseDTO(updatedComment);
 
@@ -119,9 +129,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Unauthorized(e.Message);
             }
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}/like")]
         public IActionResult LikeComment(int id, [FromHeader] string credentials)
         {
             try
@@ -141,6 +155,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             catch (UnauthorizedOperationException e)
             {
                 return Unauthorized(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
         }
     }

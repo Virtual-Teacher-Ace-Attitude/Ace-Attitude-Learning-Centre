@@ -104,6 +104,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Conflict(e.Message);
             }
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
         [HttpGet("students/{id}")]
@@ -127,6 +131,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Conflict(e.Message);
             }
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
         [HttpPut("student/{id}/apply/")]
@@ -144,11 +152,15 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
             catch (EntityNotFoundException e)
             {
-                return StatusCode(StatusCodes.Status404NotFound, e);
+                return StatusCode(StatusCodes.Status404NotFound, e.Message);
             }
             catch (UnauthorizedOperationException e)
             {
-                return StatusCode(StatusCodes.Status401Unauthorized, e);
+                return StatusCode(StatusCodes.Status401Unauthorized, e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
         }
 
@@ -174,6 +186,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             {
                 return Conflict(e.Message);
             }
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
+            }
         }
 
         [HttpGet("students/unapproved")]
@@ -197,6 +213,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             catch (UnauthorizedOperationException e)
             {
                 return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return StatusCode(StatusCodes.Status400BadRequest, e.Message);
             }
         }
 

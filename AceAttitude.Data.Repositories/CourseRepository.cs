@@ -3,11 +3,14 @@ using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Common.Helpers.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace AceAttitude.Data.Repositories
 {
     public class CourseRepository : ICourseRepository
     {
+        private const string CourseNotFoundErrorMessage = "Course with id: {0} does not exist!";
+
         private readonly ApplicationDbContext courseContext;
         private readonly IParseHelper parseHelper;
 
@@ -37,12 +40,14 @@ namespace AceAttitude.Data.Repositories
 
         public Course GetById(int id)
         {
-            Course course = courseContext.Courses.FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false)
-                ?? throw new EntityNotFoundException($"Course with id: {id} does not exist!");
+            Course course = courseContext.Courses
+                .Include(course => course.Lectures)
+                .Include(course => course.Comments)
+                .Include(course => course.Ratings)
+                .FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false)
+                ?? throw new EntityNotFoundException(string.Format(CourseNotFoundErrorMessage, id));
             return course;
         }
-
-
 
         public Course UpdateCourse(int id, Course course)
         {
@@ -60,7 +65,8 @@ namespace AceAttitude.Data.Repositories
         public decimal GetRating(int id)
         {
             Course course = GetById(id);
-            return course.Ratings.Average(r => r.Value);
+
+            return course.Ratings.Select(r => r.Value).AsEnumerable().Average();
         }
 
         public Course RateCourse(int id, Rating rating)
@@ -74,7 +80,9 @@ namespace AceAttitude.Data.Repositories
 
         public IQueryable<Course> GetAll()
         {
-            IQueryable<Course> allCourses = courseContext.Courses.Where(c => c.DeletedOn.HasValue == false);
+            IQueryable<Course> allCourses = courseContext.Courses.Where(c => c.DeletedOn.HasValue == false)
+                .Include(course => course.Ratings);
+
             return allCourses;
         }
 
