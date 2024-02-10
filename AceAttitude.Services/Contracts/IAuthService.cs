@@ -12,7 +12,7 @@ namespace AceAttitude.Services.Contracts
 
         public Teacher TryGetTeacher(string credentials);
 
-        public ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO, UserType userType);
+        public ApplicationUser ValidateUserCanRegister(ApplicationUser user, UserType userType);
 
         public string GeneratePasswordHash(string password);
 

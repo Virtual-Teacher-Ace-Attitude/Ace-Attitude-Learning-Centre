@@ -6,4 +6,9 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AceAttitude.Common.Constants\AceAttitude.Common.Constants.csproj" />
+    <ProjectReference Include="..\AceAttitude.Data.Models\AceAttitude.Data.Models.csproj" />
+  </ItemGroup>
+
 </Project>

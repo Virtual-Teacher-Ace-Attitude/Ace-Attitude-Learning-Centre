@@ -39,8 +39,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                 {
                     throw new InvalidUserInputException(InvalidUserCreationErrorMessage);
                 }
+                string passwordHash = this.authService.GeneratePasswordHash(userDTO.Password);
+                ApplicationUser userToRegister = this.modelMapper.MapToUser(userDTO, passwordHash);
 
-                ApplicationUser user = authService.ValidateUserCanRegister(userDTO, UserType.Student);
+                ApplicationUser user = authService.ValidateUserCanRegister(userToRegister, UserType.Student);
 
                 UserResponseDTO userResponseDto = modelMapper.MapToResponseUserDTO(userService.CreateStudent(user), "Student");
 
@@ -66,7 +68,10 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
                     throw new InvalidUserInputException(InvalidUserCreationErrorMessage);
                 }
 
-                ApplicationUser user = authService.ValidateUserCanRegister(userDTO, UserType.Teacher);
+                string passwordHash = this.authService.GeneratePasswordHash(userDTO.Password);
+                ApplicationUser userToRegister = this.modelMapper.MapToUser(userDTO, passwordHash);
+
+                ApplicationUser user = authService.ValidateUserCanRegister(userToRegister, UserType.Teacher);
 
                 UserResponseDTO teacherResponseDto = modelMapper.MapToResponseUserDTO(userService.CreateTeacher(user), "Teacher - Awaiting Approval");
 

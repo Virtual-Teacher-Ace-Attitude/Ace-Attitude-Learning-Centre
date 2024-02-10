@@ -1,0 +1,94 @@
+﻿@*@using AfterPartySupport.DTO.Models.Response;
+@inject IAuthManager AuthManager
+@model UserResponseDTO
+@{
+    var currentUser = Context.Session.Keys.Contains("CurrentUser") ? AuthManager.CurrentUser : null;
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>User Profile - @Model.Username</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #FFD700; /* Light Red-Orange Background Color */
+            color: #333; /* Dark Text Color */
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding-top: 50px; /* Add some top padding to center content */
+        }
+
+        .container {
+            max-width: 600px; /* Limit width to provide a centered grid */
+        }
+
+        .profile-icon {
+            width: 100px;
+            height: 100px;
+            margin-top: 20px;
+            border-radius: 50%;
+            border: 3px solid #fff; /* White border around the profile picture */
+        }
+
+        .user-info {
+            margin-top: 20px;
+        }
+
+        .created-at {
+            color: #888; /* Lighter text color for additional information */
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <img src="~/images/default-user-icon.png" alt="Profile" class="rounded-circle img-thumbnail profile-icon">
+        <div class="user-info">
+            @if (currentUser.IsBlocked)
+            {
+                <p class="text-warning">Blocked</p>
+            }
+            @if (currentUser.IsAdmin)
+            {
+                <p class="text-danger">Administrator</p>
+            }
+            <h2>Name: @Model.FirstName @Model.LastName</h2>
+            <p>Username: @Model.Username</p>
+            <p>Email: @Model.Email</p>
+            @if (currentUser.PhoneNumber != null)
+            {
+                <p>Phone Number: @Model.PhoneNumber</p>
+            }
+            else if (currentUser.IsAdmin)
+            {
+                <button asp-controller="user" asp-action="UpdateNumber" asp-route-id="@currentUser.Id" type="button" class="btn btn-outline-primary" id="addPhoneNumberBtn">Add Phone Number</button>
+            }
+            <p class="created-at">Account Created: @Model.CreatedAt.ToShortDateString()</p>
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            $('#addPhoneNumberBtn').click(function () {
+                // Hide the button
+                $(this).hide();
+
+                // Show the input field
+                $('#phoneNumberInput').show().focus();
+            });
+
+            // Assuming you have jQuery included in your project
+            $('#phoneNumberInput').keypress(function (e) {
+                if (e.which === 13) { // Enter key pressed
+                    var phoneNumber = $(this).val();
+                    window.location.href = '/User/UpdateNumber?number=' + phoneNumber;
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>*@

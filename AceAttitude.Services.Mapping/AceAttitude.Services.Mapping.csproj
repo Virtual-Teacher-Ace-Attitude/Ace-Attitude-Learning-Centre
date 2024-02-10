@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\AceAttitude.Data.Models\AceAttitude.Data.Models.csproj" />
     <ProjectReference Include="..\AceAttitude.Web.DTO\AceAttitude.Web.DTO.csproj" />
+    <ProjectReference Include="..\AceAttitude.Web.ViewModels\AceAttitude.Web.ViewModels.csproj" />
     <ProjectReference Include="..\Helpers\AceAttitude.Common.Helpers.csproj" />
   </ItemGroup>
 

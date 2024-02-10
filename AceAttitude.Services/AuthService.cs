@@ -26,26 +26,21 @@ namespace AceAttitude.Services
         private const string CurrentUserKey = "CurrentUser";
         private readonly IHttpContextAccessor contextAccessor;
 
-        private readonly IModelMapper modelMapper;
         private readonly IParseHelper parseHelper;
 
         private readonly IUserService userService;
 
-        public AuthService(IModelMapper modelMapper, IUserService userService, IParseHelper parseHelper, IHttpContextAccessor contextAccessor)
+        public AuthService(IUserService userService, IParseHelper parseHelper, IHttpContextAccessor contextAccessor)
         {
-            this.modelMapper = modelMapper;
             this.userService = userService;
             this.parseHelper = parseHelper;
             this.contextAccessor = contextAccessor;
         }
 
-        public ApplicationUser ValidateUserCanRegister(UserRegisterRequestDTO userDTO, UserType userType)
+        public ApplicationUser ValidateUserCanRegister(ApplicationUser user, UserType userType)
         {
-            this.userService.CheckEmailExists(userDTO.Email);
+            this.userService.CheckEmailExists(user.Email);
 
-            string passwordHash = this.GeneratePasswordHash(userDTO.Password);
-
-            ApplicationUser user = this.modelMapper.MapToUser(userDTO, passwordHash);
             user.UserType = userType;
 
             return user;
