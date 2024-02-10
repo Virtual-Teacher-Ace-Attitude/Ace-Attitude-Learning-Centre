@@ -78,10 +78,12 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
                 ApplicationUser userToCreate = this.modelMapper.MapToUser(viewModel, passwordHash);
 
-                ApplicationUser createdUser = this.authService.ValidateUserCanRegister(userToCreate, viewModel.UserType);
+                UserType userType = viewModel.IsStudent ? UserType.Student : UserType.Teacher; 
+
+                ApplicationUser createdUser = this.authService.ValidateUserCanRegister(userToCreate, userType);
                 _ = userService.Create(createdUser);
 
-                if (viewModel.UserType == UserType.Student)
+                if (userType == UserType.Student)
                 {
 					return RedirectToAction("Login", "User");
 				}

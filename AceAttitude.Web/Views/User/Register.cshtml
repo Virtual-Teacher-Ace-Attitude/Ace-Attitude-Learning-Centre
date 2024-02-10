@@ -1,6 +1,6 @@
 ﻿@{
-	ViewData["Title"] = "Register";
-	Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
 @model RegisterViewModel
@@ -8,112 +8,137 @@
 <h2>Register</h2>
 
 <form asp-controller="User" asp-action="Register" method="post">
-	<div class="form-group">
-		<label asp-for="FirstName"></label>
-		<input type="text" asp-for="FirstName" class="form-control" />
-		<span asp-validation-for="FirstName" class="text-danger"></span>
-	</div>
-	<div class="form-group">
-		<label asp-for="LastName"></label>
-		<input type="text" asp-for="LastName" class="form-control" />
-		<span asp-validation-for="LastName" class="text-danger"></span>
-	</div>
-	<div class="form-group">
-		<label asp-for="Email"></label>
-		<input type="text" asp-for="Email" class="form-control" />
-		<span asp-validation-for="Email" class="text-danger"></span>
-	</div>
-	<div class="form-group">
-		<label asp-for="Password"></label>
-		<input type="password" asp-for="Password" class="form-control" />
-		<span asp-validation-for="Password" class="text-danger"></span>
-	</div>
-	<div class="form-group">
-		<label asp-for="ConfirmPassword"></label>
-		<input type="password" asp-for="ConfirmPassword" class="form-control" />
-		<span asp-validation-for="ConfirmPassword" class="text-danger"></span>
-	</div>
+    <div class="form-group">
+        <label asp-for="FirstName"></label>
+        <input type="text" asp-for="FirstName" class="form-control" />
+        <span asp-validation-for="FirstName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="LastName"></label>
+        <input type="text" asp-for="LastName" class="form-control" />
+        <span asp-validation-for="LastName" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Email"></label>
+        <input type="text" asp-for="Email" class="form-control" />
+        <span asp-validation-for="Email" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="Password"></label>
+        <input type="password" asp-for="Password" class="form-control" />
+        <span asp-validation-for="Password" class="text-danger"></span>
+    </div>
+    <div class="form-group">
+        <label asp-for="ConfirmPassword"></label>
+        <input type="password" asp-for="ConfirmPassword" class="form-control" />
+        <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+    </div>
 
-	<input type="hidden" id="userType" name="UserType" />
+    <input type="hidden" id="isStudent" name="IsStudent" />
 
-	<div class="form-group">
-		<input type="submit" value="Register" class="btn btn-primary" id="registerButton" />
-	</div>
+    <div class="form-group">
+        <button type="button" class="btn btn-primary" id="registerButton">Register</button>
+    </div>
 </form>
 
 <!-- Registration Modal -->
 <div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="registrationModalLabel">Choose Account Type</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body text-center">
-				<p>Select your account type:</p>
-				<div class="row">
-					<div class="col-md-6">
-						<img src="~/images/student.png" alt="Student" class="img-fluid mb-2" style="max-width: 100px;">
-						<p>Register as a Student</p>
-					</div>
-					<div class="col-md-6">
-						<img src="~/images/teacher.png" alt="Teacher" class="img-fluid mb-2" style="max-width: 100px;">
-						<p>Register as a Teacher</p>
-					</div>
-				</div>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-primary" id="registerButton">Register</button>
-			</div>
-		</div>
-	</div>
-</div>
-
-<!-- Registration Modal -->
-<div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-			<div class="modal-header">
-				<h5 class="modal-title" id="registrationModalLabel">Choose Account Type</h5>
-				<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-					<span aria-hidden="true">&times;</span>
-				</button>
-			</div>
-			<div class="modal-body text-center">
-				<p>Select your account type:</p>
-				<div class="row">
-					<div class="col-md-6">
-						<img src="~/images/student.png" alt="Student" class="img-fluid mb-2" style="max-width: 100px;">
-						<p>Register as a Student</p>
-					</div>
-					<div class="col-md-6">
-						<img src="~/images/teacher.png" alt="Teacher" class="img-fluid mb-2" style="max-width: 100px;">
-						<p>Register as a Teacher</p>
-					</div>
-				</div>
-			</div>
-			<div class="form-group">
-				<button type="button" class="btn btn-primary" id="registerButton">Register</button>
-			</div>
-		</div>
-	</div>
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="registrationModalLabel">Choose Account Type</h5>
+                <!-- Ensure the 'x' button has data-dismiss="modal" attribute -->
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body text-center">
+                <p>Select your account type:</p>
+                <div class="row">
+                    <div class="col-md-6">
+                        <!-- Use student image/button as trigger -->
+                        <input type="image" src="~/images/students.png" alt="Student" class="img-fluid mb-2 student-image" style="max-width: 100px;">
+                        <p>"Register as a student and dive into our courses instantly! Start your learning journey now with expert guidance and engaging content."</p>
+                    </div>
+                    <div class="col-md-6">
+                        <!-- Use teacher image/button as trigger -->
+                        <input type="image" src="~/images/teacher.png" alt="Teacher" class="img-fluid mb-2 teacher-image" style="max-width: 100px;">
+                        <p>Join us as a teacher! While students get immediate access, teachers await approval to create captivating courses and inspire learners.</p>
+                    </div>
+                </div>
+                <!-- Button div -->
+                <div id="submitButtonDiv" style="margin-top: 20px;">
+                    <button type="button" asp-controller="Post" asp-action="Create" method="post" id="submitButton" class="btn btn-secondary" disabled>Submit</button>
+                </div>
+            </div>
+            <!-- Removed the modal footer with buttons -->
+        </div>
+    </div>
 </div>
 
 @section Scripts {
-	<!-- Add the Bootstrap and jQuery scripts -->
-	<script src="~/lib/jquery/dist/jquery.min.js"></script>
-	<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-	<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-	<script>
-		// jQuery document ready function
-		$(document).ready(function () {
-			// Attach click event to the register button
-			$('#registerButton').click(function () {
-				// Show the registration modal
-				$('#registrationModal').modal('show');
-			});
-		});
-	</script>
+    <!-- Add the Bootstrap and jQuery scripts -->
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // jQuery document ready function
+        $(document).ready(function () {
+            // Function to enable submit button when an icon is clicked
+            function enableSubmitButton() {
+                $('#submitButton').prop('disabled', false);
+                $('#submitButton').removeClass('btn-secondary').addClass('btn-success');
+            }
+
+            // Attach click event to the register button
+            $('#registerButton').click(function () {
+                // Show the registration modal
+                $('#registrationModal').modal('show');
+            });
+
+            // Attach click event to the close button of the modal
+            $('#registrationModal .close').click(function () {
+                // Hide the modal when the close button is clicked
+                $('#registrationModal').modal('hide');
+            });
+
+            // Add click event for student image/button
+            $('.student-image').click(function () {
+                // Remove highlight from all images
+                $('.student-image, .teacher-image').removeClass('highlighted');
+                // Add highlight to the clicked image
+                $(this).addClass('highlighted');
+                // Set the value of the hidden input field for IsStudent to true
+                $('#isStudent').val('true');
+                // Enable the submit button
+                enableSubmitButton();
+            });
+
+            // Add click event for teacher image/button
+            $('.teacher-image').click(function () {
+                // Remove highlight from all images
+                $('.student-image, .teacher-image').removeClass('highlighted');
+                // Add highlight to the clicked image
+                $(this).addClass('highlighted');
+                // Set the value of the hidden input field for IsStudent to false
+                $('#isStudent').val('false');
+                // Enable the submit button
+                enableSubmitButton();
+            });
+
+            //// Add click event for submit button
+            //$('#submitButton').click(function () {
+            //    // Submit the form
+            //    $('form').submit();
+            //});
+        });
+    </script>
+
+    <style>
+        .highlighted {
+            border: 2px solid #007bff !important; /* Add outline when highlighted */
+            transform: scale(1.1); /* Scale up on click */
+        }
+    </style>
 }

@@ -47,6 +47,6 @@ namespace AceAttitude.Web.ViewModels
         public string LastName { get; set; } = null!;
 
         [Required]
-        public UserType UserType { get; set; }
+        public bool IsStudent { get; set; }
     }
 }
