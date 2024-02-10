@@ -7,7 +7,7 @@
 
 <h2>Register</h2>
 
-<form asp-controller="User" asp-action="Register" method="post">
+<form id="registerForm" asp-controller="User" asp-action="Register" method="post">
     <div class="form-group">
         <label asp-for="FirstName"></label>
         <input type="text" asp-for="FirstName" class="form-control" />
@@ -68,7 +68,7 @@
                 </div>
                 <!-- Button div -->
                 <div id="submitButtonDiv" style="margin-top: 20px;">
-                    <button type="button" asp-controller="Post" asp-action="Create" method="post" id="submitButton" class="btn btn-secondary" disabled>Submit</button>
+                    <button type="button" id="submitButton" class="btn btn-secondary" disabled>Join</button>
                 </div>
             </div>
             <!-- Removed the modal footer with buttons -->
@@ -127,11 +127,30 @@
                 enableSubmitButton();
             });
 
-            //// Add click event for submit button
-            //$('#submitButton').click(function () {
-            //    // Submit the form
-            //    $('form').submit();
-            //});
+            // Add click event for submit button
+            $('#submitButton').click(function () {
+                // Serialize form data
+                var formData = $('#registerForm').serialize();
+
+                // Get the absolute URL for the action
+                var url = '@Url.Action("Register", "User")';
+
+                // Send AJAX request
+                $.ajax({
+                    url: url,
+                    type: 'POST',
+                    data: formData,
+                    success: function (data) {
+                        // Handle success response
+                        // For example, redirect to another page
+                        window.location.href = data.redirectUrl;
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                        console.error(xhr.responseText);
+                    }
+                });
+            });
         });
     </script>
 
