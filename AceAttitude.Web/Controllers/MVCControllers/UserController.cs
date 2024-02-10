@@ -47,12 +47,16 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
 				return RedirectToAction("Index", "Home");
 			}
-			catch (UnauthorizedOperationException ex)
+			catch (UnauthorizedOperationException e)
 			{
-				ModelState.AddModelError("Username", ex.Message);
-				ModelState.AddModelError("Password", ex.Message);
+				ModelState.AddModelError("Email", e.Message);
+				ModelState.AddModelError("Password", e.Message);
 
-				return this.ForbiddenOperation(ex.Message, StatusCodes.Status401Unauthorized);
+				return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+			}
+			catch (EntityNotFoundException e)
+			{
+				return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
 			}
 		}
 

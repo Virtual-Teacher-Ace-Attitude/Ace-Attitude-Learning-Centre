@@ -6,12 +6,12 @@ using AceAttitude.Web.DTO.Response;
 
 namespace AceAttitude.Services.Mapping
 {
-    public class ModelMapper : IModelMapper
+    public class APIModelMapper : IAPIModelMapper
     {
 
         private readonly IParseHelper parseHelper;
         // Map to base entities
-        public ModelMapper(IParseHelper parseHelper)
+        public APIModelMapper(IParseHelper parseHelper)
         {
             this.parseHelper = parseHelper;
         }

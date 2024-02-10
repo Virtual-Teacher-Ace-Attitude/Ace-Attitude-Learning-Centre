@@ -68,7 +68,7 @@ namespace AceAttitude.Web
 
             builder.Services.AddScoped<IAuthService, AuthService>();
 
-            builder.Services.AddScoped<IModelMapper, ModelMapper>();
+            builder.Services.AddScoped<IAPIModelMapper, APIModelMapper>();
             builder.Services.AddScoped<IMVCModelMapper, MVCModelMapper>();
 
             builder.Services.AddScoped<IUserRepository, UserRepository>();

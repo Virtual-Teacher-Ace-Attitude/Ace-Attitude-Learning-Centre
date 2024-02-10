@@ -16,9 +16,9 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
 
         private readonly ICourseService courseService;
         private readonly IAuthService authService;
-        private readonly IModelMapper modelMapper;
+        private readonly IAPIModelMapper modelMapper;
 
-        public CourseAPIController(ICourseService courseService, IAuthService authService, IModelMapper modelMapper)
+        public CourseAPIController(ICourseService courseService, IAuthService authService, IAPIModelMapper modelMapper)
         {
             this.courseService = courseService;
             this.authService = authService;

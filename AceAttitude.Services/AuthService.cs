@@ -20,6 +20,8 @@ namespace AceAttitude.Services
 		private readonly string UserNotLoggedInErrorMessage = "You need to be logged in to perform this action!";
 		private readonly string UserNotAdminErrorMessage = "This action can only be performed by admins!";
 
+		private readonly string TeacherNotApprovedErrorMessage = "This teacher profile either doesn't exist or hasn't been approved yet!";
+
 		private const string CurrentUserKey = "CurrentUser";
 		private readonly IHttpContextAccessor contextAccessor;
 
@@ -142,6 +144,18 @@ namespace AceAttitude.Services
 		{
 			string credentials = email + '|' + password;
 			CurrentUser = TryGetUser(credentials);
+
+			if (CurrentUser.UserType == UserType.Teacher)
+			{
+				try
+				{
+					Teacher teacher = this.userService.GetTeacherById(CurrentUser.Id);
+				}
+				catch (EntityNotFoundException)
+				{
+					throw new UnauthorizedOperationException(TeacherNotApprovedErrorMessage);
+				}
+			}
 		}
 
 		public void Logout()

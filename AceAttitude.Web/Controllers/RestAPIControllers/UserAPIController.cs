@@ -16,12 +16,12 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
     {
         private readonly string InvalidUserCreationErrorMessage = "Unable to create user, invalid input data!";
 
-        private readonly IModelMapper modelMapper;
+        private readonly IAPIModelMapper modelMapper;
 
         private readonly IUserService userService;
         private readonly IAuthService authService;
 
-        public UserController(IUserService userService, IAuthService authService, IModelMapper modelMapper)
+        public UserController(IUserService userService, IAuthService authService, IAPIModelMapper modelMapper)
         {
             this.userService = userService;
             this.authService = authService;
