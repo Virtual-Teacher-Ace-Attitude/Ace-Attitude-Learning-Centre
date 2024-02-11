@@ -5,162 +5,173 @@ using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 
 using AceAttitude.Services.Contracts;
-using AceAttitude.Services.Mapping.Contracts;
-
-using AceAttitude.Web.DTO.Request;
 
 using Microsoft.AspNetCore.Http;
 
 namespace AceAttitude.Services
 {
-    public class AuthService : IAuthService
-    {
-        private readonly string IncorrectCredentialsErrorMessage = "The username or password provided are incorrect!";
+	public class AuthService : IAuthService
+	{
+		private readonly string IncorrectCredentialsErrorMessage = "The username or password provided are incorrect!";
 
-        private readonly string NotStudentErrorMessage = "The following action can only be performed by a student!";
-        private readonly string NotTeacherErrorMessage = "The following action can only be performed by a teacher!";
+		private readonly string NotStudentErrorMessage = "The following action can only be performed by a student!";
+		private readonly string NotTeacherErrorMessage = "The following action can only be performed by a teacher!";
 
-        private readonly string UserNotLoggedInErrorMessage = "You need to be logged in to perform this action!";
-        private readonly string UserNotAdminErrorMessage = "This action can only be performed by admins!";
+		private readonly string UserNotLoggedInErrorMessage = "You need to be logged in to perform this action!";
+		private readonly string UserNotAdminErrorMessage = "This action can only be performed by admins!";
 
-        private const string CurrentUserKey = "CurrentUser";
-        private readonly IHttpContextAccessor contextAccessor;
+		private readonly string TeacherNotApprovedErrorMessage = "This teacher profile either doesn't exist or hasn't been approved yet!";
 
-        private readonly IParseHelper parseHelper;
+		private const string CurrentUserKey = "CurrentUser";
+		private readonly IHttpContextAccessor contextAccessor;
 
-        private readonly IUserService userService;
+		private readonly IParseHelper parseHelper;
 
-        public AuthService(IUserService userService, IParseHelper parseHelper, IHttpContextAccessor contextAccessor)
-        {
-            this.userService = userService;
-            this.parseHelper = parseHelper;
-            this.contextAccessor = contextAccessor;
-        }
+		private readonly IUserService userService;
 
-        public ApplicationUser ValidateUserCanRegister(ApplicationUser user, UserType userType)
-        {
-            this.userService.CheckEmailExists(user.Email);
+		public AuthService(IUserService userService, IParseHelper parseHelper, IHttpContextAccessor contextAccessor)
+		{
+			this.userService = userService;
+			this.parseHelper = parseHelper;
+			this.contextAccessor = contextAccessor;
+		}
 
-            user.UserType = userType;
+		public ApplicationUser ValidateUserCanRegister(ApplicationUser user, UserType userType)
+		{
+			this.userService.CheckEmailExists(user.Email);
 
-            return user;
-        }
+			user.UserType = userType;
 
-        public ApplicationUser TryGetUser(string credentials)
-        {
-            try
-            {
-                credentials = this.parseHelper.ParseCredentials(credentials);
+			return user;
+		}
 
-                string[] splitCredentials = credentials.Split('|');
-                string email = splitCredentials[0];
-                string password = splitCredentials[1];
+		public ApplicationUser TryGetUser(string credentials)
+		{
+			try
+			{
+				credentials = this.parseHelper.ParseCredentials(credentials);
 
-                ApplicationUser user = userService.GetByEmail(email);
+				string[] splitCredentials = credentials.Split('|');
+				string email = splitCredentials[0];
+				string password = splitCredentials[1];
 
-                if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
-                {
-                    throw new UnauthorizedOperationException(IncorrectCredentialsErrorMessage);
-                }
+				ApplicationUser user = userService.GetByEmail(email);
 
-                return user;
-            }
-            catch (EntityNotFoundException)
-            {
-                throw new UnauthorizedOperationException(IncorrectCredentialsErrorMessage);
-            }
-        }
+				if (!BCrypt.Net.BCrypt.Verify(password, user.PasswordHash))
+				{
+					throw new UnauthorizedOperationException(IncorrectCredentialsErrorMessage);
+				}
 
-        public Student TryGetStudent(string credentials)
-        {
-            ApplicationUser user = this.TryGetUser(credentials);
+				return user;
+			}
+			catch (EntityNotFoundException)
+			{
+				throw new UnauthorizedOperationException(IncorrectCredentialsErrorMessage);
+			}
+		}
 
-            if (user.UserType == UserType.Student)
-            {
-                throw new UnauthorizedOperationException(NotStudentErrorMessage);
-            }
+		public Student TryGetStudent(string credentials)
+		{
+			ApplicationUser user = this.TryGetUser(credentials);
 
-            return this.userService.GetStudentById(user.Id);
-        }
+			if (user.UserType == UserType.Student)
+			{
+				throw new UnauthorizedOperationException(NotStudentErrorMessage);
+			}
 
-        public Teacher TryGetTeacher(string credentials)
-        {
-            ApplicationUser user = this.TryGetUser(credentials);
+			return this.userService.GetStudentById(user.Id);
+		}
 
-            if (user.UserType == UserType.Teacher)
-            {
-                throw new UnauthorizedOperationException(NotTeacherErrorMessage);
-            }
+		public Teacher TryGetTeacher(string credentials)
+		{
+			ApplicationUser user = this.TryGetUser(credentials);
 
-            return this.userService.GetTeacherById(user.Id);
-        }
+			if (user.UserType == UserType.Teacher)
+			{
+				throw new UnauthorizedOperationException(NotTeacherErrorMessage);
+			}
 
-        public string GeneratePasswordHash(string password)
-        {
-            return BCrypt.Net.BCrypt.HashPassword(password);
-        }
+			return this.userService.GetTeacherById(user.Id);
+		}
 
-        // Front-End auth methods
+		public string GeneratePasswordHash(string password)
+		{
+			return BCrypt.Net.BCrypt.HashPassword(password);
+		}
 
-        public ApplicationUser CurrentUser
-        {
-            get
-            {
-                string username = contextAccessor.HttpContext.Session.GetString(CurrentUserKey);
-                if (username == null)
-                {
-                    return null;
-                }
+		// Front-End auth methods
 
-                return userService.GetByEmail(username);
-            }
-            private set
-            {
-                ApplicationUser user = value;
-                if (user != null)
-                {
-                    // add username to session
-                    contextAccessor.HttpContext.Session.SetString(CurrentUserKey, user.Email);
-                }
-                else
-                {
-                    contextAccessor.HttpContext.Session.Remove(CurrentUserKey);
-                }
-            }
-        }
+		public ApplicationUser CurrentUser
+		{
+			get
+			{
+				string username = contextAccessor.HttpContext.Session.GetString(CurrentUserKey);
+				if (username == null)
+				{
+					return null!;
+				}
 
-        public bool EnsureUserLoggedIn()
-        {
-            bool loggedIn = contextAccessor.HttpContext.Session.Keys.Contains(CurrentUserKey);
+				return userService.GetByEmail(username);
+			}
+			private set
+			{
+				ApplicationUser user = value;
+				if (user != null)
+				{
+					// add username to session
+					contextAccessor.HttpContext.Session.SetString(CurrentUserKey, user.Email);
+				}
+				else
+				{
+					contextAccessor.HttpContext.Session.Remove(CurrentUserKey);
+				}
+			}
+		}
 
-            if (!loggedIn)
-            {
-                throw new UnauthorizedOperationException(UserNotLoggedInErrorMessage);
-            }
+		public bool EnsureUserLoggedIn()
+		{
+			bool loggedIn = contextAccessor.HttpContext.Session.Keys.Contains(CurrentUserKey);
 
-            return loggedIn;
-        }
+			if (!loggedIn)
+			{
+				throw new UnauthorizedOperationException(UserNotLoggedInErrorMessage);
+			}
 
-        public void Login(string username, string password)
-        {
-            string credentials = username + '|' + password;
-            CurrentUser = TryGetUser(credentials);
-        }
+			return loggedIn;
+		}
 
-        public void Logout()
-        {
-            CurrentUser = null;
-        }
+		public void Login(string email, string password)
+		{
+			string credentials = email + '|' + password;
+			CurrentUser = TryGetUser(credentials);
 
-        public void EnsureUserAdmin()
-        {
-            if (CurrentUser != null)
-            {
-                if (CurrentUser.UserType != UserType.Admin)
-                {
-                    throw new UnauthorizedOperationException(UserNotAdminErrorMessage);
-                }
-            }
-        }
-    }
+			if (CurrentUser.UserType == UserType.Teacher)
+			{
+				try
+				{
+					Teacher teacher = this.userService.GetTeacherById(CurrentUser.Id);
+				}
+				catch (EntityNotFoundException)
+				{
+					throw new UnauthorizedOperationException(TeacherNotApprovedErrorMessage);
+				}
+			}
+		}
+
+		public void Logout()
+		{
+			CurrentUser = null!;
+		}
+
+		public void EnsureUserAdmin()
+		{
+			if (CurrentUser != null)
+			{
+				if (CurrentUser.UserType != UserType.Admin)
+				{
+					throw new UnauthorizedOperationException(UserNotAdminErrorMessage);
+				}
+			}
+		}
+	}
 }

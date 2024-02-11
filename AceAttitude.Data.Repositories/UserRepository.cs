@@ -26,9 +26,9 @@ namespace AceAttitude.Data.Repositories
 
 
         private readonly ApplicationDbContext context;
-        private readonly IModelMapper modelMapper;
+        private readonly IAPIModelMapper modelMapper;
 
-        public UserRepository(ApplicationDbContext context, IModelMapper modelMapper)
+        public UserRepository(ApplicationDbContext context, IAPIModelMapper modelMapper)
         {
             this.context = context;
             this.modelMapper = modelMapper;

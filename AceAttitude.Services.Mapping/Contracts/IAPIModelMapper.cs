@@ -4,7 +4,7 @@ using AceAttitude.Web.DTO.Response;
 
 namespace AceAttitude.Services.Mapping.Contracts
 {
-    public interface IModelMapper
+    public interface IAPIModelMapper
     {
         // Map to base entities
         public Student MapToStudent(ApplicationUser user);

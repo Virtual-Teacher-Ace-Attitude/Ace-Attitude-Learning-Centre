@@ -13,9 +13,9 @@ namespace AceAttitude.Data.Repositories
 
         private readonly ApplicationDbContext lectureContext;
 
-        private readonly IModelMapper modelMapper;
+        private readonly IAPIModelMapper modelMapper;
 
-        public LectureRepository(ApplicationDbContext lectureContext, IModelMapper modelMapper)
+        public LectureRepository(ApplicationDbContext lectureContext, IAPIModelMapper modelMapper)
         {
             this.lectureContext = lectureContext;
             this.modelMapper = modelMapper;

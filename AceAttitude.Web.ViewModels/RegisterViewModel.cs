@@ -32,21 +32,24 @@ namespace AceAttitude.Web.ViewModels
 
         [Required]
         [Compare(nameof(Password), ErrorMessage = PasswordsNotMatchingErrorMessage)]
+        [Display(Name = "Confirm Password")]
         public string ConfirmPassword { get; set; } = null!;
 
         [Required]
         [StringLength(maximumLength: ValidationConstants.NameMaxLength,
             MinimumLength = ValidationConstants.NameMinLength,
             ErrorMessage = InvalidFirstNameLengthErrorMessage)]
+        [Display(Name = "First Name")]
         public string FirstName { get; set; } = null!;
 
         [Required]
         [StringLength(maximumLength: ValidationConstants.NameMaxLength,
             MinimumLength = ValidationConstants.NameMinLength,
             ErrorMessage = InvalidLastNameLengthErrorMessage)]
+        [Display(Name = "Last Name")]
         public string LastName { get; set; } = null!;
 
         [Required]
-        public UserType UserType { get; set; }
+        public bool IsStudent { get; set; }
     }
 }

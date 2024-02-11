@@ -23,7 +23,7 @@ namespace AceAttitude.Services.Contracts
 
         public void Logout();
 
-        public void Login(string username, string password);
+        public void Login(string email, string password);
 
         public bool EnsureUserLoggedIn();
     }

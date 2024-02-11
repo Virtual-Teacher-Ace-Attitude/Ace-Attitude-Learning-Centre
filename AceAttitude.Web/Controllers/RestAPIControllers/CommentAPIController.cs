@@ -14,12 +14,12 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
     {
         private readonly IAuthService authService;
 
-        private readonly IModelMapper modelMapper;
+        private readonly IAPIModelMapper modelMapper;
 
         private readonly ICommentService commentService;
         private readonly ICourseService courseService;
 
-        public CommentAPIController(IAuthService authService, ICommentService commentService, ICourseService courseService, IModelMapper modelMapper)
+        public CommentAPIController(IAuthService authService, ICommentService commentService, ICourseService courseService, IAPIModelMapper modelMapper)
         {
             this.authService = authService;
             this.commentService = commentService;

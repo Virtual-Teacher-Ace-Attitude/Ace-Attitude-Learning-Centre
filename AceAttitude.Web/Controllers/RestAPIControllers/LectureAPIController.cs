@@ -15,11 +15,11 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         private readonly string InvalidLectureCreationErrorMessage = "Unable to create lecture, invalid input data!";
 
         private readonly IAuthService authService;
-        private readonly IModelMapper modelMapper;
+        private readonly IAPIModelMapper modelMapper;
 
         private readonly ILectureService lectureService;
 
-        public LectureAPIController(ILectureService lectureService, IAuthService authService, IModelMapper modelMapper)
+        public LectureAPIController(ILectureService lectureService, IAuthService authService, IAPIModelMapper modelMapper)
         {
             this.lectureService = lectureService;
             this.authService = authService;

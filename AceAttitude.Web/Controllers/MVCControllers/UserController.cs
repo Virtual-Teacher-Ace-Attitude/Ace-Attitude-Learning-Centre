@@ -25,30 +25,42 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             this.modelMapper = modelMapper;
         }
 
-        [HttpPost]
-        public IActionResult Login(LoginViewModel viewModel)
-        {
-            if (!ModelState.IsValid)
-            {
-                return View(viewModel);
-            }
+		[HttpGet]
+		public IActionResult Login()
+		{
+			var viewModel = new LoginViewModel();
 
-            try
-            {
-                authService.Login(viewModel.Username, viewModel.Password);
+			return View(viewModel);
+		}
 
-                return RedirectToAction("Index", "Home");
-            }
-            catch (UnauthorizedOperationException ex)
-            {
-                ModelState.AddModelError("Username", ex.Message);
-                ModelState.AddModelError("Password", ex.Message);
+		[HttpPost]
+		public IActionResult Login(LoginViewModel viewModel)
+		{
+			if (!ModelState.IsValid)
+			{
+				return View(viewModel);
+			}
 
-                return this.ForbiddenOperation(ex.Message, StatusCodes.Status401Unauthorized);
-            }
-        }
+			try
+			{
+				authService.Login(viewModel.Email, viewModel.Password);
 
-        [HttpGet]
+				return RedirectToAction("Index", "Home");
+			}
+			catch (UnauthorizedOperationException e)
+			{
+				ModelState.AddModelError("Email", e.Message);
+				ModelState.AddModelError("Password", e.Message);
+
+				return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+			}
+			catch (EntityNotFoundException e)
+			{
+				return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+			}
+		}
+
+		[HttpGet]
         public IActionResult Logout()
         {
             authService.Logout();
@@ -78,17 +90,23 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
                 ApplicationUser userToCreate = this.modelMapper.MapToUser(viewModel, passwordHash);
 
-                ApplicationUser createdUser = this.authService.ValidateUserCanRegister(userToCreate, viewModel.UserType);
-                _ = userService.Create(createdUser);
+                UserType userType = viewModel.IsStudent ? UserType.Student : UserType.Teacher;
 
-                if (viewModel.UserType == UserType.Student)
+                if (userType == UserType.Student)
                 {
-					return RedirectToAction("Login", "User");
-				}
+                    ApplicationUser createdUser = this.authService.ValidateUserCanRegister(userToCreate, userType);
+                    _ = userService.CreateStudent(createdUser);
+
+                    return RedirectToAction("Login", "User");
+                }
                 else
                 {
-					return RedirectToAction("Home", "Index");
-				}
+                    ApplicationUser createdUser = this.authService.ValidateUserCanRegister(userToCreate, userType);
+                    _ = userService.CreateTeacher(createdUser);
+
+                    // Add view for created teacher to advise that to wait for approval
+                    return RedirectToAction("Home", "Index");
+                }
             }
             catch (DuplicateEntityException e)
             {
