@@ -1,12 +1,21 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using AceAttitude.Data.Models;
+using AceAttitude.Services.Contracts;
+using Microsoft.AspNetCore.Mvc;
 
 namespace AceAttitude.Web.Controllers.MVCControllers
 {
     public class CourseController : Controller
     {
-        public IActionResult Index()
+        private readonly ICourseService courseService;
+
+        public CourseController(ICourseService courseService)
         {
-            return View();
+            this.courseService = courseService;
+        }
+        public IActionResult Index(string filterParam, string filterParamValue, string sortParam)
+        {
+            List<Course> courses = courseService.GetAll(filterParam, filterParamValue, sortParam);
+            return View(courses);
         }
 
         public IActionResult Details() 

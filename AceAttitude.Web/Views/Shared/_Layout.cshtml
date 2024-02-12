@@ -5,6 +5,8 @@
 
     var currentUser = Context.Session.Keys.Contains("CurrentUser") ? AuthService.CurrentUser : null;
     ViewData["IsAdmin"] = currentUser?.UserType == UserType.Admin;
+    ViewData["IsTeacher"] = currentUser?.UserType == UserType.Teacher;
+    ViewData["IsStudent"] = currentUser?.UserType == UserType.Student;
 }
 
 <!DOCTYPE html>

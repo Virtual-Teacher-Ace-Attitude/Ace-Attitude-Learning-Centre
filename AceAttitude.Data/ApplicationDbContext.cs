@@ -218,7 +218,7 @@ namespace AceAttitude.Data
                 new Course
                 {
                     Id = 1,
-                    TeacherId = teacher1Id,
+                    TeacherId = teacher1Id, 
                     Title = "Course 1",
                     Description = "Description of course 1.",
                     Level = Models.Misc.Level.A2,

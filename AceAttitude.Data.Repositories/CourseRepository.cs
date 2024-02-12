@@ -81,7 +81,9 @@ namespace AceAttitude.Data.Repositories
         public IQueryable<Course> GetAll()
         {
             IQueryable<Course> allCourses = courseContext.Courses.Where(c => c.DeletedOn.HasValue == false)
-                .Include(course => course.Ratings);
+                .Include(course => course.Ratings)
+                .Include(course => course.Teacher)
+                .ThenInclude(teacher => teacher.User);
 
             return allCourses;
         }

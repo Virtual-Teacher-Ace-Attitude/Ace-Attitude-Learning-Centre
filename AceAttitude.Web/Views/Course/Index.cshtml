@@ -1,1 +1,69 @@
-﻿
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using AceAttitude.Data.Models
+@model List<Course>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <title>AfterPartySupport - Posts</title>
+    <link rel="stylesheet" href="~/css/site.css" />
+</head>
+<body>
+
+
+    <form asp-controller="Post" asp-action="Index" method="get">
+        <label for="sortDropdown" class="form-label">Sort By:</label>
+        <select class="form-select" id="sortDropdown" name="sortParam" aria-label="Sort by">
+            <option value="date">Date</option>
+            <option value="likes">Likes</option>
+            <option value="comments">Comments</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Apply Sorting</button>
+    </form>
+
+    <form asp-controller="Post" asp-action="Index" method="get">
+        <label for="sortDropdown" class="form-label">Sort By:</label>
+        <select class="form-select" id="sortDropdown" name="sortParam" aria-label="Sort by">
+            <option value="date">Date</option>
+            <option value="likes">Likes</option>
+            <option value="comments">Comments</option>
+        </select>
+        <button type="submit" class="btn btn-primary">Apply Sorting</button>
+    </form>
+
+
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">#</th>
+                <th scope="col">Title</th>
+                <th scope="col">Teacher</th>
+                <th scope="col">Level</th>
+                <th scope="col">Age Group</th>
+                <th scope="col">Starting Date</th>
+                <th scope="col">Rating</th>
+            </tr>
+        </thead>
+        <tbody>
+            @for (int i = 0; i < this.Model.Count; i++)
+            {
+                <tr>
+                    <th scope="row">@(i + 1)</th>
+                    <td><a class="nav-link" href="/course/details/@Model[i].Id">@Model[i].Title</a></td>
+                    <td>@Model[i].Title</td>
+                    <td>@Model[i].Teacher.User.FirstName @Model[i].Teacher.User.LastName</td> 
+                    <td>@Model[i].Level</td>
+                    <td>@Model[i].AgeGroup</td>
+                    <td>@Model[i].StartingDate</td>
+                    <td>@Model[i].Rating()</td> 
+                </tr>
+            }
+        </tbody>
+    </table>
+    
+
+
+</body>
+</html>
