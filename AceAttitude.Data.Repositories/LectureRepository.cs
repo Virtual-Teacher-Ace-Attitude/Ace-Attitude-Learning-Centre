@@ -3,6 +3,7 @@ using AceAttitude.Data.Models;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.DTO.Request;
+using Microsoft.EntityFrameworkCore;
 
 namespace AceAttitude.Data.Repositories
 {
@@ -13,14 +14,11 @@ namespace AceAttitude.Data.Repositories
 
         private readonly ApplicationDbContext lectureContext;
 
-        private readonly IAPIModelMapper modelMapper;
-
-        public LectureRepository(ApplicationDbContext lectureContext, IAPIModelMapper modelMapper)
+        public LectureRepository(ApplicationDbContext lectureContext)
         {
             this.lectureContext = lectureContext;
-            this.modelMapper = modelMapper;
         }
-        public Lecture CreateLecture(Lecture lecture)
+        public Lecture CreateLecture(Lecture lecture, int courseId)
         {
             lecture.CreatedOn = DateTime.Now;
 
@@ -28,7 +26,7 @@ namespace AceAttitude.Data.Repositories
 
             lectureContext.SaveChanges();
 
-            return lecture;
+            return this.GetById(lecture.Id, courseId);
         }
 
         public Lecture DeleteLecture(int lectureId, int courseId)
@@ -44,7 +42,9 @@ namespace AceAttitude.Data.Repositories
 
         public Lecture GetById(int lectureId, int courseId)
         {
-            Lecture lecture = lectureContext.Lectures.FirstOrDefault(l => l.Id == lectureId && l.DeletedOn.HasValue == false)
+            Lecture lecture = lectureContext.Lectures
+                .Include(lecture => lecture.Course)
+                .FirstOrDefault(l => l.Id == lectureId && l.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException(string.Format(LectureDoesntExistErrorMessage, lectureId));
 
             this.EnsureLectureBelongsToCourse(lecture, courseId);

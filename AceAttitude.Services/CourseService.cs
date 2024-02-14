@@ -45,10 +45,10 @@ namespace AceAttitude.Services
             return courseRepository.GetFilteredCourses(filterParam, filterParamValue, sortParam);
         }
 
-        public Course RateCourse(int id, Rating rating, Student student)
+        public Course RateCourse(int id, decimal rating, Student student)
         {
             authHelper.EnsureStudentEnrolled(student, id);
-            return courseRepository.RateCourse(id, rating);
+            return courseRepository.RateCourse(id, rating, student);
         }
     }
 }

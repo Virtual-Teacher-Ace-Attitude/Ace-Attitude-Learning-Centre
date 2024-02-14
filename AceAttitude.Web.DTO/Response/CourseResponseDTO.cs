@@ -6,9 +6,9 @@ namespace AceAttitude.Web.DTO.Response
     {
         public string Title { get; set; } = null!;
 
-        public Level Level { get; set; }
+        public string Level { get; set; } = null!;
 
-        public AgeGroup AgeGroup { get; set; }
+        public string AgeGroup { get; set; } = null!;
 
         public string Description { get; set; } = null!;
 
@@ -19,5 +19,7 @@ namespace AceAttitude.Web.DTO.Response
         public bool IsDraft { get; set; }
 
         public bool IsCompleted { get; set; }
+
+        public string Rating { get; set; } = null!;
     }
 }

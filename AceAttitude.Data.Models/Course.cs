@@ -33,13 +33,14 @@ namespace AceAttitude.Data.Models
 
         public bool IsCompleted { get; set; }
 
-        public string Rating()
+        public decimal Rating()
         {
-            if (this.Ratings.Any())
+            if (this.Ratings.Count != 0)
             {
-               return this.Ratings.Average(r => r.Value).ToString();
+               return this.Ratings.Average(r => r.Value);
             }
-            return "N/A";  
+
+            return -1;  
         }
 
         public ICollection<Lecture> Lectures { get; set; } = new List<Lecture>();

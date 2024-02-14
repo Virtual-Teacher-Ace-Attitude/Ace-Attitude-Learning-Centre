@@ -128,7 +128,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPut("{id}/rate")]
-        public IActionResult RateCourse(int id, [FromBody] Rating rating, [FromHeader] string credentials)
+        public IActionResult RateCourse(int id, [FromBody] decimal rating, [FromHeader] string credentials)
         {
             try
             {

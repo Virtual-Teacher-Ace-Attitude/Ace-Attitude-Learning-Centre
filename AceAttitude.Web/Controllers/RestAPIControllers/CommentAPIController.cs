@@ -80,14 +80,14 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteComment(int id, [FromHeader] string credentials)
+        [HttpDelete("{commentId}")]
+        public IActionResult DeleteComment(int commentId, [FromRoute] int courseId, [FromHeader] string credentials)
         {
             try
             {
                 ApplicationUser user = authService.TryGetUser(credentials);
 
-                Comment deletedComment = commentService.DeleteComment(id, user);
+                Comment deletedComment = commentService.DeleteComment(commentId, courseId, user);
 
                 CommentResponseDTO commentResponseDto = this.modelMapper.MapToCommentResponseDTO(deletedComment);
 
@@ -108,14 +108,14 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
         }
 
         [HttpPut("{commentId}")]
-        public IActionResult EditComment([FromRoute]int commentId, [FromRoute] int courseId, 
+        public IActionResult EditComment(int commentId, [FromRoute] int courseId, 
             [FromBody] CommentRequestDTO commentRequestDTO, [FromHeader] string credentials)
         {
             try
             {
                 ApplicationUser user = authService.TryGetUser(credentials);
 
-                Comment updatedComment = commentService.UpdateComment(commentId, commentRequestDTO.Content, user);
+                Comment updatedComment = commentService.UpdateComment(commentId, courseId, commentRequestDTO.Content, user);
 
                 CommentResponseDTO commentResponseDto = this.modelMapper.MapToCommentResponseDTO(updatedComment);
 
@@ -135,14 +135,14 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPut("{id}/like")]
-        public IActionResult LikeComment(int id, [FromHeader] string credentials)
+        [HttpPut("{commentId}/like")]
+        public IActionResult LikeComment(int commentId, [FromRoute] int courseId, [FromHeader] string credentials)
         {
             try
             {
                 ApplicationUser user = authService.TryGetUser(credentials);
 
-                Comment comment = commentService.LikeComment(id, user);
+                Comment comment = commentService.LikeComment(commentId, courseId, user);
 
                 CommentResponseDTO commentResponseDto = this.modelMapper.MapToCommentResponseDTO(comment);
 

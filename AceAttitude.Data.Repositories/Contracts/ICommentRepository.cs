@@ -8,13 +8,13 @@ namespace AceAttitude.Data.Repositories.Contracts
         List<Comment> GetComments(Course course);
         Comment CreateComment (Comment comment, Course course);
 
-        Comment GetById (int id);
+        Comment GetById (int commentId, int courseId);
 
-        Comment UpdateComment (int id, string content);
+        Comment UpdateComment (int commentId, int courseId, string content);
 
-        Comment DeleteComment (int id);
+        Comment DeleteComment (int commentId, int courseId);
 
-        Comment LikeComment (int id, ApplicationUser user);
+        Comment LikeComment (int commentId, int courseId, ApplicationUser user);
 
 
     }

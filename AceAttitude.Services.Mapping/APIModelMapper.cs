@@ -178,11 +178,12 @@ namespace AceAttitude.Services.Mapping
                 Title = course.Title,
                 Description = course.Description,
                 IsDraft = course.IsDraft,
-                Level = course.Level,
-                AgeGroup = course.AgeGroup,
+                Level = course.Level.ToString(),
+                AgeGroup = course.AgeGroup.ToString(),
                 CreatedOn = course.CreatedOn,
                 StartingDate = course.StartingDate,
                 IsCompleted = course.IsCompleted,
+                Rating = course.Rating() == -1 ? "N/A" : course.Rating().ToString("F2"),
             };
         }
 

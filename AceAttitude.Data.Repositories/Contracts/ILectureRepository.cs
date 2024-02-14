@@ -7,7 +7,7 @@ namespace AceAttitude.Data.Repositories.Contracts
     {
         public Lecture GetById(int lectureId, int courseId);
 
-        public Lecture CreateLecture(Lecture lecture);
+        public Lecture CreateLecture(Lecture lecture, int courseId);
 
         public Lecture UpdateLecture(int lectureId, int courseId, Lecture lecture);
 

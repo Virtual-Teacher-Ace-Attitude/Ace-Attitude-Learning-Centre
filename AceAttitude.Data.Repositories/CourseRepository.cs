@@ -23,6 +23,7 @@ namespace AceAttitude.Data.Repositories
         public Course CreateCourse(Course course)
         {
             course.CreatedOn = DateTime.Now;
+            course.IsDraft = true;
             courseContext.Courses.Add(course);
             courseContext.SaveChanges();
             return course;
@@ -62,19 +63,15 @@ namespace AceAttitude.Data.Repositories
 
             return courseToUpdate;
         }
-        public decimal GetRating(int id)
-        {
-            Course course = GetById(id);
 
-            return course.Ratings.Select(r => r.Value).AsEnumerable().Average();
-        }
-
-        public Course RateCourse(int id, Rating rating)
+        public Course RateCourse(int id, decimal rating, Student student)
         {
             Course courseToRate = GetById(id);
-            courseToRate.Ratings.Add(rating);
-            rating.IsRated = true;
+
+            courseToRate.Ratings.Add(new Rating { CourseId = id, StudentId = student.Id, IsRated = true, Value = rating});
+
             courseContext.SaveChanges();
+
             return courseToRate;
         }
 
@@ -96,8 +93,7 @@ namespace AceAttitude.Data.Repositories
 
         private IQueryable<Course> FilterCourses(string filterParam, string paramValue)
         {
-
-            switch (filterParam)
+            switch (filterParam.ToLower())
             {
                 case "name":
                     return GetAll().Where(c => c.Title.Contains(paramValue));
@@ -112,7 +108,8 @@ namespace AceAttitude.Data.Repositories
                                             || c.Teacher.User.FirstName == paramValue);
                 case "rating":
                     decimal rating = parseHelper.ParseRating(paramValue);
-                    return GetAll().Where(c => GetRating(c.Id) >= rating);
+                    // Instead of calling the Rating() method, directly calculate the average rating in LINQ
+                    return GetAll().Where(c => c.Ratings.Any() && c.Ratings.Select(r => r.Value).Average() >= rating);
                 default:
                     return GetAll();
 
@@ -121,15 +118,14 @@ namespace AceAttitude.Data.Repositories
 
         private IQueryable<Course> SortCourses(string sortParam, IQueryable<Course> filteredCourses)
         {
-            switch (sortParam)
+            switch (sortParam.ToLower())
             {
                 case "name":
-                    return filteredCourses.OrderByDescending(c => c.Title);
+                    return filteredCourses.OrderBy(c => c.Title);
                 case "rating":
-                    return filteredCourses.OrderByDescending(c => GetRating(c.Id));
-                case "name and rating":
-                    return filteredCourses.OrderByDescending(c => GetRating(c.Id))
-                        .ThenByDescending(c => c.Title);
+                    return filteredCourses.OrderByDescending(c => c.Ratings.Any() ? c.Ratings.Select(r => r.Value).Average() : -1);
+                case "level":
+                    return filteredCourses.OrderByDescending(c => c.Level);
                 default:
                     return filteredCourses.OrderByDescending(c => c.StartingDate);
             }

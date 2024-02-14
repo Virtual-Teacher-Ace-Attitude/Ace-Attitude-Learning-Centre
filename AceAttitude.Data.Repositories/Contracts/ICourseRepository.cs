@@ -12,9 +12,7 @@ namespace AceAttitude.Data.Repositories.Contracts
 
         Course DeleteCourse(int id);
 
-        Course RateCourse(int id, Rating rating);
-
-        decimal GetRating(int Id);
+        Course RateCourse(int id, decimal rating, Student student);
 
         List<Course> GetFilteredCourses(string filterParam, string filterParamValue, string sortParam);
     }

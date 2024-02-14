@@ -15,6 +15,6 @@ namespace AceAttitude.Services.Contracts
 
         List<Course> GetAll(string filterParam, string filterParamValue, string sortParam);
 
-        Course RateCourse(int id, Rating rating, Student student);
+        Course RateCourse(int id, decimal rating, Student student);
     }
 }

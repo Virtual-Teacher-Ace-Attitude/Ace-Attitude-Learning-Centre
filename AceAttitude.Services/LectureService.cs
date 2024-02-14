@@ -27,7 +27,7 @@ namespace AceAttitude.Services
             authHelper.EnsureTeacherApproved(teacher);
             authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, courseId);
 
-            return lectureRepository.CreateLecture(lecture);
+            return lectureRepository.CreateLecture(lecture, courseId);
         }
 
         public Lecture DeleteLecture(int lectureId, int courseId, Teacher teacher)

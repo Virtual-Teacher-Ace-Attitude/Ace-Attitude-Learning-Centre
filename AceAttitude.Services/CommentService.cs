@@ -22,10 +22,11 @@ namespace AceAttitude.Services
             return commentRepository.CreateComment(comment, course);
         }
 
-        public Comment DeleteComment(int id, ApplicationUser user)
+        public Comment DeleteComment(int commentId, int courseId, ApplicationUser user)
         {
-            EnsureUserIsCreatorOrAdmin(user, id);
-            return commentRepository.DeleteComment(id);
+            EnsureUserIsCreatorOrAdmin(user, commentId, courseId);
+
+            return commentRepository.DeleteComment(commentId, courseId);
         }
 
         public List<Comment> GetComments(Course course)
@@ -33,25 +34,21 @@ namespace AceAttitude.Services
             return commentRepository.GetComments(course);
         }
 
-        public Comment GetById(int id)
+        public Comment LikeComment(int commentId, int courseId, ApplicationUser user)
         {
-            return commentRepository.GetById(id);
+            return commentRepository.LikeComment(commentId, courseId, user);
         }
 
-        public Comment LikeComment(int id, ApplicationUser user)
+        public Comment UpdateComment(int commentId, int courseId, string content, ApplicationUser user)
         {
-            return LikeComment(id, user);
+            EnsureUserIsCreatorOrAdmin(user, commentId, courseId);
+
+            return commentRepository.UpdateComment(commentId, courseId, content);
         }
 
-        public Comment UpdateComment(int id, string content, ApplicationUser user)
+        private void EnsureUserIsCreatorOrAdmin(ApplicationUser user, int commentId, int courseId)
         {
-            EnsureUserIsCreatorOrAdmin(user, id);
-            return commentRepository.UpdateComment(id, content);
-        }
-
-        private void EnsureUserIsCreatorOrAdmin(ApplicationUser user, int commentId)
-        {
-            Comment comment = commentRepository.GetById(commentId);
+            Comment comment = commentRepository.GetById(commentId, courseId);
             if (user.UserType != UserType.Admin && comment.User != user)
             {
                 throw new UnauthorizedOperationException
