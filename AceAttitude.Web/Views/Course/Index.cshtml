@@ -31,7 +31,7 @@
             {
                 <tr>
                     <th scope="row">@(i + 1)</th>
-                    <td><a class="nav-link" href="/course/@Model[i].Id">@Model[i].Title</a></td>
+                    <td><a class="nav-link" asp-controller ="Course" asp-action="Details" asp-route-id="@Model[i].Id">@Model[i].Title</a></td>
                     <td>@Model[i].Teacher.User.FirstName @Model[i].Teacher.User.LastName</td> 
                     <td>@Model[i].Level</td>
                     <td>@Model[i].AgeGroup</td>
