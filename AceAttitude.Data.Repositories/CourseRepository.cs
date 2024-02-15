@@ -45,6 +45,8 @@ namespace AceAttitude.Data.Repositories
                 .Include(course => course.Lectures)
                 .Include(course => course.Comments)
                 .Include(course => course.Ratings)
+                .Include(course => course.Teacher)
+                .ThenInclude(teacher => teacher.User)
                 .FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException(string.Format(CourseNotFoundErrorMessage, id));
             return course;

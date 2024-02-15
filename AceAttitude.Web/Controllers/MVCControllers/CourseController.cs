@@ -12,15 +12,15 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         {
             this.courseService = courseService;
         }
-        public IActionResult Index(string filterParam, string filterParamValue, string sortParam)
+        public IActionResult Index([FromQuery]string filterParam, [FromQuery]string filterParamValue, [FromQuery] string sortParam)
         {
             List<Course> courses = courseService.GetAll(filterParam, filterParamValue, sortParam);
             return View(courses);
         }
-
-        public IActionResult Details() 
+        public IActionResult Details([FromRoute] int id) 
         {
-            return View();
+            Course course = courseService.GetById(id);
+            return View(course);
         }
 
         public IActionResult Create()

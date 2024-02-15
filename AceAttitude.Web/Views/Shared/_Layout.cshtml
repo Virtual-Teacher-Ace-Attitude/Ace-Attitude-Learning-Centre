@@ -96,7 +96,7 @@
                     </li>
 
                     <li class="nav-item">
-                        <a asp-controller="Course" asp-action="Index" class="btn">Courses</a>
+                        <a asp-controller="Course" asp-action="Index" asp-route-filterParam="none" asp-route-sortParam="none" asp-route-filterParamValue="none" class="btn">Courses</a>
                     </li>
 
                     @if ((bool)ViewData["IsAuthenticated"])
