@@ -20,6 +20,8 @@ namespace AceAttitude.Data.Models
 
         public bool IsCompleted { get; set; }
 
+        public bool IsApproved { get; set; }
+
         [Required]
         public DateTime CreatedOn { get; set; }
     }
