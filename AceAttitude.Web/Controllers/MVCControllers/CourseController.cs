@@ -9,7 +9,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
     {
         private readonly ICourseService courseService;
 
-        
+
         public CourseController(ICourseService courseService)
         {
             this.courseService = courseService;
@@ -22,22 +22,22 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpGet("{id}")]
-        public IActionResult Details([FromRoute] int id) 
+        public IActionResult Details([FromRoute] int id)
         {
             Course course = courseService.GetById(id);
             return View(course);
         }
-
+        [HttpPost]
         public IActionResult Create()
         {
             return View();
         }
-
+        [HttpPut]
         public IActionResult Edit() 
         {
             return View();
         }
-
+        [HttpDelete]
         public IActionResult Delete() 
         {
             return View();
