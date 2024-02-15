@@ -50,5 +50,16 @@ namespace AceAttitude.Services
             authHelper.EnsureStudentEnrolled(student, id);
             return courseRepository.RateCourse(id, rating, student);
         }
+
+        public Course ReleaseCourse(int courseId, Teacher teacher)
+        {
+            authHelper.EnsureTeacherIsCourseCreator(teacher, courseId);
+            return courseRepository.ReleaseCourse(courseId);
+        }
+
+        public Course ApplyForCourse(int courseId, Student student)
+        {
+            return this.courseRepository.ApplyForCourse(courseId, student);
+        }
     }
 }

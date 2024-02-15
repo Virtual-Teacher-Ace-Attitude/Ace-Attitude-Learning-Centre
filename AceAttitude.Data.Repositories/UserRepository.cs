@@ -220,6 +220,10 @@ namespace AceAttitude.Data.Repositories
             student.AwaitingPromotion = false;
 
             Teacher newTeacher = this.modelMapper.MapToTeacher(user);
+            newTeacher.User = user;
+            user.UserType = UserType.Teacher;
+
+            context.Add(newTeacher);
 
             context.SaveChanges();
 

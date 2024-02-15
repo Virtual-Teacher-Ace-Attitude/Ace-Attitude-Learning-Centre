@@ -13,6 +13,10 @@ namespace AceAttitude.Services.Contracts
 
         Course UpdateCourse(int id, Course course, Teacher teacher);
 
+        Course ReleaseCourse(int courseId, Teacher teacher);
+
+        Course ApplyForCourse(int courseId, Student student);
+
         List<Course> GetAll(string filterParam, string filterParamValue, string sortParam);
 
         Course RateCourse(int id, decimal rating, Student student);

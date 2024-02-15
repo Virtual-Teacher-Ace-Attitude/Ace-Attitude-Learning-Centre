@@ -4,6 +4,7 @@ using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Common.Helpers.Contracts;
 using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.Design;
 
 namespace AceAttitude.Data.Repositories
 {
@@ -11,12 +12,18 @@ namespace AceAttitude.Data.Repositories
     {
         private const string CourseNotFoundErrorMessage = "Course with id: {0} does not exist!";
 
-        private readonly ApplicationDbContext courseContext;
+        private const string CourseNotRatableErrorMessage = "Course with title: {0} is still ongoing and cannot be rated.";
+
+        private const string CourseAlreadyReleasedErrorMessage = "Course with id: {0} is already released.";
+
+        private const string StudentAlreadyAppliedErrorMessage = "You have already applied to course with id: {0}.";
+
+        private readonly ApplicationDbContext context;
         private readonly IParseHelper parseHelper;
 
         public CourseRepository(ApplicationDbContext context, IParseHelper parseHelper)
         {
-            this.courseContext = context;
+            this.context = context;
             this.parseHelper = parseHelper;
         }
 
@@ -24,8 +31,8 @@ namespace AceAttitude.Data.Repositories
         {
             course.CreatedOn = DateTime.Now;
             course.IsDraft = true;
-            courseContext.Courses.Add(course);
-            courseContext.SaveChanges();
+            context.Courses.Add(course);
+            context.SaveChanges();
             return course;
         }
 
@@ -35,13 +42,26 @@ namespace AceAttitude.Data.Repositories
         {
             Course courseToDelete = GetById(id);
             courseToDelete.DeletedOn = DateTime.Now;
-            courseContext.SaveChanges();
+            context.SaveChanges();
             return courseToDelete;
         }
 
         public Course GetById(int id)
         {
-            Course course = courseContext.Courses
+            Course course = context.Courses
+                .Include(course => course.Lectures)
+                .Include(course => course.Comments)
+                .Include(course => course.Ratings)
+                .Include(course => course.Teacher)
+                .ThenInclude(teacher => teacher.User)
+                .FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false && c.IsDraft == false)
+                ?? throw new EntityNotFoundException(string.Format(CourseNotFoundErrorMessage, id));
+            return course;
+        }
+
+        private Course GetDraftCourse(int id)
+        {
+            Course course = context.Courses
                 .Include(course => course.Lectures)
                 .Include(course => course.Comments)
                 .Include(course => course.Ratings)
@@ -50,6 +70,42 @@ namespace AceAttitude.Data.Repositories
                 .FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException(string.Format(CourseNotFoundErrorMessage, id));
             return course;
+        }
+
+        public Course ReleaseCourse(int courseId)
+        {
+            Course courseToRelease = GetDraftCourse(courseId);
+
+            this.EnsureCourseNotReleased(courseToRelease);
+
+            courseToRelease.IsDraft = false;
+
+            context.SaveChanges();
+
+            return courseToRelease;
+        }
+
+        public Course ApplyForCourse(int courseId, Student student)
+        {
+            Course course = GetById(courseId);
+
+            this.EnsureNotApplied(courseId, student);
+
+            StudentCourses studentCourse = new StudentCourses { CourseId = courseId, StudentId = student.Id, IsCompleted = false , IsApproved = false};
+
+            context.Add(studentCourse);
+
+            context.SaveChanges();
+
+            return course;
+        }
+
+        private void EnsureNotApplied(int courseId, Student student)
+        {
+            if (student.StudentCourses.Any(sc => sc.CourseId == courseId))
+            {
+                throw new UnauthorizedOperationException(string.Format(StudentAlreadyAppliedErrorMessage, courseId));
+            }
         }
 
         public Course UpdateCourse(int id, Course course)
@@ -61,25 +117,70 @@ namespace AceAttitude.Data.Repositories
             courseToUpdate.Level = course.Level;
             courseToUpdate.ModifiedOn = DateTime.Now;
 
-            courseContext.SaveChanges();
+            context.SaveChanges();
 
             return courseToUpdate;
         }
 
-        public Course RateCourse(int id, decimal rating, Student student)
+        private void EnsureCourseNotReleased(Course course)
         {
-            Course courseToRate = GetById(id);
+            if (course.IsDraft == false)
+            {
+                throw new UnauthorizedOperationException(string.Format(CourseAlreadyReleasedErrorMessage, course.Id));
+            }
+        }
 
-            courseToRate.Ratings.Add(new Rating { CourseId = id, StudentId = student.Id, IsRated = true, Value = rating});
+        private Rating GetRating(int courseId, string studentId)
+        {
+            Rating rating = context.Ratings
+                .FirstOrDefault(r => r.StudentId == studentId && r.CourseId == courseId)
+                ?? new Rating { StudentId = studentId, CourseId = courseId, IsRated = false };
 
-            courseContext.SaveChanges();
+            if (!context.Ratings.Any(r => r.StudentId == studentId && r.CourseId == courseId))
+            {
+                context.Add(rating);
+                context.SaveChanges();
+            }
+
+            return rating;
+        }
+
+        public Course RateCourse(int courseId, decimal value, Student student)
+        {
+            Course courseToRate = GetById(courseId);
+
+            this.EnsureCourseCompleted(courseToRate);
+
+            Rating rating = this.GetRating(courseId, student.Id);
+
+            rating.Value = value;
+
+            context.SaveChanges();
 
             return courseToRate;
         }
 
+        private void EnsureCourseCompleted(Course course)
+        {
+            if (course.IsCompleted == false)
+            {
+                throw new UnauthorizedOperationException(string.Format(CourseNotRatableErrorMessage, course.Title));
+            }
+        }
+
+        //public IQueryable<Course> GetAllDraft(Teacher teacher)
+        //{
+        //    IQueryable<Course> allDraftCourses = context.Courses.Where(c => c.DeletedOn.HasValue == false && c.IsDraft == false)
+        //        .Include(course => course.Ratings)
+        //        .Include(course => course.Teacher)
+        //        .ThenInclude(teacher => teacher.User);
+
+        //    return allDraftCourses;
+        //}
+
         public IQueryable<Course> GetAll()
         {
-            IQueryable<Course> allCourses = courseContext.Courses.Where(c => c.DeletedOn.HasValue == false)
+            IQueryable<Course> allCourses = context.Courses.Where(c => c.DeletedOn.HasValue == false && c.IsDraft == false)
                 .Include(course => course.Ratings)
                 .Include(course => course.Teacher)
                 .ThenInclude(teacher => teacher.User);

@@ -8,12 +8,24 @@ namespace AceAttitude.Common.Helpers
     public class AuthHelper : IAuthHelper
     {
         private const string StudentNotEnrolledErrorMessage = "You are not enrolled in this course!";
+
         private const string TeacherNotApprovedErrorMessage = "You are not an approved teacher!";
-        private const string TeacherNotCourseCreator = "You are not the creator of this course or an admin!";
+
+        private const string TeacherNotCourseCreatorOrAdmin = "You are not the creator of this course or an admin!";
+
+        private const string TeacherNotCourseCreator = "You are not the creator of this course!";
 
         public void EnsureTeacherIsCourseCreatorOrAdmin(Teacher teacher, int courseId)
         {
             if (!teacher.CreatedCourses.Any(cc => cc.Id == courseId) && teacher.IsAdmin == false)
+            {
+                throw new UnauthorizedOperationException(TeacherNotCourseCreatorOrAdmin);
+            }
+        }
+
+        public void EnsureTeacherIsCourseCreator(Teacher teacher, int courseId)
+        {
+            if (!teacher.CreatedCourses.Any(cc => cc.Id == courseId))
             {
                 throw new UnauthorizedOperationException(TeacherNotCourseCreator);
             }

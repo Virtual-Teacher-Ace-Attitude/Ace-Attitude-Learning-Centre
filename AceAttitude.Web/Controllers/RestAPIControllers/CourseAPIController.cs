@@ -47,12 +47,12 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpGet("{id}")]
-        public IActionResult GetCourseById(int id)
+        [HttpGet("{courseId}")]
+        public IActionResult GetCourseById(int courseId)
         {
             try
             {
-                var course = courseService.GetById(id); 
+                var course = courseService.GetById(courseId); 
                 var responseDTO = modelMapper.MapToCourseResponseDTO(course);
                 return Ok(responseDTO);
             }
@@ -97,8 +97,72 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPut("{id}")]
-        public IActionResult UpdateCourse(int id, [FromBody] CourseRequestDTO courseRequestDTO, [FromHeader] string credentials)
+        [HttpPut("{courseId}/release")]
+        public IActionResult ReleaseCourse(int courseId, [FromHeader] string credentials)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    throw new InvalidUserInputException(InvalidCourseCreationErrorMessage);
+                }
+
+                Teacher teacher = authService.TryGetTeacher(credentials);
+                
+                Course releasedCourse = courseService.ReleaseCourse(courseId, teacher);
+
+                CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(releasedCourse);
+
+                return StatusCode(StatusCodes.Status201Created, responseDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Unauthorized(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Unauthorized(e.Message);
+            }
+        }
+
+        [HttpPut("{courseId}/apply")]
+        public IActionResult ApplyForCourse(int courseId, [FromHeader] string credentials)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    throw new InvalidUserInputException(InvalidCourseCreationErrorMessage);
+                }
+
+                Student student = authService.TryGetStudent(credentials);
+
+                Course courseAppliedFor = courseService.ApplyForCourse(courseId, student);
+
+                CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(courseAppliedFor);
+
+                return StatusCode(StatusCodes.Status201Created, responseDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Unauthorized(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Unauthorized(e.Message);
+            }
+        }
+
+        [HttpPut("{courseId}")]
+        public IActionResult UpdateCourse(int courseId, [FromBody] CourseRequestDTO courseRequestDTO, [FromHeader] string credentials)
         {
             try
             {
@@ -109,7 +173,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
 
                 Teacher teacher = authService.TryGetTeacher(credentials);
                 Course course = modelMapper.MapToCourse(courseRequestDTO);
-                Course updatedCourse = courseService.UpdateCourse(id, course, teacher);
+                Course updatedCourse = courseService.UpdateCourse(courseId, course, teacher);
                 CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(updatedCourse);
                 return Ok(responseDTO);
             }
@@ -127,13 +191,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPut("{id}/rate")]
-        public IActionResult RateCourse(int id, [FromBody] decimal rating, [FromHeader] string credentials)
+        [HttpPut("{courseId}/rate")]
+        public IActionResult RateCourse(int courseId, [FromBody] decimal rating, [FromHeader] string credentials)
         {
             try
             {
                 Student student = authService.TryGetStudent(credentials);
-                Course ratedCourse = courseService.RateCourse(id, rating, student);
+                Course ratedCourse = courseService.RateCourse(courseId, rating, student);
                 CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(ratedCourse);
                 return Ok(responseDTO);
             }
@@ -152,13 +216,13 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpDelete("{id}")]
-        public IActionResult DeleteCourse(int id, [FromHeader] string credentials)
+        [HttpDelete("{courseId}")]
+        public IActionResult DeleteCourse(int courseId, [FromHeader] string credentials)
         {
             try
             {
                 Teacher teacher = authService.TryGetTeacher(credentials);
-                Course deletedCourse = courseService.DeleteCourse(id, teacher);
+                Course deletedCourse = courseService.DeleteCourse(courseId, teacher);
                 CourseResponseDTO responseDTO = modelMapper.MapToCourseResponseDTO(deletedCourse);
                 return Ok(responseDTO);
             }
