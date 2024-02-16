@@ -380,6 +380,7 @@ namespace AceAttitude.Data
                     CourseId = 1,
                     IsCompleted = true,
                     CreatedOn = standardCreationDate.AddDays(-3),
+                    IsApproved = true,
                 },
 
                 new StudentCourses
@@ -389,6 +390,7 @@ namespace AceAttitude.Data
                     CourseId = 1,
                     IsCompleted = true,
                     CreatedOn = standardCreationDate.AddDays(-4),
+                    IsApproved = true,
                 },
 
                 new StudentCourses
@@ -398,6 +400,7 @@ namespace AceAttitude.Data
                     CourseId = 1,
                     IsCompleted = true,
                     CreatedOn = standardCreationDate.AddDays(-5),
+                    IsApproved = true,
                 },
 
                 new StudentCourses
@@ -407,6 +410,7 @@ namespace AceAttitude.Data
                     CourseId = 2,
                     IsCompleted = false,
                     CreatedOn = standardCreationDate.AddDays(8),
+                    IsApproved = true,
                 },
 
                 new StudentCourses
@@ -416,6 +420,7 @@ namespace AceAttitude.Data
                     CourseId = 2,
                     IsCompleted = false,
                     CreatedOn = standardCreationDate.AddDays(9),
+                    IsApproved = true,
                 },
 
                 new StudentCourses
@@ -425,6 +430,7 @@ namespace AceAttitude.Data
                     CourseId = 2,
                     IsCompleted = false,
                     CreatedOn = standardCreationDate.AddDays(10),
+                    IsApproved = true,
                 },
             };
 

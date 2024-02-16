@@ -7,6 +7,8 @@ namespace AceAttitude.Common.Helpers.Contracts
     {
         public void EnsureTeacherIsCourseCreatorOrAdmin(Teacher teacher, int courseId);
 
+        public void EnsureTeacherIsCourseCreator(Teacher teacher, int courseId);
+
         public void EnsureStudentEnrolled(Student student, int courseId);
 
         public void EnsureTeacherApproved(Teacher teacher);
