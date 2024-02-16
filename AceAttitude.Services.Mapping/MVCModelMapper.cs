@@ -42,5 +42,16 @@ namespace AceAttitude.Services.Mapping
                 Content = model.Content
             };
         }
+
+        public Lecture MapViewModelToLecture(LectureViewModel viewModel)
+        {
+            return new Lecture()
+            {
+                Title= viewModel.Title,
+                Description= viewModel.Description,
+                VideoFilePath= viewModel.VideoFilePath,
+                TextFilePath= viewModel.TextFilePath,
+            };
+        }
     }
 }

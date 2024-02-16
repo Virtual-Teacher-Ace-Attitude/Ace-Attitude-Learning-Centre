@@ -9,5 +9,6 @@ namespace AceAttitude.Services.Mapping.Contracts
 
         public Course MapToCourse(CourseViewModel courseViewModel);
         Comment MapViewModelToComment(CommentViewModel model);
+        Lecture MapViewModelToLecture(LectureViewModel viewModel);
     }
 }
