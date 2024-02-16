@@ -129,6 +129,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 var course = courseService.GetById(id);
                 var courseViewModel = new CourseViewModel()
                 {
+                    Id = id,
                     Title = course.Title,
                     Description = course.Description,
                     Level = course.Level.ToString(),

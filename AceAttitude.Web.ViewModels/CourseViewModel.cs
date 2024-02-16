@@ -10,6 +10,8 @@ namespace AceAttitude.Web.ViewModels
 		private const string TitleMinLengthErrorMessage = "Title must be between 5 and 50 symbols long!";
 		private const string DescriptionMaxLengthErrorMessage = "Description cannot be more than 1000 characters long!";
 
+		public int Id { get; set; }
+
 		[Required]
 		[StringLength(maximumLength: ValidationConstants.TitleMaxLength,
 		MinimumLength = ValidationConstants.TitleMinLength,

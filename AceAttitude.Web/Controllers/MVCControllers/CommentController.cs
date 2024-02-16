@@ -1,5 +1,4 @@
 ﻿using AceAttitude.Common.Exceptions;
-using AceAttitude.Services;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.ViewModels;
@@ -14,11 +13,13 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         private readonly IAuthService authService;
         private readonly IMVCModelMapper modelMapper;
 
-        public CommentController(ICommentService commentService, ICourseService courseService, IAuthService authService)
+        public CommentController(ICommentService commentService, ICourseService courseService, 
+            IAuthService authService, IMVCModelMapper modelMapper)
         {
             this.commentService = commentService;
             this.courseService = courseService;
             this.authService = authService;
+            this.modelMapper = modelMapper;
         }
 
         [HttpGet]
@@ -104,6 +105,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 var comment = commentService.GetComment(commentId, courseId);
                 var commentViewModel = new CommentViewModel()
                 {
+                    Id = comment.Id,
                     Content = comment.Content,
                 };
 
