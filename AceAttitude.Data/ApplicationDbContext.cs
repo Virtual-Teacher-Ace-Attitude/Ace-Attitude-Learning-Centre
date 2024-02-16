@@ -25,9 +25,11 @@ namespace AceAttitude.Data
 
         public DbSet<Rating> Ratings { get; set; }
 
+        public DbSet<Teacher> Teachers { get; set; }
+
         public DbSet<Student> Students { get; set; }
 
-        public DbSet<Teacher> Teachers { get; set; }
+        public DbSet<StudentCourses> StudentCourses { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
