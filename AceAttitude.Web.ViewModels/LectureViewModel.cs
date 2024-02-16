@@ -9,6 +9,8 @@ namespace AceAttitude.Web.ViewModels
 
         private const string DescriptionMaxLengthErrorMessage = "Description cannot be more than 1000 characters long!";
 
+        public int Id { get; set; }
+
         [Required]
         [StringLength(maximumLength: ValidationConstants.TitleMaxLength,
             MinimumLength = ValidationConstants.TitleMinLength,

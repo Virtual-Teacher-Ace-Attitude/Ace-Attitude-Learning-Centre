@@ -1,5 +1,20 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using AceAttitude.Data.Models
+@model Lecture
+
+<body>
+    <div class="card mb-3">
+        <div class="card-body">
+            <h5 class="card-title">Title: @Model.Title</h5>
+            <p class="card-text">@Model.Description</p>
+            <p class="card-text"><small class="text-body-secondary">Assignment: @Model.TextFilePath</small></p>
+            <p class="card-text"><small class="text-body-secondary">Video: @Model.VideoFilePath</small></p>
+        </div>
+    </div>
+    <h2>Do you want to delete this lecture?</h2>
+    <form asp-controller="Lecture" asp-action="DeleteConfirmed" asp-route-id="@Model.Id" method="delete">
+        <button type="submit" class="btn btn-success">Yes</button>
+    </form>
+    <a href="/Post/Index" class="btn btn-danger">No</a>
+
+</body>
