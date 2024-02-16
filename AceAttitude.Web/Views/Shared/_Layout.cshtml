@@ -19,137 +19,213 @@
     <link rel="stylesheet" href="~/css/site.css" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
 
+    <!-- Styles for the registration modal -->
     <style>
-        .custom-navbar {
-            background-color: #001f3f; /* Dark Blue Background Color */
+        /* Modal Content */
+        #registrationModal .modal-content {
+            background-color: #333;
+            color: #fff;
         }
 
-        .profile-icon {
-            width: 30px;
-            height: 30px;
-            margin-top: 4px; /* Adjusted margin-top for vertical centering */
+        /* Modal Header */
+        #registrationModal .modal-header {
+            border-bottom: 1px solid #444;
         }
 
-        .modal-content {
-            background-color: #333; /* Dark grey background color */
-            color: #fff; /* Text color */
-        }
-
-        .modal-header {
-            border-bottom: 1px solid #444; /* Darker border for header */
-        }
-
-        .modal-body {
+        /* Modal Body */
+        #registrationModal .modal-body {
             padding: 20px;
         }
 
-        .profile-icon-clicked {
-            outline: 2px solid #007bff; /* Change the color to your desired outline color */
+        /* Highlighted class */
+        #registrationModal .highlighted {
+            border: 2px solid #007bff !important;
+            transform: scale(1.1);
+        }
+    </style>
+
+    <!-- Scripts and Styles for Profile Picture functionality -->
+    <style>
+        /* Custom navbar */
+        .custom-navbar {
+            background-color: #001f3f;
         }
 
+        /* Profile picture icon */
+        .profile-icon {
+            width: 30px;
+            height: 30px;
+            margin-top: 4px;
+        }
+
+        /* Profile picture options box */
         .profile-options-box {
             position: absolute;
             display: none;
-            background-color: #fff; /* White background color */
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2); /* Box shadow for a subtle lift */
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
             padding: 10px;
             border-radius: 4px;
             z-index: 1000;
         }
 
-            .profile-options-box a {
-                display: block;
-                padding: 5px;
-                color: #333; /* Text color */
-                text-decoration: none;
-                transition: background-color 0.3s;
-            }
+        .profile-options-box a {
+            display: block;
+            padding: 5px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
 
-                .profile-options-box a:hover {
-                    background-color: #f0f0f0; /* Light gray background on hover */
-                }
+        .profile-options-box a:hover {
+            background-color: #f0f0f0;
+        }
     </style>
-    @RenderSection("Scripts", required: false)
+
+    @RenderSection("Styles", required: false)
 </head>
 <body style="background-color: #f0f8ff; position: relative;">
-    <!-- Light Blue Background Color -->
 
-    <header>
-        <nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
-            <!-- Add the custom-navbar class here -->
-            <a class="navbar-brand" href="/home/index">Ace Attitude Learning Centre</a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ml-auto">
-                    <!-- Align to the right using ml-auto -->
+<header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
+        <a class="navbar-brand" href="/home/index">Ace Attitude Learning Centre</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
                     <li class="nav-item">
                         @if (!(bool)ViewData["IsAuthenticated"])
                         {
-                            <a asp-controller="User" asp-action="Login" class="btn btn-outline-success">Login</a>
-                            <a asp-controller="User" asp-action="Register" class="btn btn-outline-primary">Register</a>
+                            <div class="btn-group" role="group">
+                                <a asp-controller="User" asp-action="Login" class="btn btn-outline-success">Login</a>
+                                <a class="btn btn-outline-primary nav-link register-link">Register</a>
+                            </div>
                         }
                     </li>
-                    <li class="nav-item">
-                        <a class="btn" href="/home/about">About</a>
+                <li class="nav-item">
+                    <a class="btn" href="/home/about">About</a>
+                </li>
+
+                <li class="nav-item">
+                    <a asp-controller="Course" asp-action="Index" asp-route-filterParam="none" asp-route-sortParam="none" asp-route-filterParamValue="none" class="btn">Courses</a>
+                </li>
+
+                @if ((bool)ViewData["IsAuthenticated"])
+                {
+                    <li class="nav-item" style="margin-left: 10px; position: relative;">
+                        <img src="~/images/default-user-icon.png" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
+                        <div class="profile-options-box" id="profile-options-box">
+                            <a asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id" class="text-primary">View Profile</a>
+                            <a asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" class="text-primary">Edit Profile</a>
+                            @if ((bool)ViewData["IsAdmin"])
+                            {
+                                <a href="#" class="text-danger">Search User</a>
+                                <a href="#" class="text-danger">Block User</a>
+                                <a href="#" class="text-danger">Unblock User</a>
+                                <a href="#" class="text-danger">Make Admin</a>
+                            }
+                            <a asp-controller="User" asp-action="Logout" class="text-warning">Sign Out</a>
+                        </div>
                     </li>
-
-                    <li class="nav-item">
-                        <a asp-controller="Course" asp-action="Index" asp-route-filterParam="none" asp-route-sortParam="none" asp-route-filterParamValue="none" class="btn">Courses</a>
-                    </li>
-
-                    @if ((bool)ViewData["IsAuthenticated"])
-                    {
-                        <li class="nav-item" style="margin-left: 10px; position: relative;">
-                            <!-- Centered profile picture vertically, clickable -->
-                            <img src="~/images/default-user-icon.png" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
-                            <div class="profile-options-box" id="profile-options-box">
-                                <a asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id" class="text-primary">View Profile</a>
-                                <a asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" class="text-primary">Edit Profile</a>
-                                @if ((bool)ViewData["IsAdmin"])
-                                {
-                                    <a href="#" class="text-danger">Search User</a>
-                                    <a href="#" class="text-danger">Block User</a>
-                                    <a href="#" class="text-danger">Unblock User</a>
-                                    <a href="#" class="text-danger">Make Admin</a>
-                                }
-                                <a asp-controller="User" asp-action="Logout" class="text-warning">Sign Out</a>
-                            </div>
-                        </li>
-                    }
-                    <li class="nav-item ml-auto">
-                        <a class="btn" href="/api/swagger/index.html">Developer API</a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-    </header>
-
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
-
-    <footer class="footer">
-        <div class="container">
-            <span class="text-muted">© Copyright @DateTime.Now.Year, Ace Attitude Learning Centre</span>
+                }
+                <li class="nav-item ml-auto">
+                    <a class="btn" href="/api/swagger/index.html">Developer API</a>
+                </li>
+            </ul>
         </div>
-    </footer>
+    </nav>
+</header>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<div class="container">
+    <main role="main" class="pb-3">
+        <!-- Registration Modal -->
+        <div class="modal fade" id="registrationModal" tabindex="-1" role="dialog" aria-labelledby="registrationModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="registrationModalLabel">Choose Account Type</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body text-center">
+                        <p>Select your account type:</p>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <input type="image" src="~/images/students.png" alt="Student" class="img-fluid mb-2 student-image" style="max-width: 100px;">
+                                <p>"Register as a student and dive into our courses instantly! Start your learning journey now with expert guidance and engaging content."</p>
+                            </div>
+                            <div class="col-md-6">
+                                <input type="image" src="~/images/teacher.png" alt="Teacher" class="img-fluid mb-2 teacher-image" style="max-width: 100px;">
+                                <p>Join us as a teacher! While students get immediate access, teachers await approval to create captivating courses and inspire learners.</p>
+                            </div>
+                        </div>
+                        <div id="submitButtonDiv" style="margin-top: 20px;">
+                            <button type="button" id="submitButton" class="btn btn-secondary" disabled>Join</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-    <script>
-        $(document).ready(function () {
-            $('#profile-icon').click(function () {
-                $(this).toggleClass('profile-icon-clicked');
-                $('#profile-options-box').toggle();
-            });
+        @RenderBody()
+    </main>
+</div>
+
+<footer class="footer">
+    <div class="container">
+        <span class="text-muted">© Copyright @DateTime.Now.Year, Ace Attitude Learning Centre</span>
+    </div>
+</footer>
+
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        function enableSubmitButton() {
+            $('#submitButton').prop('disabled', false);
+            $('#submitButton').removeClass('btn-secondary').addClass('btn-success');
+        }
+
+        // Attach click event to the register button
+        $('.nav-link.register-link').click(function (e) {
+            e.preventDefault(); // Prevent default behavior (navigating to the register page)
+            // Show the registration modal
+            $('#registrationModal').modal('show');
         });
-    </script>
 
+        // Add click event for student image/button
+        $('.student-image').click(function () {
+            $('.student-image, .teacher-image').removeClass('highlighted');
+            $(this).addClass('highlighted');
+            $('#isStudent').val('true');
+            enableSubmitButton();
+        });
+
+        // Add click event for teacher image/button
+        $('.teacher-image').click(function () {
+            $('.student-image, .teacher-image').removeClass('highlighted');
+            $(this).addClass('highlighted');
+            $('#isStudent').val('false');
+            enableSubmitButton();
+        });
+
+        // Add click event for submit button
+        $('#submitButton').click(function () {
+            window.location.href = '/User/Register';
+        });
+
+        // Profile Picture Functionality
+        $('#profile-icon').click(function () {
+            $(this).toggleClass('profile-icon-clicked');
+            $('#profile-options-box').toggle();
+        });
+    });
+</script>
+
+@RenderSection("Scripts", required: false)
 </body>
 </html>
