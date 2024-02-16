@@ -161,6 +161,65 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
+        [HttpGet("{courseId}/students/applied")]
+        public IActionResult GetAppliedStudents(int courseId, [FromHeader] string credentials)
+        {
+            try
+            {
+                if (!this.ModelState.IsValid)
+                {
+                    throw new InvalidUserInputException(InvalidCourseCreationErrorMessage);
+                }
+
+                Teacher teacher = authService.TryGetTeacher(credentials);
+
+                ICollection<Student> appliedStudents = courseService.GetAppliedStudents(courseId, teacher);
+
+                ICollection<StudentResponseDTO> studentsDTO = appliedStudents.Select(this.modelMapper.MapToStudentResponseDTO).ToList();
+
+                return StatusCode(StatusCodes.Status201Created, studentsDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return NotFound(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Unauthorized(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Unauthorized(e.Message);
+            }
+        }
+
+        [HttpPut("{courseId}/students/{studentId}/admit")]
+        public IActionResult AdmitStudent([FromHeader] string credentials, int courseId, string studentId)
+        {
+            try
+            {
+                Teacher teacher = this.authService.TryGetTeacher(credentials);
+
+                Student student = this.courseService.AdmitStudent(courseId, studentId, teacher);
+
+                StudentResponseDTO studentResponseDTO = this.modelMapper.MapToStudentResponseDTO(student);
+
+                return StatusCode(StatusCodes.Status200OK, studentResponseDTO);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return Conflict(e.Message);
+            }
+            catch (InvalidUserInputException e)
+            {
+                return Conflict(e.Message);
+            }
+        }
+
         [HttpPut("{courseId}")]
         public IActionResult UpdateCourse(int courseId, [FromBody] CourseRequestDTO courseRequestDTO, [FromHeader] string credentials)
         {

@@ -142,14 +142,14 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPut("student/{id}/apply/")]
-        public IActionResult ApplyForTeacher([FromHeader] string credentials, string id)
+        [HttpPut("student/apply/")]
+        public IActionResult ApplyForTeacher([FromHeader] string credentials)
         {
             try
             {
                 ApplicationUser user = this.authService.TryGetUser(credentials);
 
-                Student student = this.userService.ApplyForTeacher(id, user);
+                Student student = this.userService.ApplyForTeacher(user);
 
                 StudentResponseDTO studentResponseDTO = this.modelMapper.MapToStudentResponseDTO(student);
 

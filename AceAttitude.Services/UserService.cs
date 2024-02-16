@@ -16,10 +16,8 @@ namespace AceAttitude.Services
         private readonly string UnableToViewProfileErrorMessage = "Only the creator of the profile or an admin can view it!";
         private readonly string UnableToEditProfileErrorMessage = "Only the creator of the profile or an admin can edit it!";
 
-        private readonly string UnableToApplyErrorMessage = "Only the creator of the profile can apply for teacher!";
-
         private readonly string InvalidUserTypeErrorMessage = "This action can only be performed by a {0} or admin!";
-        private readonly string StudentRequiredForApplicationErrorMessage = "You are already marked as a teacher!";
+        private readonly string StudentRequiredForApplicationErrorMessage = "You are already a teacher!";
 
         private readonly IUserRepository userRepository;
         private readonly IAuthHelper authHelper;
@@ -114,19 +112,14 @@ namespace AceAttitude.Services
             return this.userRepository.GetStudentById(id);
         }
 
-        public Student ApplyForTeacher(string id, ApplicationUser requestUser)
+        public Student ApplyForTeacher(ApplicationUser requestUser)
         {
             if (requestUser.UserType != UserType.Student)
             {
                 throw new UnauthorizedOperationException(StudentRequiredForApplicationErrorMessage);
             }
 
-            if (requestUser.Id != id)
-            {
-                throw new UnauthorizedOperationException(UnableToApplyErrorMessage);
-            }
-
-            return this.userRepository.ApplyForTeacher(id);
+            return this.userRepository.ApplyForTeacher(requestUser.Id);
         }
 
         public ICollection<Teacher> GetUnapprovedTeachers(ApplicationUser requestUser)

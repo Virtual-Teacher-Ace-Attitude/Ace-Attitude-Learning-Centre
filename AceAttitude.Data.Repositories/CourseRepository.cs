@@ -3,8 +3,8 @@ using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Common.Helpers.Contracts;
+
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.Design;
 
 namespace AceAttitude.Data.Repositories
 {
@@ -18,13 +18,23 @@ namespace AceAttitude.Data.Repositories
 
         private const string StudentAlreadyAppliedErrorMessage = "You have already applied to course with id: {0}.";
 
+        private const string NoStudentsAppliedErrorMessage = "No students are currently awaiting approval for this course.";
+
+        private const string StudentCourseNotFoundErrorMessage = "Student with ID: {0} has not applied to course with ID: {1}.";
+
+        private const string StudentAlreadyAdmitedErrorMessage = "Student with ID: {0} has already been admited to course with ID: {1}.";
+
         private readonly ApplicationDbContext context;
+
+        private readonly IUserRepository userRepository;
+
         private readonly IParseHelper parseHelper;
 
-        public CourseRepository(ApplicationDbContext context, IParseHelper parseHelper)
+        public CourseRepository(ApplicationDbContext context, IParseHelper parseHelper, IUserRepository userRepository)
         {
             this.context = context;
             this.parseHelper = parseHelper;
+            this.userRepository = userRepository;
         }
 
         public Course CreateCourse(Course course)
@@ -36,7 +46,57 @@ namespace AceAttitude.Data.Repositories
             return course;
         }
 
+        private StudentCourses GetStudentCourse(int courseId, string studentId)
+        {
+            StudentCourses studentCourse = context
+                .StudentCourses
+                .Include(sc => sc.Course)
+                .Include(sc => sc.Student)
+                .FirstOrDefault(sc => sc.CourseId == courseId && sc.StudentId == studentId)
+                ?? throw new EntityNotFoundException(string.Format(StudentCourseNotFoundErrorMessage, studentId, courseId));
 
+            if (studentCourse.IsApproved)
+            {
+                throw new UnauthorizedOperationException(string.Format(StudentAlreadyAdmitedErrorMessage, studentId, courseId));
+            }
+
+            return studentCourse;
+        }
+
+        public Student AdmitStudent(int courseId, string studentId)
+        {
+            StudentCourses studentCourse = GetStudentCourse(courseId, studentId);
+
+            studentCourse.IsApproved = true;
+
+            context.SaveChanges();
+
+            return this.userRepository.GetStudentById(studentId);
+        }
+
+        public ICollection<Student> GetAppliedStudents(int courseId)
+        {
+            var appliedStudents = context.Students
+                .Include(student => student.User)
+                .Include(student => student.Ratings)
+                .Include(student => student.StudentCourses)
+                .ThenInclude(sc => sc.Course)
+                .Where(student => student.IsPromoted == false
+                && student.StudentCourses.Any(sc => sc.CourseId == courseId && sc.IsApproved == false)
+                && student.User.DeletedOn.HasValue == false).ToList();
+
+            this.EnsureCollectionNotEmpty(appliedStudents.Count, NoStudentsAppliedErrorMessage);
+
+            return appliedStudents;
+        }
+
+        private void EnsureCollectionNotEmpty(int count, string errorMessage)
+        {
+            if (count == 0)
+            {
+                throw new EntityNotFoundException(errorMessage);
+            }
+        }
 
         public Course DeleteCourse(int id)
         {
@@ -92,7 +152,7 @@ namespace AceAttitude.Data.Repositories
 
             this.EnsureNotApplied(courseId, student);
 
-            StudentCourses studentCourse = new StudentCourses { CourseId = courseId, StudentId = student.Id, IsCompleted = false , IsApproved = false};
+            StudentCourses studentCourse = new StudentCourses { CourseId = courseId, StudentId = student.Id, IsCompleted = false, IsApproved = false };
 
             context.Add(studentCourse);
 
