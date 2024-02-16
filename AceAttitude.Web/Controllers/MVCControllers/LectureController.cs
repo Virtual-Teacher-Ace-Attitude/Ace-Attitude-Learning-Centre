@@ -4,10 +4,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 {
     public class LectureController : Controller
     {
-        public IActionResult Index()
-        {
-            return View();
-        }
+
 
         public IActionResult Details()
         {
