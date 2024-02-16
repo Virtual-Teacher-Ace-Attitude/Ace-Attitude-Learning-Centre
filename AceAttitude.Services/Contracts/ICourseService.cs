@@ -20,5 +20,9 @@ namespace AceAttitude.Services.Contracts
         List<Course> GetAll(string filterParam, string filterParamValue, string sortParam);
 
         Course RateCourse(int id, decimal rating, Student student);
+
+        public ICollection<Student> GetAppliedStudents(int courseId, Teacher teacher);
+
+        public Student AdmitStudent(int courseId, string studentId, Teacher teacher);
     }
 }

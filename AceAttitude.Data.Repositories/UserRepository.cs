@@ -24,7 +24,6 @@ namespace AceAttitude.Data.Repositories
         private const string UnableToDeleteAdminErrorMessage = "You are unable to delete other admins.";
         private const string UnableToEditAdminErrorMessage = "You are unable to edit the profile of other admins.";
 
-
         private readonly ApplicationDbContext context;
         private readonly IAPIModelMapper modelMapper;
 
@@ -65,6 +64,17 @@ namespace AceAttitude.Data.Repositories
             return teacher;
         }
 
+        public Teacher GetUnapprovedTeacher(string id)
+        {
+            var teacher = context.Teachers
+                .Include(teacher => teacher.User)
+                .Include(teacher => teacher.CreatedCourses)
+                .FirstOrDefault(teacher => teacher.Id == id && teacher.User.DeletedOn.HasValue == false)
+                ?? throw new EntityNotFoundException(string.Format(UserNotFoundErrorMessage, "Teacher", "ID: ", id));
+
+            return teacher;
+        }
+
         public ApplicationUser GetByEmail(string email)
         {
             var user = context.Users.FirstOrDefault(user => user.Email == email && user.DeletedOn.HasValue == false)
@@ -78,8 +88,9 @@ namespace AceAttitude.Data.Repositories
             var unapprovedTeachers = context.Teachers
                 .Include(teacher => teacher.User)
                 .Include(teacher => teacher.CreatedCourses)
-                .Where(teacher => teacher.IsApproved == false && teacher.User.DeletedOn.HasValue == false).ToList()
-                ?? throw new EntityNotFoundException(TeachersNotAwaitingApprovalErrorMessage);
+                .Where(teacher => teacher.IsApproved == false && teacher.User.DeletedOn.HasValue == false).ToList();
+
+            this.EnsureCollectionNotEmpty(unapprovedTeachers.Count, TeachersNotAwaitingApprovalErrorMessage);
 
             return unapprovedTeachers;
         }
@@ -91,10 +102,19 @@ namespace AceAttitude.Data.Repositories
                 .Include(student => student.Ratings)
                 .Include(student => student.StudentCourses)
                 .ThenInclude(sc => sc.Course)
-                .Where(student => student.IsPromoted == false && student.AwaitingPromotion == true && student.User.DeletedOn.HasValue == false).ToList()
-                ?? throw new EntityNotFoundException(TeachersNotAwaitingApprovalErrorMessage);
+                .Where(student => student.IsPromoted == false && student.AwaitingPromotion == true && student.User.DeletedOn.HasValue == false).ToList();
+
+            this.EnsureCollectionNotEmpty(unapprovedStudents.Count, TeachersNotAwaitingApprovalErrorMessage);
 
             return unapprovedStudents;
+        }
+
+        private void EnsureCollectionNotEmpty(int count, string errorMessage)
+        {
+            if (count == 0)
+            {
+                throw new EntityNotFoundException(errorMessage);
+            }
         }
 
         public ApplicationUser Create(ApplicationUser user)
@@ -187,7 +207,7 @@ namespace AceAttitude.Data.Repositories
 
         public Teacher ApproveTeacher(string id)
         {
-            Teacher teacher = this.GetTeacherById(id);
+            Teacher teacher = this.GetUnapprovedTeacher(id);
 
             if (teacher.IsApproved)
             {
@@ -221,6 +241,7 @@ namespace AceAttitude.Data.Repositories
 
             Teacher newTeacher = this.modelMapper.MapToTeacher(user);
             newTeacher.User = user;
+            newTeacher.IsApproved = true;
             user.UserType = UserType.Teacher;
 
             context.Add(newTeacher);

@@ -31,7 +31,7 @@ namespace AceAttitude.Services.Contracts
 
         public Student ViewStudentProfile(string id, ApplicationUser requestUser);
 
-        public Student ApplyForTeacher(string id, ApplicationUser requestUser);
+        public Student ApplyForTeacher(ApplicationUser requestUser);
 
         public ICollection<Teacher> GetUnapprovedTeachers(ApplicationUser requestUser);
 

@@ -19,5 +19,9 @@ namespace AceAttitude.Data.Repositories.Contracts
         Course ApplyForCourse(int courseId, Student student);
 
         List<Course> GetFilteredCourses(string filterParam, string filterParamValue, string sortParam);
+
+        public ICollection<Student> GetAppliedStudents(int courseId);
+
+        public Student AdmitStudent(int courseId, string studentId);
     }
 }

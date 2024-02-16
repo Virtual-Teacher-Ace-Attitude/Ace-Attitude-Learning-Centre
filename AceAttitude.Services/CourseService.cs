@@ -8,12 +8,15 @@ namespace AceAttitude.Services
     public class CourseService : ICourseService
     {
         private readonly ICourseRepository courseRepository;
+        private readonly IUserRepository userRepository;
+
         private readonly IAuthHelper authHelper;
 
-        public CourseService(ICourseRepository courseRepository, IAuthHelper authHelper)
+        public CourseService(ICourseRepository courseRepository, IAuthHelper authHelper, IUserRepository userRepository)
         {
             this.courseRepository = courseRepository;
             this.authHelper = authHelper;
+            this.userRepository = userRepository;
         }
         public Course CreateCourse(Course course, Teacher teacher)
         {
@@ -60,6 +63,20 @@ namespace AceAttitude.Services
         public Course ApplyForCourse(int courseId, Student student)
         {
             return this.courseRepository.ApplyForCourse(courseId, student);
+        }
+
+        public ICollection<Student> GetAppliedStudents(int courseId, Teacher teacher)
+        {
+            authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, courseId);
+
+            return this.courseRepository.GetAppliedStudents(courseId);
+        }
+
+        public Student AdmitStudent(int courseId, string studentId, Teacher teacher)
+        {
+            authHelper.EnsureTeacherIsCourseCreatorOrAdmin(teacher, courseId);
+
+            return this.courseRepository.AdmitStudent(courseId, studentId);
         }
     }
 }
