@@ -4,6 +4,7 @@ namespace AceAttitude.Services.Contracts
 {
     public interface ICommentService
     {
+        Comment GetComment(int commentId, int courseId);
         List<Comment> GetComments(Course course);
         Comment CreateComment(Comment comment, Course course, ApplicationUser user);
 

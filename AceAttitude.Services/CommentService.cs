@@ -29,6 +29,11 @@ namespace AceAttitude.Services
             return commentRepository.DeleteComment(commentId, courseId);
         }
 
+        public Comment GetComment(int commentId, int courseId)
+        {
+            return commentRepository.GetById(commentId, courseId);
+        }
+
         public List<Comment> GetComments(Course course)
         {
             return commentRepository.GetComments(course);
@@ -46,7 +51,7 @@ namespace AceAttitude.Services
             return commentRepository.UpdateComment(commentId, courseId, content);
         }
 
-        private void EnsureUserIsCreatorOrAdmin(ApplicationUser user, int commentId, int courseId)
+        private Comment EnsureUserIsCreatorOrAdmin(ApplicationUser user, int commentId, int courseId)
         {
             Comment comment = commentRepository.GetById(commentId, courseId);
             if (user.UserType != UserType.Admin && comment.User != user)
@@ -54,6 +59,7 @@ namespace AceAttitude.Services
                 throw new UnauthorizedOperationException
                     (UnableToModifyCommentErrorMessage);
             }
+            return comment;
         }
     }
 }

@@ -7,6 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.3.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\AceAttitude.Data.Models\AceAttitude.Data.Models.csproj" />
     <ProjectReference Include="..\AceAttitude.Web.DTO\AceAttitude.Web.DTO.csproj" />
     <ProjectReference Include="..\AceAttitude.Web.ViewModels\AceAttitude.Web.ViewModels.csproj" />

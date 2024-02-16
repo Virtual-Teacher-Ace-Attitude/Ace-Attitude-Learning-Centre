@@ -1,1 +1,34 @@
-﻿
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using AceAttitude.Data.Models
+@model CourseViewModel
+
+<body>
+	<h2>Create a new course</h2>
+	<form asp-controller="Course" asp-action="Create" method="post">
+		<div class="mb-3">
+			<label asp-for="Title" class="form-label">Title</label>
+			<input asp-for="Title" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Course Title">
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</div>
+		<div class="mb-3">
+			<label asp-for="Description" class="form-label">Description</label>
+			<textarea asp-for="Description" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+			<span asp-validation-for="Description" class="text-danger"></span>
+		</div>
+
+		<!-- Level select list -->
+		<div class="form-group">
+			<label>Select level:</label>
+			<select asp-for="Levels" class="form-control" asp-items="Model.Levels"></select>
+		</div>
+
+		<!-- Age group select list -->
+		<div class="form-group">
+			<label>Select age group:</label>
+			<select asp-for="AgeGroups" class="form-control" asp-items="Model.AgeGroups"></select>
+		</div>
+
+		<input type="submit" value="Create" class="btn-primary" />
+	</form>
+
+</body>

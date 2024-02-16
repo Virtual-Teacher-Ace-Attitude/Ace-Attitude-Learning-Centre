@@ -1,5 +1,4 @@
 ﻿using AceAttitude.Common.Constants;
-using AceAttitude.Data.Models.Misc;
 
 using System.ComponentModel.DataAnnotations;
 

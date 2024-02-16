@@ -2,6 +2,11 @@
 @using AceAttitude.Data.Models
 @model List<Course>
 
+@{
+    ViewData["Title"] = "Course Details";
+    Layout = "_Layout";
+}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -12,19 +17,36 @@
 <body>
 
 
-    <!-- Example split danger button -->
-@*     <div class="btn-group">
-        <button type="button" class="btn btn-primary">Level</button>
-        <button type="button" class="btn btn-primary dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
-            <span class="visually-hidden">Toggle Dropdown</span>
+    <p>
+        <a asp-controller="Course" asp-action="Create" class="nav">Create a new course</a>
+    </p>
+
+    <div class="btn-group" style="margin-bottom: 10px;">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Level
         </button>
-        <ul class="dropdown-menu">
-             @for (int i = 0; i < Enum.GetValues(typeof(Level)).Length; i++)
-            {
-                <li><a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParamValue=>@Enum.GetValues(typeof(Level)).GetValue{</a></li>
-            }            
-        </ul>
-    </div> *@
+        <div class="dropdown-menu">
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="Level" asp-route-filterParamValue="A1">A1</a>
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="Level" asp-route-filterParamValue="A2">A2</a>
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="Level" asp-route-filterParamValue="B1">B1</a>
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="Level" asp-route-filterParamValue="B2">B2</a>
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="Level" asp-route-filterParamValue="C1">C1</a>
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="Level" asp-route-filterParamValue="C2">C2</a>
+        </div>
+    </div>
+
+    <div class="btn-group" style="margin-bottom: 10px;">
+        <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Age Group
+        </button>
+        <div class="dropdown-menu">
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="AgeGroup" asp-route-filterParamValue="Kids">Kids</a>
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="AgeGroup" asp-route-filterParamValue="Teens">Teens</a>
+            <a class="dropdown-item" asp-controller="Course" asp-action="Index" asp-route-filterParam="AgeGroup" asp-route-filterParamValue="Adults">Adults</a>
+        </div>
+    </div>
+
+
 
     <table class="table">
         <thead>

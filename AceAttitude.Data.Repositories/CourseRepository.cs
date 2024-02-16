@@ -44,6 +44,7 @@ namespace AceAttitude.Data.Repositories
             Course course = courseContext.Courses
                 .Include(course => course.Lectures)
                 .Include(course => course.Comments)
+                .ThenInclude(comment => comment.User)
                 .Include(course => course.Ratings)
                 .Include(course => course.Teacher)
                 .ThenInclude(teacher => teacher.User)
