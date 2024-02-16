@@ -14,6 +14,8 @@ namespace AceAttitude.Web.ViewModels
         private const string CommentMinLengthErrorMessage = "Comment cannot be empty";
         private const string CommentMaxLengthErrorMessage = "Comment cannot be more than 500 characters long";
 
+        public int Id { get; set; }
+
         [Required, MinLength(ValidationConstants.CommentMinLength, ErrorMessage = CommentMinLengthErrorMessage),
             MaxLength(ValidationConstants.CommentMaxLength, ErrorMessage = CommentMaxLengthErrorMessage)]
         public string Content { get; set; } = null!;

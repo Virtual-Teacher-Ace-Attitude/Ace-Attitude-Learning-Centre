@@ -17,6 +17,6 @@
     <form asp-controller="Course" asp-action="DeleteConfirmed" asp-route-id ="@Model.Id" method="delete">
         <button type="submit" class="btn btn-success">Yes</button>
     </form>
-    <a href="/Post/Index" class="btn btn-danger">No</a>
+    <a asp-controller="Course" asp-action="Index" class="btn btn-danger">No</a>
 
 </body>

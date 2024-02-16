@@ -105,6 +105,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 var comment = commentService.GetComment(commentId, courseId);
                 var commentViewModel = new CommentViewModel()
                 {
+                    Id = comment.Id,
                     Content = comment.Content,
                 };
 
