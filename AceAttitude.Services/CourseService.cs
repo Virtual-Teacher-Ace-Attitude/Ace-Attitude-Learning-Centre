@@ -33,8 +33,10 @@ namespace AceAttitude.Services
 
         public Course GetById(int id)
         {
+
             return courseRepository.GetById(id);
         }
+
 
         public Course UpdateCourse(int id, Course course, Teacher teacher)
         {
@@ -78,5 +80,6 @@ namespace AceAttitude.Services
 
             return this.courseRepository.AdmitStudent(courseId, studentId);
         }
+
     }
 }

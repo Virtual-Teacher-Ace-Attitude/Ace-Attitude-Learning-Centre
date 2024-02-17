@@ -6,6 +6,8 @@ namespace AceAttitude.Data.Repositories.Contracts
     {
         Course GetById(int id);
 
+        Course GetDraftCourse(int id);
+
         Course CreateCourse(Course course);
 
         Course UpdateCourse(int id, Course course);

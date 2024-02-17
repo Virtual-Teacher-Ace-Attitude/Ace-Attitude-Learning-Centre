@@ -24,7 +24,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
         [HttpGet]
         [Route("course/{courseId}/comment")]
-        public IActionResult AddComment()
+        public IActionResult AddComment([FromRoute] int courseId)
         {
             try
             {
@@ -49,14 +49,16 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             var user = authService.CurrentUser;
             var course = courseService.GetById(courseId);
             var comment = modelMapper.MapViewModelToComment(model);
+            comment.CourseId = courseId;
+            comment.ApplicationUserId = user.Id;
             var createdComment = commentService.CreateComment(comment, course, user);
-            return RedirectToAction("Details", "Course", new { createdComment.Id });
+            return RedirectToAction("Details", "Course", new { courseId });
 
         }
 
 
         [HttpGet]
-        [Route("course/{id}/{commentId}/delete")]
+        [Route("course/{courseId}/{commentId}/delete")]
         public IActionResult DeleteComment([FromRoute] int commentId, [FromRoute] int courseId)
         {
             try
@@ -73,7 +75,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("course/{courseId}/{commentId}/delete")]
         public IActionResult DeleteCommentConfirmed([FromRoute] int courseId, [FromRoute] int commentId)
         {
@@ -83,7 +85,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 var user = authService.CurrentUser;
                 _ = commentService.DeleteComment(commentId, courseId, user);
 
-                return RedirectToAction("Details", "Course", new { courseId });
+                return RedirectToAction("Details", "Course", new { id = courseId });
             }
             catch (EntityNotFoundException ex)
             {
@@ -106,6 +108,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 var commentViewModel = new CommentViewModel()
                 {
                     Id = comment.Id,
+                    CourseId = courseId,
                     Content = comment.Content,
                 };
 
@@ -121,7 +124,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("course/{courseId}/{commentId}/edit")]
         public IActionResult EditComment([FromRoute] int courseId, [FromRoute] int commentId, CommentViewModel commentViewModel)
         {
@@ -133,16 +136,17 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             var user = authService.CurrentUser;
             commentService.UpdateComment(commentId, courseId, commentViewModel.Content, user);
 
-            return RedirectToAction("Details", "Course", new { courseId });
+            return RedirectToAction("Details", "Course", new { id = courseId });
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("course/{courseId}/{commentId}/like")]
         public IActionResult LikeComment([FromRoute] int courseId, [FromRoute] int commentId)
         {
             var user = authService.CurrentUser;
+            authService.EnsureUserLoggedIn();
             commentService.LikeComment( commentId, courseId, user);
-            return RedirectToAction("Details", "Course", new { courseId });
+            return RedirectToAction("Details", "Course", new { id = courseId });
         }
     }
 }

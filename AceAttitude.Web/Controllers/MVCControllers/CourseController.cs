@@ -1,6 +1,7 @@
 ﻿using AceAttitude.Common.Exceptions;
 using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
+using AceAttitude.Services;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.ViewModels;
@@ -15,16 +16,19 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         private readonly ICourseService courseService;
         private readonly IAuthService authService;
         private readonly IMVCModelMapper modelMapper;
+        private readonly IUserService userService;
 
 
-        public CourseController(ICourseService courseService, IAuthService authService, IMVCModelMapper modelMapper)
+        public CourseController(ICourseService courseService, IAuthService authService, 
+            IMVCModelMapper modelMapper, IUserService userService)
         {
             this.courseService = courseService;
             this.authService = authService; 
             this.modelMapper = modelMapper;
+            this.userService = userService;
         }
         [HttpGet("")]
-        public IActionResult Index([FromQuery] string filterParam, [FromQuery] string filterParamValue, [FromQuery] string sortParam)
+        public IActionResult Index([FromQuery] string filterParam ="none", [FromQuery] string filterParamValue = "none", [FromQuery] string sortParam = "none")
         {
             List<Course> courses = courseService.GetAll(filterParam, filterParamValue, sortParam);
             return View(courses);
@@ -34,8 +38,11 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         public IActionResult Details([FromRoute] int id)
         {
             Course course = courseService.GetById(id);
+
             return View(course);
         }
+
+
 
         [HttpGet("create")]
         public IActionResult Create()
@@ -69,7 +76,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                     InitializeDropDownLists(model);
                     return View(model);
                 }
-                var teacher = authService.TryGetTeacher(authService.CurrentUser.Id);
+                var teacher = userService.GetTeacherById(authService.CurrentUser.Id);
                 var course = modelMapper.MapToCourse(model);
                 course.TeacherId = teacher.Id;
                 var createdCourse = courseService.CreateCourse(course, teacher);

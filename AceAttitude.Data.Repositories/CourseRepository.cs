@@ -115,12 +115,12 @@ namespace AceAttitude.Data.Repositories
                 .Include(course => course.Ratings)
                 .Include(course => course.Teacher)
                 .ThenInclude(teacher => teacher.User)
-                .FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false && c.IsDraft == false)
+                .FirstOrDefault(c => c.Id == id && c.DeletedOn.HasValue == false)
                 ?? throw new EntityNotFoundException(string.Format(CourseNotFoundErrorMessage, id));
             return course;
         }
 
-        private Course GetDraftCourse(int id)
+        public Course GetDraftCourse(int id)
         {
             Course course = context.Courses
                 .Include(course => course.Lectures)
@@ -136,7 +136,7 @@ namespace AceAttitude.Data.Repositories
 
         public Course ReleaseCourse(int courseId)
         {
-            Course courseToRelease = GetDraftCourse(courseId);
+            Course courseToRelease = GetById(courseId);
 
             this.EnsureCourseNotReleased(courseToRelease);
 
