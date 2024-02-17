@@ -111,6 +111,7 @@ namespace AceAttitude.Data.Repositories
             Course course = context.Courses
                 .Include(course => course.Lectures)
                 .Include(course => course.Comments)
+                .ThenInclude(comment => comment.User)
                 .Include(course => course.Ratings)
                 .Include(course => course.Teacher)
                 .ThenInclude(teacher => teacher.User)

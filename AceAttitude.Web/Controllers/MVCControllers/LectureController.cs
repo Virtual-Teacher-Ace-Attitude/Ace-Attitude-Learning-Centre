@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace AceAttitude.Web.Controllers.MVCControllers
 {
-    [Route("api/courses/{courseId}/lectures")]
+    [Route("courses/{courseId}/lectures")]
     public class LectureController : Controller
     {
 
@@ -139,7 +139,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
-        [HttpPost]
+        [HttpPut]
         [Route("edit/{lectureId}")]
         public IActionResult EditLecture([FromRoute] int courseId, [FromRoute] int lectureId, LectureViewModel lectureViewModel)
         {

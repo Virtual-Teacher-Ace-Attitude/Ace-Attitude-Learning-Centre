@@ -56,7 +56,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
 
         [HttpGet]
-        [Route("course/{id}/deleteComment/{commentId}")]
+        [Route("course/{id}/{commentId}/delete")]
         public IActionResult DeleteComment([FromRoute] int commentId, [FromRoute] int courseId)
         {
             try
@@ -73,8 +73,8 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
-        [HttpPost]
-        [Route("course/{courseId}/deleteComment/{commentId}")]
+        [HttpDelete]
+        [Route("course/{courseId}/{commentId}/delete")]
         public IActionResult DeleteCommentConfirmed([FromRoute] int courseId, [FromRoute] int commentId)
         {
             try
@@ -95,7 +95,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpGet]
-        [Route("course/{courseId}/editComment/{commentId}")]
+        [Route("course/{courseId}/{commentId}/edit")]
         public IActionResult EditComment([FromRoute] int courseId, [FromRoute] int commentId)
         {
             try
@@ -121,8 +121,8 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
-        [HttpPost]
-        [Route("course/{courseId}/editComment/{commentId}")]
+        [HttpPut]
+        [Route("course/{courseId}/{commentId}/edit")]
         public IActionResult EditComment([FromRoute] int courseId, [FromRoute] int commentId, CommentViewModel commentViewModel)
         {
             if (!ModelState.IsValid)
@@ -136,8 +136,8 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             return RedirectToAction("Details", "Course", new { courseId });
         }
 
-        [HttpPost]
-        [Route("course/{courseId}/likeComment/{commentId}")]
+        [HttpPut]
+        [Route("course/{courseId}/{commentId}/like")]
         public IActionResult LikeComment([FromRoute] int courseId, [FromRoute] int commentId)
         {
             var user = authService.CurrentUser;

@@ -37,7 +37,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             return View(course);
         }
 
-        [HttpGet("/create")]
+        [HttpGet("create")]
         public IActionResult Create()
         {
             try
@@ -57,7 +57,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
         }
 
-        [HttpPost("/create")]
+        [HttpPost("create")]
         public IActionResult Create(CourseViewModel model)
         {
             try
@@ -167,23 +167,23 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         private void InitializeDropDownLists(CourseViewModel viewModel)
 		{
 			IEnumerable<SelectListItem> levelSelectListItems = Enum.GetValues(typeof(Level))
-																	.Cast<Level>()
-																	.Select(l => new SelectListItem
-																	{
-																		Value = l.ToString(),
-																		Text = l.ToString()
-																	});
+				.Cast<Level>()
+				.Select(l => new SelectListItem
+				{
+					Value = l.ToString(),
+					Text = l.ToString()
+				});
 
 			// Create SelectList from the SelectListItems
 			viewModel.Levels = new SelectList(levelSelectListItems, "Value", "Text");
 
 			IEnumerable<SelectListItem> ageSelectListItems = Enum.GetValues(typeof(AgeGroup))
-														.Cast<AgeGroup>()
-														.Select(l => new SelectListItem
-														{
-															Value = l.ToString(),
-															Text = l.ToString()
-														});
+		        .Cast<AgeGroup>()
+		        .Select(l => new SelectListItem
+		        {
+		        	Value = l.ToString(),
+		        	Text = l.ToString()
+		        });
 
 			// Create SelectList from the SelectListItems
 			viewModel.AgeGroups = new SelectList(ageSelectListItems, "Value", "Text");
