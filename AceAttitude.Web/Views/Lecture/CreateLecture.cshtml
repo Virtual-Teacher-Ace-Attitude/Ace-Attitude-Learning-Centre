@@ -3,26 +3,31 @@
 @model LectureViewModel
 
 <body>
-	<h2>Edit post</h2>
-	<form asp-controller="Lecture" asp-action="Edit" asp-route-id="@Model.Id" method="post">
+	<h2>Create a new lecture</h2>
+	<form asp-controller="Lecture" asp-action="CreateLecture" asp-route-courseId="@Model.CourseId" method="post">
 		<div class="mb-3">
 			<label asp-for="Title" class="form-label">Title</label>
 			<input asp-for="Title" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Lecture Title">
+			<span asp-validation-for="Title" class="text-danger"></span>
 		</div>
 		<div class="mb-3">
-			<label asp-for="Description" class="form-label">Description</label>
+			<label asp-for="Description" class="form-label">Description:</label>
 			<textarea asp-for="Description" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+			<span asp-validation-for="Description" class="text-danger"></span>
 		</div>
 		<div class="mb-3">
 			<label asp-for="TextFilePath" class="form-label">Text file path:</label>
 			<input asp-for="TextFilePath" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Path">
+			<span asp-validation-for="TextFilePath" class="text-danger"></span>
 		</div>
 		<div class="mb-3">
 			<label asp-for="VideoFilePath" class="form-label">Video file path:</label>
 			<input asp-for="VideoFilePath" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Path">
+			<span asp-validation-for="VideoFilePath" class="text-danger"></span>
 		</div>
 
-		<input type="submit" value="Edit" class="btn-primary" />
+
+		<input type="submit" value="Create" class="btn-primary" />
 	</form>
 
 </body>

@@ -11,10 +11,13 @@ namespace AceAttitude.Web.ViewModels
 
         public int Id { get; set; }
 
-        [Required]
+		public int CourseId { get; set; }
+
+		[Required]
         [StringLength(maximumLength: ValidationConstants.TitleMaxLength,
             MinimumLength = ValidationConstants.TitleMinLength,
             ErrorMessage = TitleMinLengthErrorMessage)]
+        
         public string Title { get; set; } = null!;
 
         [MaxLength(1000, ErrorMessage = DescriptionMaxLengthErrorMessage)]

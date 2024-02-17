@@ -52,7 +52,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             comment.CourseId = courseId;
             comment.ApplicationUserId = user.Id;
             var createdComment = commentService.CreateComment(comment, course, user);
-            return RedirectToAction("Details", "Course", new { courseId });
+            return RedirectToAction("Details", "Course", new { id = courseId });
 
         }
 
