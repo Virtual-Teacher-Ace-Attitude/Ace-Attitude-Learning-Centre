@@ -34,8 +34,9 @@
         <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
     </div>
 
-    <input type="hidden" id="isStudent" name="IsStudent" />
+    <input type="hidden" asp-for="IsStudent" id="IsStudent" name="IsStudent" value="@Model.IsStudent" />
 
+    <!-- Submit button -->
     <div class="form-group">
         <input type="submit" value="Register" class="btn btn-primary" />
     </div>

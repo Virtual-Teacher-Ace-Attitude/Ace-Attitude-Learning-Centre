@@ -69,9 +69,10 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpGet]
-        public IActionResult Register()
+        public IActionResult Register(bool isStudent)
         {
             var viewModel = new RegisterViewModel();
+            viewModel.IsStudent = isStudent;
 
             return View(viewModel);
         }
@@ -105,13 +106,19 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                     _ = userService.CreateTeacher(createdUser);
 
                     // Add view for created teacher to advise that to wait for approval
-                    return RedirectToAction("Home", "Index");
+                    return RedirectToAction("TeacherConfirmation", "User");
                 }
             }
             catch (DuplicateEntityException e)
             {
                 return this.ForbiddenOperation(e.Message, StatusCodes.Status403Forbidden);
             }
+        }
+
+        [HttpGet]
+        public IActionResult TeacherConfirmation()
+        {
+            return View();
         }
 
         private IActionResult ForbiddenOperation(string errorMessage, int statusCode)

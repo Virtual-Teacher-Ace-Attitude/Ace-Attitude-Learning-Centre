@@ -183,48 +183,57 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
 <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
 
-<script>
-    $(document).ready(function () {
-        function enableSubmitButton() {
-            $('#submitButton').prop('disabled', false);
-            $('#submitButton').removeClass('btn-secondary').addClass('btn-success');
-        }
+    <script>
+        $(document).ready(function () {
+            function enableSubmitButton() {
+                $('#submitButton').prop('disabled', false);
+                $('#submitButton').removeClass('btn-secondary').addClass('btn-success');
+            }
 
-        // Attach click event to the register button
-        $('.nav-link.register-link').click(function (e) {
-            e.preventDefault(); // Prevent default behavior (navigating to the register page)
-            // Show the registration modal
-            $('#registrationModal').modal('show');
-        });
+            var isStudent = null; // Initialize as null
 
-        // Add click event for student image/button
-        $('.student-image').click(function () {
-            $('.student-image, .teacher-image').removeClass('highlighted');
-            $(this).addClass('highlighted');
-            $('#isStudent').val('true');
-            enableSubmitButton();
-        });
+            $(document).ready(function () {
+                // Function to enable the submit button
+                function enableSubmitButton() {
+                    $('#submitButton').prop('disabled', false);
+                    $('#submitButton').removeClass('btn-secondary').addClass('btn-success');
+                }
 
-        // Add click event for teacher image/button
-        $('.teacher-image').click(function () {
-            $('.student-image, .teacher-image').removeClass('highlighted');
-            $(this).addClass('highlighted');
-            $('#isStudent').val('false');
-            enableSubmitButton();
-        });
+                $('.nav-link.register-link').click(function (e) {
+                    e.preventDefault(); // Prevent default behavior (navigating to the register page)
+                    $('#registrationModal').modal('show');
+                });
 
-        // Add click event for submit button
-        $('#submitButton').click(function () {
-            window.location.href = '/User/Register';
-        });
+                // Click event for student image/button
+                $('.student-image').click(function () {
+                    $('.student-image, .teacher-image').removeClass('highlighted');
+                    $(this).addClass('highlighted');
+                    isStudent = true; // Set isStudent to true for student registration
+                    enableSubmitButton();
+                });
 
-        // Profile Picture Functionality
-        $('#profile-icon').click(function () {
-            $(this).toggleClass('profile-icon-clicked');
-            $('#profile-options-box').toggle();
+                // Click event for teacher image/button
+                $('.teacher-image').click(function () {
+                    $('.student-image, .teacher-image').removeClass('highlighted');
+                    $(this).addClass('highlighted');
+                    isStudent = false; // Set isStudent to false for teacher registration
+                    enableSubmitButton();
+                });
+
+                // Add click event for submit button
+                $('#submitButton').click(function () {
+                    // Redirect to the Register action with the isStudent parameter
+                    window.location.href = '/User/Register?isStudent=' + isStudent;
+                });
+            });
+
+            // Profile Picture Functionality
+            $('#profile-icon').click(function () {
+                $(this).toggleClass('profile-icon-clicked');
+                $('#profile-options-box').toggle();
+            });
         });
-    });
-</script>
+    </script>
 
 @RenderSection("Scripts", required: false)
 </body>
