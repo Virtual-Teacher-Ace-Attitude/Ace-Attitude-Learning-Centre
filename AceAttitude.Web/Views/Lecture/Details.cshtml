@@ -1,6 +1,16 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+﻿@inject IAuthService authService
+
+@{
+    ViewData["IsAuthenticated"] = Context.Session.Keys.Contains("CurrentUser");
+
+    var currentUser = Context.Session.Keys.Contains("CurrentUser") ? authService.CurrentUser : null;
+    ViewData["IsAdmin"] = currentUser?.UserType == UserType.Admin;
+}
+
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using AceAttitude.Data.Models
 @model Lecture
+
 <body>
     <div class="card mb-3">
         <div class="card-body">
@@ -8,6 +18,15 @@
             <p class="card-text">@Model.Description</p>
             <p class="card-text"><small class="text-body-secondary">Assignment: @Model.TextFilePath</small></p>
             <p class="card-text"><small class="text-body-secondary">Video: @Model.VideoFilePath</small></p>
+
+            @if (currentUser != null && currentUser.Id == Model.Course.TeacherId)
+            {
+                <a asp-controller="Lecture" asp-action="EditLecture" asp-route-courseId="@Model.CourseId" asp-route-lectureId="@Model.Id" class="btn btn-warning">Edit</a>
+            }
+            @if (currentUser != null && (currentUser.Id == Model.Course.TeacherId || currentUser.UserType == UserType.Admin))
+            {
+                <a asp-controller="Lecture" asp-action="DeleteLecture" asp-route-courseId="@Model.CourseId" asp-route-lectureId="@Model.Id" class="btn btn-danger">Delete</a>
+            }
         </div>
     </div>
 </body>

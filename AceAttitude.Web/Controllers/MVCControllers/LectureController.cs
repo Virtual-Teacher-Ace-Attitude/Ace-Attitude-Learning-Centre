@@ -1,4 +1,5 @@
 ﻿using AceAttitude.Common.Exceptions;
+using AceAttitude.Services;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
 using AceAttitude.Web.ViewModels;
@@ -14,14 +15,16 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         private readonly ILectureService lectureService;
         private readonly IAuthService authService;
         private readonly IMVCModelMapper modelMapper;
+        private readonly IUserService userService;
 
 
-        public LectureController(ILectureService lectureService, ICourseService courseService,
+        public LectureController(ILectureService lectureService, IUserService userService,
             IAuthService authService, IMVCModelMapper modelMapper)
         {
             this.lectureService = lectureService;
             this.authService = authService;
             this.modelMapper = modelMapper;
+            this.userService = userService;
         }
         [HttpGet("{lectureId}")]
         public IActionResult Details([FromRoute] int courseId, [FromRoute] int lectureId)
@@ -40,13 +43,13 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
         [HttpGet]
         [Route("create")]
-        public IActionResult CreateLecture()
+        public IActionResult CreateLecture([FromRoute] int courseId)
         {
             try
             {
                 this.authService.EnsureUserLoggedIn();
 
-                return this.View(new LectureViewModel());
+                return this.View(new LectureViewModel() { CourseId = courseId });
             }
             catch (UnauthorizedOperationException e)
             {
@@ -62,11 +65,11 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             {
                 return View(viewModel);
             }
-            var teacher = authService.TryGetTeacher(authService.CurrentUser.Id);
-            var lecture = modelMapper.MapViewModelToLecture(viewModel);
+			var teacher = userService.GetTeacherById(authService.CurrentUser.Id);
+			var lecture = modelMapper.MapViewModelToLecture(viewModel);
             lecture.CourseId = courseId;
             var createdLecture = lectureService.CreateLecture(lecture, courseId, teacher);
-            return RedirectToAction("Details", "Lecture", new { createdLecture.Id });
+            return RedirectToAction("Details", "Lecture", new {  courseId, lectureId = createdLecture.Id });
 
         }
 
@@ -90,17 +93,17 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
-        [HttpDelete]
+        [HttpPost]
         [Route("delete/{lectureId}")]
-        public IActionResult DeleteLectureConfirmed([FromRoute] int courseId, [FromRoute] int commentId)
+        public IActionResult DeleteLectureConfirmed([FromRoute] int courseId, [FromRoute] int lectureId)
         {
             try
             {
-                //placeholder for authentication
-                var teacher = authService.TryGetTeacher(authService.CurrentUser.Id);
-                _ = lectureService.DeleteLecture(commentId, courseId, teacher);
+				//placeholder for authentication
+				var teacher = userService.GetTeacherById(authService.CurrentUser.Id);
+				_ = lectureService.DeleteLecture(lectureId, courseId, teacher);
 
-                return RedirectToAction("Details", "Course", new { courseId });
+                return RedirectToAction("Details", "Course", new { id = courseId });
             }
             catch (EntityNotFoundException ex)
             {
@@ -121,6 +124,8 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 var lecture = lectureService.GetById(lectureId, courseId, user);
                 var lectureViewModel = new LectureViewModel()
                 {
+                    Id = lectureId,
+                    CourseId = courseId,
                     Title = lecture.Title,
                     Description = lecture.Description,
                     VideoFilePath = lecture.VideoFilePath,
@@ -139,7 +144,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
-        [HttpPut]
+        [HttpPost]
         [Route("edit/{lectureId}")]
         public IActionResult EditLecture([FromRoute] int courseId, [FromRoute] int lectureId, LectureViewModel lectureViewModel)
         {
@@ -148,11 +153,11 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 return View(lectureViewModel);
             }
 
-            var teacher = authService.TryGetTeacher(authService.CurrentUser.Id);
-            var newLecture = modelMapper.MapViewModelToLecture(lectureViewModel);
+			var teacher = userService.GetTeacherById(authService.CurrentUser.Id);
+			var newLecture = modelMapper.MapViewModelToLecture(lectureViewModel);
             lectureService.UpdateLecture(lectureId, courseId, newLecture, teacher);
 
-            return RedirectToAction("Details", "Course", new { courseId });
+            return RedirectToAction("Details", "Course", new { id = courseId });
         }
 
 

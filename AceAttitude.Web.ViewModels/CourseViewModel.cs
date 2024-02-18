@@ -1,7 +1,7 @@
 ﻿using AceAttitude.Common.Constants;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
-
+using AceAttitude.Data.Models.Misc;
 
 namespace AceAttitude.Web.ViewModels
 {

@@ -16,6 +16,8 @@ namespace AceAttitude.Web.ViewModels
 
         public int Id { get; set; }
 
+        public int CourseId { get; set; }
+
         [Required, MinLength(ValidationConstants.CommentMinLength, ErrorMessage = CommentMinLengthErrorMessage),
             MaxLength(ValidationConstants.CommentMaxLength, ErrorMessage = CommentMaxLengthErrorMessage)]
         public string Content { get; set; } = null!;
