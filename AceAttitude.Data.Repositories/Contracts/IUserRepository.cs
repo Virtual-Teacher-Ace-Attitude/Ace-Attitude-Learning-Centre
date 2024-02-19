@@ -36,5 +36,7 @@ namespace AceAttitude.Data.Repositories.Contracts
         public Teacher PromoteAdmin(string id);
 
         public bool CheckEmailExists(string email);
+
+        public string UpdateProfilePicturePath(string path, string userId);
     }
 }

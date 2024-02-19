@@ -5,10 +5,21 @@ namespace AceAttitude.Services.Mapping.Contracts
 {
     public interface IMVCModelMapper
     {
+        // Map to base entities
         public ApplicationUser MapToUser(RegisterViewModel registerViewModel, string passwordHash);
 
+        public ApplicationUser MapToUser(EditUserViewModel editUserViewModel);
+
         public Course MapToCourse(CourseViewModel courseViewModel);
-        Comment MapViewModelToComment(CommentViewModel model);
-        Lecture MapViewModelToLecture(LectureViewModel viewModel);
+
+        public Comment MapViewModelToComment(CommentViewModel model);
+
+        public Lecture MapViewModelToLecture(LectureViewModel viewModel);
+
+        // Map to viewmodels
+
+        public UserViewModel MapToUserViewModel(ApplicationUser user);
+
+        public EditUserViewModel MapToEditUserViewModel(ApplicationUser user);
     }
 }

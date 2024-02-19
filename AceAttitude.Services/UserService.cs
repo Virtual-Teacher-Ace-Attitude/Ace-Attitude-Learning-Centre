@@ -30,7 +30,7 @@ namespace AceAttitude.Services
 
         public ApplicationUser GetById(string id)
         {
-            throw new NotImplementedException();
+            return this.userRepository.GetById(id);
         }
 
         public ApplicationUser GetByEmail(string email)
@@ -86,6 +86,13 @@ namespace AceAttitude.Services
             {
                 throw new DuplicateEntityException(DuplicateEmailRegisterErrorMessage);
             }
+        }
+
+        public ApplicationUser ViewUserProfile(string id, ApplicationUser requestUser)
+        {
+            this.authHelper.EnsureIdMatchingOrAdmin(id, requestUser, UnableToViewProfileErrorMessage);
+
+            return this.userRepository.GetById(id);
         }
 
         public Teacher ViewTeacherProfile(string id, ApplicationUser requestUser)
@@ -170,6 +177,11 @@ namespace AceAttitude.Services
             }
 
             return this.userRepository.PromoteAdmin(id);
+        }
+
+        public string UpdateProfilePicturePath(string path, string userId)
+        {
+            return this.userRepository.UpdateProfilePicturePath(path, userId);
         }
     }
 }

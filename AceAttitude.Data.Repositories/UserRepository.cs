@@ -286,5 +286,16 @@ namespace AceAttitude.Data.Repositories
 
             return true;
         }
+
+        public string UpdateProfilePicturePath(string path, string userId)
+        {
+            ApplicationUser user = this.GetById(userId);
+
+            user.PictureFilePath = path;
+
+            this.context.SaveChanges();
+
+            return path;
+        }
     }
 }

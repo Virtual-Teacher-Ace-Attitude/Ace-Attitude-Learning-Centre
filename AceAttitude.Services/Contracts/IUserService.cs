@@ -31,6 +31,8 @@ namespace AceAttitude.Services.Contracts
 
         public Student ViewStudentProfile(string id, ApplicationUser requestUser);
 
+        public ApplicationUser ViewUserProfile(string id, ApplicationUser requestUser);
+
         public Student ApplyForTeacher(ApplicationUser requestUser);
 
         public ICollection<Teacher> GetUnapprovedTeachers(ApplicationUser requestUser);
@@ -42,5 +44,7 @@ namespace AceAttitude.Services.Contracts
         public Teacher PromoteStudent(string id, ApplicationUser requestUser);
 
         public Teacher PromoteAdmin(string id, ApplicationUser requestUser);
+
+        public string UpdateProfilePicturePath(string path, string userId);
     }
 }

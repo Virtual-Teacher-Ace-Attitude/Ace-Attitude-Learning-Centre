@@ -142,7 +142,7 @@ namespace AceAttitude.Web.Controllers.RestAPIControllers
             }
         }
 
-        [HttpPut("student/apply/")]
+        [HttpPut("student/apply")]
         public IActionResult ApplyForTeacher([FromHeader] string credentials)
         {
             try
