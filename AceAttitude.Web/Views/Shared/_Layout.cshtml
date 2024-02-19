@@ -128,7 +128,7 @@
                 @if ((bool)ViewData["IsAuthenticated"])
                 {
                     <li class="nav-item" style="margin-left: 10px; position: relative;">
-                            <img src="@picturePath" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
+                            <img src="@Url.Content(picturePath)" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
                         <div class="profile-options-box" id="profile-options-box">
                             <a asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id" class="text-primary">View Profile</a>
                             <a asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" class="text-primary">Edit Profile</a>
@@ -136,12 +136,13 @@
                             {
                                 <a href="#" class="text-danger">My Courses</a>
                             }
-                            @if ((bool)ViewData["Isteacher"])
+                            @if ((bool)ViewData["IsTeacher"])
                             {
                                 <a href="#" class="text-danger">My Courses</a>
                             }
                             @if ((bool)ViewData["IsAdmin"])
                             {
+                                <a href="#" class="text-danger">My Courses</a>
                                 <a href="#" class="text-danger">Approve Users</a>
                                 <a href="#" class="text-danger">Modify Users</a>
                             }

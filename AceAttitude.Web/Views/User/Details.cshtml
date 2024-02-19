@@ -70,7 +70,7 @@
 
     <div class="container">
         <a href="#" id="profile-picture-link">
-            <img src="@picturePath" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-picture">
+            <img src="@Url.Content(picturePath)" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-picture">
         </a>
         <div class="user-info">
             @if ((bool)ViewData["IsStudent"])
@@ -90,8 +90,7 @@
             <p class="created-at">Account Created: @Model.CreatedOn.ToShortDateString()</p>
             @if ((bool)ViewData["IsStudent"])
             {
-                <form method="post" asp-controller="User" asp-action="ApplyForTeacher">
-                    <input type ="text" hidden value="@Model.Id" asp-for="Id">
+                <form method="post" asp-controller="User" asp-action="ApplyForTeacherMVC" asp-route-id="@Model.Id">
                     <button type="submit" class="btn btn-outline-primary">Apply for Teacher</button>
                 </form>
             }
