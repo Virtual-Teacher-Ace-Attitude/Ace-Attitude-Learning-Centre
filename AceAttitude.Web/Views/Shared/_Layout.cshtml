@@ -94,6 +94,29 @@
         .profile-options-box a:hover {
             background-color: #f0f0f0;
         }
+
+        /* Dropdown box style */
+        .dropdown-box {
+            position: absolute;
+            display: none;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            padding: 10px;
+            border-radius: 4px;
+            z-index: 1000;
+        }
+
+        .dropdown-box a {
+            display: block;
+            padding: 5px;
+            color: #333;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+
+        .dropdown-box a:hover {
+            background-color: #f0f0f0;
+        }
     </style>
 
     @RenderSection("Styles", required: false)
@@ -121,18 +144,39 @@
                     <a class="btn" href="/home/about">About</a>
                 </li>
 
-                    <li class="nav-item">
-                        <a asp-controller="Games" asp-action="Index"  class="btn">Games</a>
+                <li class="nav-item">
+                    <a asp-controller="Games" asp-action="Index"  class="btn">Games</a>
+                </li>
+
+                    <!-- Level Button with Dropdown -->
+                    <li class="nav-item" style="position: relative;">
+                        <a class="nav-link" href="#" id="levelButton">Level</a>
+                        <div class="dropdown-box" id="level-options-box">
+                            <!-- List of levels -->
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="A1" class="btn">A1</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="A2" class="btn">A2</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="B1" class="btn">B1</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="B2" class="btn">B2</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="C1" class="btn">C1</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="C2" class="btn">C2</a>
+                        </div>
                     </li>
 
-                <li class="nav-item">
-                    <a asp-controller="Course" asp-action="Index" class="btn">Courses</a>
-                </li>
+                    <!-- Age-Group Button with Dropdown -->
+                    <li class="nav-item" style="position: relative;">
+                        <a class="nav-link" href="#" id="ageGroupButton">Age-Group</a>
+                        <div class="dropdown-box" id="age-group-options-box">
+                            <!-- List of age-groups -->
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Kids" class="btn">Kids</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Teens" class="btn">Teens</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Adults" class="btn">Adults</a>
+                        </div>
+                    </li>
 
                 @if ((bool)ViewData["IsAuthenticated"])
                 {
                     <li class="nav-item" style="margin-left: 10px; position: relative;">
-                            <img src="@picturePath" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
+                            <img src="@Url.Content(picturePath)" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
                         <div class="profile-options-box" id="profile-options-box">
                             <a asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id" class="text-primary">View Profile</a>
                             <a asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" class="text-primary">Edit Profile</a>
@@ -140,12 +184,13 @@
                             {
                                 <a href="#" class="text-danger">My Courses</a>
                             }
-                            @if ((bool)ViewData["Isteacher"])
+                            @if ((bool)ViewData["IsTeacher"])
                             {
                                 <a href="#" class="text-danger">My Courses</a>
                             }
                             @if ((bool)ViewData["IsAdmin"])
                             {
+                                <a href="#" class="text-danger">My Courses</a>
                                 <a href="#" class="text-danger">Approve Users</a>
                                 <a href="#" class="text-danger">Modify Users</a>
                             }
@@ -256,6 +301,29 @@
                 $(this).toggleClass('profile-icon-clicked');
                 $('#profile-options-box').toggle();
             });
+        });
+    </script>
+
+    <script>
+        // Level Button click event
+        $('#levelButton').click(function (e) {
+            e.preventDefault();
+            $('#level-options-box').toggle(); // Toggle visibility of level options box
+            $('#age-group-options-box').hide(); // Hide age-group options box if visible
+        });
+
+        // Age-Group Button click event
+        $('#ageGroupButton').click(function (e) {
+            e.preventDefault();
+            $('#age-group-options-box').toggle(); // Toggle visibility of age-group options box
+            $('#level-options-box').hide(); // Hide level options box if visible
+        });
+
+        // Close dropdown menus if user clicks outside
+        $(document).click(function (e) {
+            if (!$(e.target).closest('.nav-item').length) {
+                $('.dropdown-box').hide(); // Hide all dropdown boxes
+            }
         });
     </script>
 

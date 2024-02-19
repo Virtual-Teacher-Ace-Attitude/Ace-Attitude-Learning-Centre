@@ -192,7 +192,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpPost]
-        public IActionResult ApplyForTeacher([FromRoute]string id)
+        public IActionResult ApplyForTeacherMVC([FromRoute]string id)
         {
             try
             {
@@ -250,13 +250,18 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
                 // Update user's profile picture path in your data store
                 ApplicationUser requestUser = this.authService.CurrentUser;
-                // Assuming you have a method like UpdateProfilePicturePath in your userService
-                // Update the user's profile picture path with the relativeFilePath
-                string dataBasePath = filePath;
+
+                // Determine the relative path
+                string relativePath = filePath.Replace(Directory.GetCurrentDirectory(), "").TrimStart('\\');
+                relativePath = relativePath.Replace('\\', '/');
+
+                // Construct the relative URL
+                string relativeUrl = $"~/images/profile-pictures/{Path.GetFileName(relativePath)}";
+                string dataBasePath = relativeUrl;
                 userService.UpdateProfilePicturePath(dataBasePath, requestUser.Id);
 
                 // Return success response with the URL of the uploaded image
-                string imageUrl = Url.Content(filePath); // Convert to URL
+                string imageUrl = Url.Content(relativeUrl); // Convert to URL
                 return Ok(new { imageUrl });
             }
             catch (Exception ex)
