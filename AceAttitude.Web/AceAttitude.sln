@@ -34,6 +34,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceAttitude.Services.Mappin
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AceAttitude.Common.Helpers", "..\Helpers\AceAttitude.Common.Helpers.csproj", "{74A960E2-26A6-47E5-B631-87FD65383668}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AceAttitude.Services.Games", "..\AceAttitude.Services.Games\AceAttitude.Services.Games.csproj", "{0F98876B-3516-46AB-82ED-3B1F8D1D6D69}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -84,6 +86,10 @@ Global
 		{74A960E2-26A6-47E5-B631-87FD65383668}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{74A960E2-26A6-47E5-B631-87FD65383668}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{74A960E2-26A6-47E5-B631-87FD65383668}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F98876B-3516-46AB-82ED-3B1F8D1D6D69}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F98876B-3516-46AB-82ED-3B1F8D1D6D69}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F98876B-3516-46AB-82ED-3B1F8D1D6D69}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F98876B-3516-46AB-82ED-3B1F8D1D6D69}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -100,6 +106,7 @@ Global
 		{2C4815C0-2841-42AA-9711-83A39AD9D659} = {C5E55370-AFC2-4527-A18A-BBB69AD6E797}
 		{2CC12A69-C127-4704-8089-F25AEA470872} = {7975A806-851E-4658-9AF4-8CCCF3BABC1F}
 		{74A960E2-26A6-47E5-B631-87FD65383668} = {C5E55370-AFC2-4527-A18A-BBB69AD6E797}
+		{0F98876B-3516-46AB-82ED-3B1F8D1D6D69} = {7975A806-851E-4658-9AF4-8CCCF3BABC1F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {32B7897B-3D46-4791-948F-7731723B273D}

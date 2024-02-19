@@ -1,0 +1,29 @@
+﻿<body>
+    <div style="display: flex; justify-content: center;">
+        <div class="card" style="width: 20rem; margin-right: 40px;">
+            <img src="~/images/wordsearch.jpg" class="card-img-top" alt="...">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Word Search</h5>
+                <p class="card-text">This is a word search puzzle game. Solve one of our classic puzzles, or create your own.</p>
+                <div class="mt-auto">
+                    <a asp-controller="Games" asp-action="CreateWordSearch" class="btn btn-primary">Create</a>
+                    <a href="#" class="btn btn-primary">Play</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="card" style="width: 20rem; margin-left: 40px;">
+            <img src="~/images/memory.jpg" class="card-img-top" alt="...">
+            <div class="card-body d-flex flex-column">
+                <h5 class="card-title">Memory</h5>
+                <p class="card-text">This is a pairs matching memory game. Solve one of our classic matching games, or create your own.</p>
+                <div class="mt-auto">
+                    <a asp-controller="Games" asp-action="CreateWordSearch" class="btn btn-primary">Create</a>
+                    <a href="#" class="btn btn-primary">Play</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+
