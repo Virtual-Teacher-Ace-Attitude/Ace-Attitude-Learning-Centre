@@ -1,8 +1,6 @@
-﻿using AceAttitude.Common.Helpers;
-using AceAttitude.Common.Helpers.Contracts;
+﻿using AceAttitude.Common.Helpers.Contracts;
 using AceAttitude.Data.Models;
 using AceAttitude.Services.Mapping.Contracts;
-using AceAttitude.Web.DTO.Request;
 using AceAttitude.Web.ViewModels;
 
 namespace AceAttitude.Services.Mapping
@@ -14,6 +12,9 @@ namespace AceAttitude.Services.Mapping
         {
             this.parseHelper = parseHelper;
         }
+
+        // Map to base entities
+
         public ApplicationUser MapToUser(RegisterViewModel registerViewModel, string passwordHash)
         {
             return new ApplicationUser
@@ -23,6 +24,16 @@ namespace AceAttitude.Services.Mapping
                 Email = registerViewModel.Email,
                 PasswordHash = passwordHash,
                 CreatedOn = DateTime.Now,
+            };
+        }
+
+        public ApplicationUser MapToUser(EditUserViewModel editUserViewModel)
+        {
+            return new ApplicationUser
+            {
+                Id = editUserViewModel.Id,
+                FirstName = editUserViewModel.FirstName,
+                LastName = editUserViewModel.LastName,
             };
         }
 
@@ -47,10 +58,35 @@ namespace AceAttitude.Services.Mapping
         {
             return new Lecture()
             {
-                Title= viewModel.Title,
-                Description= viewModel.Description,
-                VideoFilePath= viewModel.VideoFilePath,
-                TextFilePath= viewModel.TextFilePath,
+                Title = viewModel.Title,
+                Description = viewModel.Description,
+                VideoFilePath = viewModel.VideoFilePath,
+                TextFilePath = viewModel.TextFilePath,
+            };
+        }
+
+        // Map to viewmodels
+
+        public UserViewModel MapToUserViewModel(ApplicationUser user)
+        {
+            return new UserViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Email = user.Email,
+                CreatedOn = user.CreatedOn,
+                UserType = user.UserType.ToString(),
+            };
+        }
+
+        public EditUserViewModel MapToEditUserViewModel(ApplicationUser user)
+        {
+            return new EditUserViewModel
+            {
+                Id = user.Id,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
             };
         }
     }

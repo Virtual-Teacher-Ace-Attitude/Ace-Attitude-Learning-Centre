@@ -43,4 +43,8 @@
     <ProjectReference Include="..\AceAttitude.Web.ViewModels\AceAttitude.Web.ViewModels.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\profile-pictures\" />
+  </ItemGroup>
+
 </Project>

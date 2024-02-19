@@ -7,6 +7,19 @@
     ViewData["IsAdmin"] = currentUser?.UserType == UserType.Admin;
     ViewData["IsTeacher"] = currentUser?.UserType == UserType.Teacher;
     ViewData["IsStudent"] = currentUser?.UserType == UserType.Student;
+
+    if (currentUser == null)
+    {
+        ViewData["PicturePath"] = "~/images/default-user-icon.png";
+    }
+    else
+    {
+        ViewData["PicturePath"] = string.IsNullOrEmpty(currentUser.PictureFilePath)
+            ? "~/images/default-user-icon.png"
+            : currentUser.PictureFilePath;
+    }
+
+    var picturePath = ViewData["PicturePath"] as string;
 }
 
 <!DOCTYPE html>
@@ -109,22 +122,28 @@
                 </li>
 
                 <li class="nav-item">
-                    <a asp-controller="Course" asp-action="Index" asp-route-filterParam="none" asp-route-sortParam="none" asp-route-filterParamValue="none" class="btn">Courses</a>
+                    <a asp-controller="Course" asp-action="Index" class="btn">Courses</a>
                 </li>
 
                 @if ((bool)ViewData["IsAuthenticated"])
                 {
                     <li class="nav-item" style="margin-left: 10px; position: relative;">
-                        <img src="~/images/default-user-icon.png" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
+                            <img src="@picturePath" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
                         <div class="profile-options-box" id="profile-options-box">
                             <a asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id" class="text-primary">View Profile</a>
                             <a asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" class="text-primary">Edit Profile</a>
+                            @if ((bool)ViewData["IsStudent"])
+                            {
+                                <a href="#" class="text-danger">My Courses</a>
+                            }
+                            @if ((bool)ViewData["Isteacher"])
+                            {
+                                <a href="#" class="text-danger">My Courses</a>
+                            }
                             @if ((bool)ViewData["IsAdmin"])
                             {
-                                <a href="#" class="text-danger">Search User</a>
-                                <a href="#" class="text-danger">Block User</a>
-                                <a href="#" class="text-danger">Unblock User</a>
-                                <a href="#" class="text-danger">Make Admin</a>
+                                <a href="#" class="text-danger">Approve Users</a>
+                                <a href="#" class="text-danger">Modify Users</a>
                             }
                             <a asp-controller="User" asp-action="Logout" class="text-warning">Sign Out</a>
                         </div>

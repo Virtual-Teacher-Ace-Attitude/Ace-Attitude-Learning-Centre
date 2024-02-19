@@ -12,7 +12,7 @@ namespace AceAttitude.Services
 {
 	public class AuthService : IAuthService
 	{
-		private readonly string IncorrectCredentialsErrorMessage = "The username or password provided are incorrect!";
+		private readonly string IncorrectCredentialsErrorMessage = "The email or password provided are incorrect!";
 
 		private readonly string NotStudentErrorMessage = "The following action can only be performed by a student!";
 		private readonly string NotTeacherErrorMessage = "The following action can only be performed by a teacher!";
