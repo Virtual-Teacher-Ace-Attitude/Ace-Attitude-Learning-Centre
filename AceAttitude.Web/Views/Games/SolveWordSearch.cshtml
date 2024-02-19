@@ -1,0 +1,40 @@
+﻿@model char[,]
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Word Search Grid</title>
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Adjust column width as needed */
+            gap: 2px; /* Adjust gap between squares */
+        }
+
+        .square {
+            width: 50px; /* Adjust square size as needed */
+            height: 50px; /* Adjust square size as needed */
+            background-color: #ffffff; /* Change background color as needed */
+            border: 1px solid #000000; /* Change border color as needed */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    </style>
+</head>
+<body>
+    <div class="grid">
+        @for (int i = 0; i < Model.GetLength(0); i++)
+        {
+            <div class="row">
+                @for (int j = 0; j < Model.GetLength(1); j++)
+                {
+                    <div class="square">@Model[i, j]</div>
+                }
+            </div>
+        }
+    </div>
+</body>
+</html>

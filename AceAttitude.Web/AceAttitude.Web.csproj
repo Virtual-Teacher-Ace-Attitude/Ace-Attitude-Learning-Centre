@@ -37,6 +37,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\AceAttitude.Data\AceAttitude.Data.csproj" />
+    <ProjectReference Include="..\AceAttitude.Services.Games\AceAttitude.Services.Games.csproj" />
     <ProjectReference Include="..\AceAttitude.Services.Mapping\AceAttitude.Services.Mapping.csproj" />
     <ProjectReference Include="..\AceAttitude.Services\AceAttitude.Services.csproj" />
     <ProjectReference Include="..\AceAttitude.Web.DTO\AceAttitude.Web.DTO.csproj" />

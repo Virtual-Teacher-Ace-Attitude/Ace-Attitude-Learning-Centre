@@ -8,7 +8,7 @@ using AceAttitude.Data.Repositories.Contracts;
 
 using AceAttitude.Services;
 using AceAttitude.Services.Contracts;
-
+using AceAttitude.Services.Games;
 using AceAttitude.Services.Mapping;
 using AceAttitude.Services.Mapping.Contracts;
 
@@ -82,6 +82,9 @@ namespace AceAttitude.Web
 
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<ICommentService, CommentService>();
+
+            builder.Services.AddSingleton<WordSearchGenerator>();
+            builder.Services.AddSingleton<MemoryGameGenerator>();
 
             var app = builder.Build();
 

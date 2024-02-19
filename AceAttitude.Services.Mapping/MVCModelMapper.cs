@@ -43,6 +43,8 @@ namespace AceAttitude.Services.Mapping
             {
                 Title = courseViewModel.Title,
                 Description = courseViewModel.Description,
+                Level = parseHelper.ParseLevel(courseViewModel.Level),
+                AgeGroup = parseHelper.ParseAge(courseViewModel.AgeGroup)
             };
         }
 
