@@ -2,4 +2,21 @@
 @using AceAttitude.Data.Models
 @model List<string>
 
-<body></body>
+<body>
+    @for(int i = 1; i <= Model.Count; i++ )
+    {
+        string imagePath = i.ToString() + ".jpg";
+        <div class="card mb-3" style="max-width: 540px;">
+            <div class="row g-0">
+                <div class="col-md-4">
+                    <img src="~/images/WordSearches/@imagePath" class="img-fluid rounded-start" alt="...">
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">@Model[i-1].ToUpper()</h5>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</body>

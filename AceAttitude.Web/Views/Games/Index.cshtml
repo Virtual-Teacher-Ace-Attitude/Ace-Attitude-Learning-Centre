@@ -1,4 +1,7 @@
-﻿<body>
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using AceAttitude.Data.Models
+
+<body>
     <div style="display: flex; justify-content: center;">
         <div class="card" style="width: 20rem; margin-right: 40px;">
             <img src="~/images/wordsearch.jpg" class="card-img-top" alt="...">
@@ -7,7 +10,7 @@
                 <p class="card-text">This is a word search puzzle game. Solve one of our classic puzzles, or create your own.</p>
                 <div class="mt-auto">
                     <a asp-controller="Games" asp-action="CreateWordSearch" class="btn btn-primary">Create</a>
-                    <a href="#" class="btn btn-primary">Play</a>
+                    <a asp-controller="Games" asp-action="GetWordSearches" class="btn btn-primary">Play</a>
                 </div>
             </div>
         </div>
@@ -19,7 +22,7 @@
                 <p class="card-text">This is a pairs matching memory game. Solve one of our classic matching games, or create your own.</p>
                 <div class="mt-auto">
                     <a asp-controller="Games" asp-action="CreateWordSearch" class="btn btn-primary">Create</a>
-                    <a href="#" class="btn btn-primary">Play</a>
+                    <a asp-controller="Games" asp-action="GetWordSearches" class="btn btn-primary">Play</a>
                 </div>
             </div>
         </div>
