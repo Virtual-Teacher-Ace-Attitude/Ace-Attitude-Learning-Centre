@@ -22,7 +22,6 @@
     }
 
     var picturePath = ViewData["PicturePath"] as string;
-    string test = "";
 }
 
 <!DOCTYPE html>
@@ -45,10 +44,10 @@
             max-width: 600px; /* Limit width to provide a centered grid */
         }
 
-        .profile-icon {
-            width: 100px;
-            height: 100px;
-            margin-top: 20px;
+        /* Larger profile picture on details page */
+        .profile-icon-large {
+            width: 100px; /* Adjust as needed */
+            height: 100px; /* Adjust as needed */
             border-radius: 50%;
             border: 3px solid #fff; /* White border around the profile picture */
         }
@@ -70,7 +69,7 @@
 
     <div class="container">
         <a href="#" id="profile-picture-link">
-            <img src="@Url.Content(picturePath)" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-picture">
+            <img src="@Url.Content(picturePath)" alt="Profile" class="rounded-circle img-thumbnail profile-icon-large" id="profile-picture">
         </a>
         <div class="user-info">
             @if ((bool)ViewData["IsStudent"])

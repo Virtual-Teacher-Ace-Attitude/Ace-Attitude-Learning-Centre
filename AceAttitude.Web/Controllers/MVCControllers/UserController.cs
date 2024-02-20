@@ -15,13 +15,19 @@ namespace AceAttitude.Web.Controllers.MVCControllers
     {
         private readonly IUserService userService;
         private readonly IAuthService authService;
+        private readonly ICourseService courseService;
+
         private readonly IMVCModelMapper modelMapper;
+
         private readonly IWebHostEnvironment webHostEnvironment;
 
-        public UserController(IUserService userService, IAuthService authService, IMVCModelMapper modelMapper, IWebHostEnvironment webHostEnvironment)
+        public UserController(IUserService userService, IAuthService authService, ICourseService courseService, 
+            IMVCModelMapper modelMapper, IWebHostEnvironment webHostEnvironment)
         {
             this.userService = userService;
             this.authService = authService;
+            this.courseService = courseService;
+
             this.modelMapper = modelMapper;
             this.webHostEnvironment = webHostEnvironment;
         }
@@ -216,6 +222,27 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 ViewData["ErrorMessage"] = e.Message;
 
                 return View("Error");
+            }
+        }
+
+        [HttpGet]
+        public IActionResult TeacherCourses([FromRoute] string id)
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                List<Course> courses = courseService.GetAllTeacherCourses(id, requestUser).ToList();
+                return View(courses);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
             }
         }
 

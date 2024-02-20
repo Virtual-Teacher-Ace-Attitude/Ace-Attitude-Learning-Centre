@@ -24,5 +24,7 @@ namespace AceAttitude.Services.Contracts
         public ICollection<Student> GetAppliedStudents(int courseId, Teacher teacher);
 
         public Student AdmitStudent(int courseId, string studentId, Teacher teacher);
+
+        public ICollection<Course> GetAllTeacherCourses(string id, ApplicationUser requestUser);
     }
 }

@@ -1,10 +1,17 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @using AceAttitude.Data.Models
 @model List<Course>
+@inject IAuthService AuthService
 
 @{
     ViewData["Title"] = "Course Details";
     Layout = "_Layout";
+
+    ViewData["IsAuthenticated"] = Context.Session.Keys.Contains("CurrentUser");
+
+    var currentUser = Context.Session.Keys.Contains("CurrentUser") ? AuthService.CurrentUser : null;
+    ViewData["IsAdmin"] = currentUser?.UserType == UserType.Admin;
+    ViewData["IsTeacher"] = currentUser?.UserType == UserType.Teacher;
 }
 
 <!DOCTYPE html>
@@ -13,13 +20,25 @@
     <meta charset="utf-8" />
     <title>Ace Attitude - Courses</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
+    <style>
+        .date {
+            font-size: 14px;
+            color: #333;
+        }
 
-    <p>
-        <a asp-controller="Course" asp-action="Create" class="nav">Create a new course</a>
-    </p>
+            .date i {
+                margin-right: 5px; /* Add space between the icon and the date */
+            }
+
+        .starting-date {
+            font-size: 14px;
+            color: #333;
+        }
+    </style>
 
 @*    <div class="btn-group" style="margin-bottom: 10px;">
         <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -48,33 +67,90 @@
 
 
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Title</th>
-                <th scope="col">Teacher</th>
-                <th scope="col">Level</th>
-                <th scope="col">Age Group</th>
-                <th scope="col">Starting Date</th>
-                <th scope="col">Rating</th>
-            </tr>
-        </thead>
-        <tbody>
-            @for (int i = 0; i < this.Model.Count; i++)
+    <div class="container">
+        <div class="row">
+
+            @if (Model.Count == 0)
             {
-                <tr>
-                    <th scope="row">@(i + 1)</th>
-                    <td><a class="nav-link" asp-controller ="Course" asp-action="Details" asp-route-id="@Model[i].Id">@Model[i].Title</a></td>
-                    <td>@Model[i].Teacher.User.FirstName @Model[i].Teacher.User.LastName</td> 
-                    <td>@Model[i].Level</td>
-                    <td>@Model[i].AgeGroup</td>
-                    <td>@Model[i].StartingDate</td>
-                    <td>@(Model[i].Rating() >= 0 ? Model[i].Rating().ToString("F2") : "N/A")</td>
-                </tr>
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
+                            <div class="card text-center">
+                                <div class="card-body">
+                                    <h3 class="card-title">No courses available</h3>
+                                    <p class="card-text" style="font-size: 1.2rem;">
+                                        There are currently no courses that have been created for this category...
+                                    </p>
+                                </div>
+                            </div>
+
+                            @if ((bool)ViewData["IsTeacher"] || (bool)ViewData["IsAdmin"])
+                            {
+                                <p style="margin-top: 20px;" class="text-center">
+                                    <a asp-controller="Course" asp-action="Create" class="btn btn-primary" style="padding: 10px 20px;">Create a new course</a>
+                                </p>
+                            }
+                        </div>
+                    </div>
+                </div>
             }
-        </tbody>
-    </table>
+            else
+            {
+                @if ((bool)ViewData["IsTeacher"] || (bool)ViewData["IsAdmin"])
+                {
+                    <p style="margin-top: 20px;">
+                        <a asp-controller="Course" asp-action="Create" class="btn btn-primary" style="padding: 10px 20px;">Create a new course</a>
+                    </p>
+                }
+
+                @foreach (var course in Model)
+                {
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="~/images/wordsearch.jpg" class="card-img-top" alt="Course Image">
+                            <div class="card-body">
+                                <h5 class="card-title">@course.Title</h5>
+                                <p class="card-text">@course.Description</p>
+                                <ul class="list-unstyled">
+                                    <li><strong>Teacher:</strong> @course.Teacher.User.FirstName @course.Teacher.User.LastName</li>
+                                    <li><strong>Level:</strong> @course.Level</li>
+                                    <li><strong>Age Group:</strong> @course.AgeGroup</li>
+                                    <li><strong>Starting Date:</strong> <span class="starting-date">@course.StartingDate</span></li>
+                                    <li><strong>Rating:</strong> @(course.Rating() >= 0 ? course.Rating().ToString("F2") : "N/A")</li>
+                                </ul>
+                                <div class="d-flex justify-content-between mt-auto">
+                                    <!-- Flex container for buttons -->
+                                    <a asp-controller="Course" asp-action="Details" asp-route-id="@course.Id" class="btn btn-link text-dark">
+                                        <i class="fas fa-info-circle"></i> Details
+                                    </a>
+                                    @if ((bool)ViewData["IsAuthenticated"])
+                                    {
+                                        @if (course.TeacherId == currentUser.Id || (bool)ViewData["IsAdmin"])
+                                        {
+                                            <div class="d-flex">
+                                                <!-- Flex container for edit and delete buttons -->
+                                                <div class="mt-auto mr-2">
+                                                    <!-- Margin right to separate icons -->
+                                                    <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-link text-warning">
+                                                        <i class="fas fa-pencil-alt"></i> Edit
+                                                    </a>
+                                                </div>
+                                                <div class="mt-auto">
+                                                    <a asp-controller="Course" asp-action="Delete" asp-route-id="@course.Id" class="btn btn-link text-danger">
+                                                        <i class="fas fa-trash-alt"></i> Delete
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
     
 
 
