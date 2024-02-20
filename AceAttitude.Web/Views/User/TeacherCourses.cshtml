@@ -20,6 +20,7 @@
     <meta charset="utf-8" />
     <title>Ace Attitude - Courses</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
 </head>
 <body>
 
@@ -36,38 +37,60 @@
 
     <div class="container">
         <div class="row">
-            @foreach (var course in Model)
-            {
-                <div class="col-md-6 mb-4">
+            <div class="col-md-12 mb-4 text-center">
+                <h2>My Courses</h2> <!-- This could be your overall title, if needed -->
+            </div>
+        </div>
+        @foreach (var course in Model)
+        {
+            <div class="row">
+                <div class="col-md-6 mb-4 offset-md-3">
+                    <!-- Offset to center the card -->
                     <div class="card">
                         <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center">
+                            <h5 class="card-title mb-2 text-center">@course.Title</h5>
+                            <div class="d-flex justify-content-between">
                                 <div>
-                                    <h5 class="card-title mb-2">@course.Title</h5>
                                     <p class="mb-0"><strong>Level:</strong> @course.Level</p>
-                                    <p class="mb-0"><strong>Age Group:</strong> @course.AgeGroup</p>
-                                </div>
-                                <div class="text-center">
                                     <p class="mb-0 date">
                                         <i class="far fa-calendar-alt"></i> @course.StartingDate
                                     </p>
-                                    <p class="mb-0"><strong>Rating:</strong> @(course.Rating() >= 0 ? course.Rating().ToString("F2") : "N/A")</p>
                                 </div>
                                 <div>
-                                    <a asp-controller="Course" asp-action="Details" asp-route-id="@course.Id" class="btn btn-primary">Details</a>
+                                    <p class="mb-0"><strong>Age Group:</strong> @course.AgeGroup</p>
+                                    <p class="mb-0"><strong>Rating:</strong> @(course.Rating() >= 0 ? course.Rating().ToString("F2") : "N/A")</p>
                                 </div>
-                                <div class="mt-auto">
-                                    <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-primary">Edit</a>
-                                </div>
-                                <div class="mt-auto">
-                                    <a asp-controller="Course" asp-action="Delete" asp-route-id="@course.Id" class="btn btn-primary">Delete</a>
+                            </div>
+                            <div class="text-center">
+                                <div class="d-flex justify-content-center">
+                                    <a asp-controller="Course" asp-action="Details" asp-route-id="@course.Id" class="btn btn-link text-dark">
+                                        <i class="fas fa-info-circle"></i> Details
+                                    </a>
+                                    <div class="mt-auto mr-2">
+                                        <a asp-controller="Course" asp-action="Edit" asp-route-id="@course.Id" class="btn btn-link text-warning">
+                                            <i class="fas fa-pencil-alt"></i> Edit
+                                        </a>
+                                    </div>
+                                    <div class="mt-auto mr-2">
+                                        <a asp-controller="Course" asp-action="Delete" asp-route-id="@course.Id" class="btn btn-link text-danger">
+                                            <i class="fas fa-trash-alt"></i> Delete
+                                        </a>
+                                    </div>
+                                    @if (course.IsDraft)
+                                    {
+                                        <div class="mt-auto mr-2">
+                                            <a asp-controller="Course" asp-action="ReleaseCourse" asp-route-id="@course.Id" class="btn btn-link text-primary">
+                                                <i class="fas fa-pencil-ruler text-primary"></i> Release
+                                            </a>
+                                        </div>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
     </div>
 
 </body>

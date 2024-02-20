@@ -4,6 +4,7 @@ using AceAttitude.Data.Models.Misc;
 using AceAttitude.Services;
 using AceAttitude.Services.Contracts;
 using AceAttitude.Services.Mapping.Contracts;
+using AceAttitude.Web.DTO.Response;
 using AceAttitude.Web.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -107,7 +108,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
-        [HttpDelete("{id}/delete")]
+        [HttpPost("{id}/delete")]
         public IActionResult DeleteConfirmed([FromRoute] int id)
         {
             try
@@ -121,6 +122,42 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             catch (EntityNotFoundException ex)
             {
                 Response.StatusCode = StatusCodes.Status404NotFound;
+                ViewData["ErrorMessage"] = ex.Message;
+
+                return View("Error");
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ReleaseCourse(int courseId)
+        {
+            try
+            {
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                Teacher teacher = this.userService.GetTeacherById(requestUser.Id);
+
+                Course releasedCourse = courseService.ReleaseCourse(courseId, teacher);
+
+                return RedirectToAction("Details", "Course", new { id = releasedCourse.Id });
+            }
+            catch (EntityNotFoundException ex)
+            {
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                ViewData["ErrorMessage"] = ex.Message;
+
+                return View("Error");
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                Response.StatusCode = StatusCodes.Status401Unauthorized;
+                ViewData["ErrorMessage"] = ex.Message;
+
+                return View("Error");
+            }
+            catch (InvalidUserInputException ex)
+            {
+                Response.StatusCode = StatusCodes.Status400BadRequest;
                 ViewData["ErrorMessage"] = ex.Message;
 
                 return View("Error");
