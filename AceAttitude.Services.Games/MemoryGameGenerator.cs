@@ -12,7 +12,19 @@
                         { "have", "had" },
                         { "make", "made" },
                         { "sing", "sang" },
-                        { "cut", "cut" } 
+                        { "cut", "cut" }
+                    }
+                },
+
+                            {
+                    "Ordinal Numbers",
+                    new Dictionary<string, string>()
+                    {
+                        { "one", "first" },
+                        { "two", "second" },
+                        { "three", "third" },
+                        { "four", "fourth" },
+                        { "five", "fifth" }
                     }
                 }
             };
