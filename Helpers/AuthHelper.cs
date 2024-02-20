@@ -54,5 +54,13 @@ namespace AceAttitude.Common.Helpers
                 throw new UnauthorizedOperationException(message);
             }
         }
+
+        public void EnsureIdMatching(string id, ApplicationUser requestUser, string message)
+        {
+            if (requestUser.Id != id)
+            {
+                throw new UnauthorizedOperationException(message);
+            }
+        }
     }
 }

@@ -28,10 +28,18 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>@ViewData["Title"] - Ace Attitude Learning Centre</title>
+   
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    
     <link rel="stylesheet" href="~/css/site.css" />
+   
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
+    
+    <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
 
     <!-- Styles for the registration modal -->
     <style>
@@ -67,8 +75,8 @@
 
         /* Profile picture icon */
         .profile-icon {
-            width: 30px;
-            height: 30px;
+            width: 30px; /* Adjust as needed */
+            height: 30px; /* Adjust as needed */
             margin-top: 4px;
         }
 
@@ -117,6 +125,30 @@
         .dropdown-box a:hover {
             background-color: #f0f0f0;
         }
+
+        .highlighted {
+            border: 2px solid #007bff !important;
+            transform: scale(1.1);
+        }
+    </style>
+
+    <style>
+        /* Apply the font to the navbar */
+        .custom-navbar .navbar-nav .nav-link,
+        .custom-navbar .navbar-nav .btn {
+            color: #333; /* Choose your desired color */
+            font-family: 'Roboto', sans-serif; /* or 'Montserrat', sans-serif; */
+            font-weight: 500; /* Choose font weight (400 for normal, 500 for medium) */
+            font-size: 16px; /* Choose font size */
+            /* Add any additional styling here */
+        }
+
+            /* Apply hover effect */
+            .custom-navbar .navbar-nav .nav-link:hover,
+            .custom-navbar .navbar-nav .btn:hover {
+                color: #555; /* Choose your desired hover color */
+                /* Add any additional hover styling here */
+            }
     </style>
 
     @RenderSection("Styles", required: false)
@@ -140,17 +172,37 @@
                             </div>
                         }
                     </li>
-                <li class="nav-item">
-                    <a class="btn" href="/home/about">About</a>
-                </li>
+                    <li class="nav-item">
+                        <a class="btn" href="/home/about">
+                            <i class="fas fa-info-circle"></i> About
+                        </a>
+                    </li>
 
-                <li class="nav-item">
-                    <a asp-controller="Games" asp-action="Index"  class="btn">Games</a>
-                </li>
+                    <!-- Games Button -->
+                    <li class="nav-item">
+                        <a asp-controller="Games" asp-action="Index" class="nav-link">
+                            <i class="fas fa-gamepad"></i> Games
+                        </a>
+                    </li>
+
+                    <!-- Age-Group Button with Dropdown -->
+                    <li class="nav-item" style="position: relative;">
+                        <a class="nav-link" href="#" id="ageGroupButton">
+                            <i class="fas fa-child"></i> Age-Group
+                        </a>
+                        <div class="dropdown-box" id="age-group-options-box">
+                            <!-- List of age-groups -->
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Kids" class="btn">Kids</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Teens" class="btn">Teens</a>
+                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Adults" class="btn">Adults</a>
+                        </div>
+                    </li>
 
                     <!-- Level Button with Dropdown -->
                     <li class="nav-item" style="position: relative;">
-                        <a class="nav-link" href="#" id="levelButton">Level</a>
+                        <a class="nav-link" href="#" id="levelButton">
+                            <i class="fas fa-layer-group"></i> Level
+                        </a>
                         <div class="dropdown-box" id="level-options-box">
                             <!-- List of levels -->
                             <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="A1" class="btn">A1</a>
@@ -159,17 +211,6 @@
                             <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="B2" class="btn">B2</a>
                             <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="C1" class="btn">C1</a>
                             <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="C2" class="btn">C2</a>
-                        </div>
-                    </li>
-
-                    <!-- Age-Group Button with Dropdown -->
-                    <li class="nav-item" style="position: relative;">
-                        <a class="nav-link" href="#" id="ageGroupButton">Age-Group</a>
-                        <div class="dropdown-box" id="age-group-options-box">
-                            <!-- List of age-groups -->
-                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Kids" class="btn">Kids</a>
-                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Teens" class="btn">Teens</a>
-                            <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Adults" class="btn">Adults</a>
                         </div>
                     </li>
 
@@ -186,11 +227,11 @@
                             }
                             @if ((bool)ViewData["IsTeacher"])
                             {
-                                <a href="#" class="text-danger">My Courses</a>
+                            <a asp-controller="User" asp-action="TeacherCourses" asp-route-id="@currentUser.Id" class="text-primary">My Courses</a>
                             }
                             @if ((bool)ViewData["IsAdmin"])
                             {
-                                <a href="#" class="text-danger">My Courses</a>
+                                    <a asp-controller="User" asp-action="TeacherCourses" asp-route-id="@currentUser.Id" class="text-primary">My Courses</a>
                                 <a href="#" class="text-danger">Approve Users</a>
                                 <a href="#" class="text-danger">Modify Users</a>
                             }
@@ -198,9 +239,11 @@
                         </div>
                     </li>
                 }
-                <li class="nav-item ml-auto">
-                    <a class="btn" href="/api/swagger/index.html">Developer API</a>
-                </li>
+                    <li class="nav-item ml-auto">
+                        <a class="btn" href="/api/swagger/index.html">
+                            <i class="fas fa-code"></i> Developer API
+                        </a>
+                    </li>
             </ul>
         </div>
     </nav>
@@ -299,7 +342,20 @@
             // Profile Picture Functionality
             $('#profile-icon').click(function () {
                 $(this).toggleClass('profile-icon-clicked');
-                $('#profile-options-box').toggle();
+                $('.profile-options-box').toggle(); // Corrected selector
+
+                // Toggle highlighted class
+                if ($(this).hasClass('profile-icon')) 
+                {
+                    if($(this).hasClass('highlighted'))
+                    {
+                        $(this).removeClass('highlighted');
+                    }
+                    else
+                    {
+                        $(this).addClass('highlighted');
+                    }
+                }
             });
         });
     </script>

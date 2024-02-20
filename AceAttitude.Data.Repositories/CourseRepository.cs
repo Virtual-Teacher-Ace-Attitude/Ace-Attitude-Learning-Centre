@@ -74,6 +74,18 @@ namespace AceAttitude.Data.Repositories
             return this.userRepository.GetStudentById(studentId);
         }
 
+        public ICollection<Course> GetAllTeacherCourses(string id)
+        {
+            ICollection<Course> courses = context.Courses
+                .Include(course => course.Ratings)
+                .Include(course => course.Teacher)
+                .ThenInclude(teacher => teacher.User)
+                .Where(course => course.TeacherId == id && course.DeletedOn.HasValue == false)
+                .ToList();
+
+            return courses;
+        }
+
         public ICollection<Student> GetAppliedStudents(int courseId)
         {
             var appliedStudents = context.Students

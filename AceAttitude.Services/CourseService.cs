@@ -12,6 +12,8 @@ namespace AceAttitude.Services
 
         private readonly IAuthHelper authHelper;
 
+        private const string NotAccountOwnerErrorMessage = "Unable to continue, account owner required.";
+
         public CourseService(ICourseRepository courseRepository, IAuthHelper authHelper, IUserRepository userRepository)
         {
             this.courseRepository = courseRepository;
@@ -81,5 +83,11 @@ namespace AceAttitude.Services
             return this.courseRepository.AdmitStudent(courseId, studentId);
         }
 
+        public ICollection<Course> GetAllTeacherCourses(string id, ApplicationUser requestUser)
+        {
+            authHelper.EnsureIdMatchingOrAdmin(id, requestUser, NotAccountOwnerErrorMessage);
+
+            return this.courseRepository.GetAllTeacherCourses(id);
+        }
     }
 }
