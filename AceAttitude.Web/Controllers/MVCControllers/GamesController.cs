@@ -68,10 +68,11 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         [HttpGet("wordSearches/{title}")]
         public IActionResult SolveWordSearch([FromRoute] string title) 
         {
+            List<string> words = wordSearchGenerator.getWordList(title);
+            char[,] wordSearch = wordSearchGenerator.GenerateWordSearch(words);
+            Tuple<char[,], List<string>> game = new Tuple<char[,], List<string>>(wordSearch, words);
 
-            char[,] wordSearch = wordSearchGenerator.GenerateWordSearch(wordSearchGenerator.getWordList(title));
-
-            return View(wordSearch);
+            return View(game);
         }
 
         [HttpGet("memory/{title}")]

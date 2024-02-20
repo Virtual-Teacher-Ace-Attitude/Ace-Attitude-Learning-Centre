@@ -11,11 +11,15 @@ namespace AceAttitude.Services.Games
         private const string CapitalLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
         private static Dictionary<string, List<string>> wordLists = new Dictionary<string, List<string>>()
-        {
-              { "colors", new List<string> { "black", "blue", "pink", "green", "red", "yellow", "orange", "purple", "white" } },
-                { "animals", new List<string> { "dog", "cat", "elephant", "lion", "tiger", "bear", "monkey", "giraffe", "zebra" } },
-                 { "places in town", new List<string> { "school", "hospital", "library", "park", "restaurant", "bank", "pharmacy", "postоffice", "cinema" } },
-        };
+{
+    { "colors", new List<string> { "black", "blue", "pink", "green", "red", "yellow", "orange", "purple", "white" } },
+    { "animals", new List<string> { "dog", "cat", "elephant", "lion", "tiger", "bear", "monkey", "giraffe", "zebra" } },
+    { "places in town", new List<string> { "school", "hospital", "library", "park", "restaurant", "bank", "pharmacy", "market", "cinema" } },
+    { "food", new List<string> { "apple", "banana", "pizza", "burger", "salad", "cake", "pasta", "chocolate", "sandwich" } },
+    { "actions", new List<string> { "run", "jump", "swim", "dance", "sing", "play", "climb", "laugh", "sleep" } },
+    { "places in nature", new List<string> { "forest", "mountain", "beach", "river", "lake", "waterfall", "cave", "valley", "desert" } }
+};
+
 
         public WordSearchGenerator() 
         {
