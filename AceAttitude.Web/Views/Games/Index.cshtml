@@ -9,7 +9,7 @@
                 <h5 class="card-title">Word Search</h5>
                 <p class="card-text">This is a word search puzzle game. Solve one of our classic puzzles, or create your own.</p>
                 <div class="mt-auto">
-                    <a asp-controller="Games" asp-action="CreateWordSearch" class="btn btn-primary">Create</a>
+                    <a asp-controller="Games" asp-action="CreateWordSearch" method="get" class="btn btn-primary">Create</a>
                     <a asp-controller="Games" asp-action="GetWordSearches" class="btn btn-primary">Play</a>
                 </div>
             </div>
@@ -21,8 +21,8 @@
                 <h5 class="card-title">Memory</h5>
                 <p class="card-text">This is a pairs matching memory game. Solve one of our classic matching games, or create your own.</p>
                 <div class="mt-auto">
-                    <a asp-controller="Games" asp-action="CreateWordSearch" class="btn btn-primary">Create</a>
-                    <a asp-controller="Games" asp-action="GetWordSearches" class="btn btn-primary">Play</a>
+                    <a asp-controller="Games" asp-action="CreateMemoryGame" method="get" class="btn btn-primary">Create</a>
+                    <a asp-controller="Games" asp-action="GetMemoryGames" class="btn btn-primary">Play</a>
                 </div>
             </div>
         </div>

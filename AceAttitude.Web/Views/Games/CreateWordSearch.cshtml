@@ -1,0 +1,22 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using AceAttitude.Data.Models
+@model WordSearchViewModel
+
+<body>
+	<h2>Create and play a new word search:</h2>
+	<form asp-controller="Games" asp-action="CreateWordSearch" method="post">
+		<div class="mb-3">
+			<label asp-for="Title" class="form-label">Title</label>
+			<input asp-for="Title" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Course Title">
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</div>
+		<div class="mb-3">
+			<label asp-for="Words" class="form-label">Words (Comma-separated): </label>
+			<textarea asp-for="Words" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+			<span asp-validation-for="Words" class="text-danger"></span>
+		</div>
+
+		<input type="submit" value="Create Word Search" class="btn-primary" />
+	</form>
+
+</body>

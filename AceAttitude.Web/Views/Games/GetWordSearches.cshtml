@@ -2,21 +2,33 @@
 @using AceAttitude.Data.Models
 @model List<string>
 
+<style>
+    /* Custom styles for button names */
+    .button-name {
+        font-size: 18px;
+        font-weight: bold;
+        color: #333; /* Change to your desired color */
+        /* Add any other custom styles as needed */
+    }
+</style>
+
 <body>
-    @for(int i = 1; i <= Model.Count; i++ )
+    @for (int i = 1; i <= Model.Count; i++)
     {
         string imagePath = i.ToString() + ".jpg";
-        <div class="card mb-3" style="max-width: 540px;">
-            <div class="row g-0">
-                <div class="col-md-4">
-                    <img src="~/images/WordSearches/@imagePath" class="img-fluid rounded-start" alt="...">
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">@Model[i-1].ToUpper()</h5>
+        <a asp-controller="Games" asp-action="SolveWordSearch" asp-route-title=@Model[i-1] class="card-link">
+            <div class="card mb-3" style="max-width: 540px;">
+                <div class="row g-0">
+                    <div class="col-md-4">
+                        <img src="~/images/WordSearches/@imagePath" class="img-fluid rounded-start" alt="...">
+                    </div>
+                    <div class="col-md-8">
+                        <div class="card-body d-flex align-items-center">
+                            <h5 class="card-title text-center button-name">@Model[i-1].ToUpper()</h5>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
+        </a>
     }
 </body>
