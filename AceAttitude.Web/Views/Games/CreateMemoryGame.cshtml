@@ -1,5 +1,27 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using AceAttitude.Data.Models
+@model MemoryGameViewModel
+
+<body>
+	<h2>Create and play a new memory game:</h2>
+	<form asp-controller="Games" asp-action="CreateMemoryGame" method="post">
+		<div class="mb-3">
+			<label asp-for="Title" class="form-label">Title</label>
+			<input asp-for="Title" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Game title...">
+			<span asp-validation-for="Title" class="text-danger"></span>
+		</div>
+		<div class="mb-3">
+			<label asp-for="Pairs1" class="form-label">First Word Set (Comma-separated): </label>
+			<textarea asp-for="Pairs1" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+			<span asp-validation-for="Pairs1" class="text-danger"></span>
+		</div>
+		<div class="mb-3">
+			<label asp-for="Pairs2" class="form-label">Second Word Set (Comma-separated): </label>
+			<textarea asp-for="Pairs2" class="form-control" id="exampleFormControlTextarea1" rows="10"></textarea>
+			<span asp-validation-for="Pairs2" class="text-danger"></span>
+		</div>
+
+		<input type="submit" value="Create Memory Game" class="btn-primary" />
+	</form>
+
+</body>

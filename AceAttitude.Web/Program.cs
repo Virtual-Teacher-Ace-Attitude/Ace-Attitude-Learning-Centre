@@ -83,8 +83,8 @@ namespace AceAttitude.Web
             builder.Services.AddScoped<ICommentRepository, CommentRepository>();
             builder.Services.AddScoped<ICommentService, CommentService>();
 
-            builder.Services.AddSingleton<WordSearchGenerator>();
-            builder.Services.AddSingleton<MemoryGameGenerator>();
+            builder.Services.AddScoped<WordSearchGenerator>();
+            builder.Services.AddScoped<MemoryGameGenerator>();
 
             var app = builder.Build();
 

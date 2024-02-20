@@ -10,11 +10,11 @@ namespace AceAttitude.Services.Games
 
         private const string CapitalLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
-        private Dictionary<string, List<string>> wordLists = new Dictionary<string, List<string>>()
+        private static Dictionary<string, List<string>> wordLists = new Dictionary<string, List<string>>()
         {
               { "colors", new List<string> { "black", "blue", "pink", "green", "red", "yellow", "orange", "purple", "white" } },
                 { "animals", new List<string> { "dog", "cat", "elephant", "lion", "tiger", "bear", "monkey", "giraffe", "zebra" } },
-                 { "places in town", new List<string> { "school", "hospital", "library", "park", "restaurant", "bank", "pharmacy", "postOffice", "cinema" } },
+                 { "places in town", new List<string> { "school", "hospital", "library", "park", "restaurant", "bank", "pharmacy", "postоffice", "cinema" } },
         };
 
         public WordSearchGenerator() 
@@ -207,23 +207,10 @@ namespace AceAttitude.Services.Games
             }
         }
 
-        public void PrintBoard()
-        {
-            int rows = board.GetLength(0);
-            int cols = board.GetLength(1);
-            for (int i = 0; i < rows; i++)
-            {
-                for (int j = 0; j < cols; j++)
-                {
-                    Console.Write(this.board[i, j] + " ");
-                }
-                Console.WriteLine();
-            }
-        }
 
         public List<string> getWordList(string title)
         {
-            if (!this.wordLists.ContainsKey(title))
+            if (!wordLists.ContainsKey(title))
             {
                 throw new InvalidUserInputException($"The word list '{title}' is currently not in the game.");
             }
@@ -232,16 +219,16 @@ namespace AceAttitude.Services.Games
 
         public List<string> getWordSets()
         {
-            return this.wordLists.Keys.ToList();
+            return wordLists.Keys.ToList();
         }
 
         public void addWordList(string title, List<string> wordList)
         {
-            if (this.wordLists.ContainsKey(title))
+            if (wordLists.ContainsKey(title))
             {
                 throw new InvalidUserInputException($"There is already a word search with the title '{title}'.");
             }
-            this.wordLists.Add(title, wordList);
+            wordLists.Add(title, wordList);
         }
     }
 }

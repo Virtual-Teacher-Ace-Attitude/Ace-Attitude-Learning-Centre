@@ -1,5 +1,113 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
+﻿@model Dictionary<string, string>
+
 @{
+    Random rnd = new Random();
+    var shuffledPairs = Model.OrderBy(x => rnd.Next()).ToList();
 }
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memory Pairs Game</title>
+    <style>
+        /* Styles for the grid and cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr); /* Adjust number of columns */
+            gap: 10px; /* Adjust gap between cards */
+        }
+
+        .card {
+            width: 100px; /* Adjust card size as needed */
+            height: 100px; /* Adjust card size as needed */
+            background-color: #ffffff; /* Change background color as needed */
+            border: 1px solid #000000; /* Change border color as needed */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer; /* Add cursor pointer to indicate clickability */
+            font-size: 16px; /* Adjust font size as needed */
+        }
+
+            .card.matched {
+                background-color: green; /* Highlight matched cards in green */
+            }
+
+            .card.not-matched {
+                background-color: red; /* Flash unmatched cards in red */
+            }
+    </style>
+</head>
+<body>
+    <div class="grid">
+        @foreach (var pair in shuffledPairs)
+        {
+            <div class="card" data-key="@pair.Key" data-value="@pair.Value">?</div>
+        }
+        @foreach (var pair in shuffledPairs)
+        {
+            <div class="card" data-key="@pair.Key" data-value="@pair.Value">?</div>
+        }
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+        let selectedCard = null;
+
+        cards.forEach(card => {
+            card.addEventListener('click', function () {
+                selectCard(this);
+            });
+        });
+
+        function selectCard(card) {
+            if (selectedCard === null) {
+                selectedCard = card;
+                card.textContent = card.dataset.key; // Show the word on the card
+                card.classList.add('matched'); // Highlight selected card in green
+            } else {
+                const key = card.dataset.key;
+                const value = card.dataset.value;
+                const selectedKey = selectedCard.dataset.key;
+                const selectedValue = selectedCard.dataset.value;
+
+                if (key === selectedKey && value === selectedValue) {
+                    card.textContent = card.dataset.value; // Show the word on the card
+                    card.classList.add('matched'); // Highlight matched card in green
+                    selectedCard = null;
+                } else {
+                    card.textContent = '?'; // Hide the word on the card
+                    card.classList.add('not-matched'); // Flash unmatched card in red
+                    setTimeout(() => {
+                        card.textContent = '?'; // Hide the word after a brief delay
+                        selectedCard.textContent = '?'; // Hide the word on the previously selected card
+                        card.classList.remove('not-matched'); // Remove flashing after a brief delay
+                        selectedCard.classList.remove('matched'); // Unhighlight previously selected card
+                        selectedCard = null;
+                    }, 500); // Adjust flashing duration as needed (500ms = half a second)
+                }
+            }
+        }
+    </script>
+</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

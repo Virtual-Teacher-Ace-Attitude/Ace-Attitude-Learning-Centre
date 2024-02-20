@@ -9,7 +9,7 @@
     <style>
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(50px, 1fr)); /* Adjust column width as needed */
+            grid-template-columns: repeat(@Model.GetLength(1), 50px); /* Set column width based on the number of columns */
             gap: 2px; /* Adjust gap between squares */
         }
 
@@ -21,6 +21,7 @@
             display: flex;
             justify-content: center;
             align-items: center;
+            cursor: pointer; /* Add cursor pointer to indicate clickability */
         }
     </style>
 </head>
@@ -28,13 +29,38 @@
     <div class="grid">
         @for (int i = 0; i < Model.GetLength(0); i++)
         {
-            <div class="row">
-                @for (int j = 0; j < Model.GetLength(1); j++)
-                {
-                    <div class="square">@Model[i, j]</div>
-                }
-            </div>
+            @for (int j = 0; j < Model.GetLength(1); j++)
+            {
+                char letter = Model[i, j];
+                string letterClass = char.IsUpper(letter) ? "not-word" : "word"; /* Determine CSS class based on whether letter is part of a word */
+                <div class="square @letterClass" data-letter="@letter">@letter</div>
+            }
         }
     </div>
+
+    <script>
+        document.querySelectorAll('.square').forEach(square => {
+            square.addEventListener('click', function () {
+                if (this.classList.contains('not-word')) {
+                    this.style.backgroundColor = 'red'; // Flash red for letters not part of a word
+                    setTimeout(() => {
+                        this.style.backgroundColor = '#ffffff'; // Reset background color after brief delay
+                    }, 500); // Adjust duration as needed (500ms = half a second)
+                } else {
+                    this.style.backgroundColor = 'green'; // Highlight green for letters part of a word
+                }
+
+                // Check if all lowercase letters have been selected
+                const selectedLetters = document.querySelectorAll('.word');
+                const allLettersSelected = [...selectedLetters].every(letter => letter.style.backgroundColor === 'green');
+
+                if (allLettersSelected) {
+                    // Show pop-up message
+                    alert("Congratulations, you have solved the word search!");
+                }
+            });
+        });
+    </script>
 </body>
 </html>
+
