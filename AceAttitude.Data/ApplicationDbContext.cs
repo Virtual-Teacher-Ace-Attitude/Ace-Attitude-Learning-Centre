@@ -407,15 +407,15 @@ namespace AceAttitude.Data
                     IsApproved = true,
                 },
 
-                new StudentCourses
-                {
-                    Id = 4,
-                    StudentId = student1Id,
-                    CourseId = 2,
-                    IsCompleted = false,
-                    CreatedOn = standardCreationDate.AddDays(8),
-                    IsApproved = true,
-                },
+                //new StudentCourses
+                //{
+                //    Id = 4,
+                //    StudentId = student1Id,
+                //    CourseId = 2,
+                //    IsCompleted = false,
+                //    CreatedOn = standardCreationDate.AddDays(8),
+                //    IsApproved = true,
+                //},
 
                 new StudentCourses
                 {
