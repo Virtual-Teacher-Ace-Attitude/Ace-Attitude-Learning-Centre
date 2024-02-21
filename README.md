@@ -8,9 +8,9 @@ Key Features:
 User authentication and authorization system for educators and students.
 Course management functionalities including creation, editing, and deletion.
 Lecture uploads with support for video embedding and document attachments.
-Assignment submission and grading system.
+Assignment submission.
 Interactive communication tools such as discussion forums and messaging.
-Comprehensive dashboard for tracking course progress and grades.
+Interactive learning games.
 
 Technologies Used:
 C# ASP.NET Core MVC.
@@ -22,7 +22,7 @@ Git for version control and collaboration.
 
 ## Database Diagram
 
-![Database Diagram](/images/database_diagram.png)
+![Database Diagram](/images/Database_Schema.png)
 
 ### Swagger Link
 https://localhost:7143/api/swagger/index.html
