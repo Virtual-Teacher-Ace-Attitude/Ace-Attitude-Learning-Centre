@@ -12,6 +12,8 @@
 
         public string LectureId { get; set; } = null!;
 
+        public decimal Grade { get; set; }
+
         public string TextFilePath { get; set; } = null!;
     }
 }
