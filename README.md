@@ -22,7 +22,7 @@ Git for version control and collaboration.
 
 ## Database Diagram
 
-![Database Diagram](/images/Database_Schema.png)
+![Database Diagram](/Database%20Schema.PNG)
 
 ### Swagger Link
 https://localhost:7143/api/swagger/index.html
