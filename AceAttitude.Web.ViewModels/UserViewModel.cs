@@ -13,5 +13,9 @@
         public DateTime CreatedOn { get; set; }
 
         public string UserType { get; set; } = null!;
+
+        public string? PictureFilePath { get; set; } = null!;
+
+        public string AverageGrade { get; set; } = null!;
     }
 }
