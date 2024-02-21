@@ -20,16 +20,16 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         private readonly IUserService userService;
 
 
-        public CourseController(ICourseService courseService, IAuthService authService, 
+        public CourseController(ICourseService courseService, IAuthService authService,
             IMVCModelMapper modelMapper, IUserService userService)
         {
             this.courseService = courseService;
-            this.authService = authService; 
+            this.authService = authService;
             this.modelMapper = modelMapper;
             this.userService = userService;
         }
         [HttpGet("")]
-        public IActionResult Index([FromQuery] string filterParam ="none", [FromQuery] string filterParamValue = "none", [FromQuery] string sortParam = "none")
+        public IActionResult Index([FromQuery] string filterParam = "none", [FromQuery] string filterParamValue = "none", [FromQuery] string sortParam = "none")
         {
             List<Course> courses = courseService.GetAll(filterParam, filterParamValue, sortParam);
             return View(courses);
@@ -77,7 +77,8 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                     InitializeDropDownLists(model);
                     return View(model);
                 }
-                var teacher = userService.GetTeacherById(authService.CurrentUser.Id);
+                var user = authService.CurrentUser;
+                var teacher = userService.GetTeacherById(user.Id);
                 var course = modelMapper.MapToCourse(model);
                 course.TeacherId = teacher.Id;
                 var createdCourse = courseService.CreateCourse(course, teacher);
@@ -114,7 +115,8 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             try
             {
                 //placeholder for authentication
-                var teacher = authService.TryGetTeacher(authService.CurrentUser.Id);
+                var user = authService.CurrentUser;
+                var teacher = userService.GetTeacherById(user.Id);
                 _ = courseService.DeleteCourse(id, teacher);
 
                 return RedirectToAction("Index", "Post");
@@ -200,13 +202,35 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             {
                 return View(courseViewModel);
             }
-
-            var teacher = authService.TryGetTeacher(authService.CurrentUser.Id);
+            var user = authService.CurrentUser;
+            var teacher = userService.GetTeacherById(user.Id);
             var course = modelMapper.MapToCourse(courseViewModel);
             var updatedCourse = courseService.UpdateCourse(id, course, teacher);
 
             return RedirectToAction("Details", "Course", new { id = updatedCourse.Id });
         }
+
+        [HttpGet("{id}/rate")]
+        public IActionResult RateCourse([FromRoute] int courseId)
+        {
+            var user = authService.CurrentUser;
+            var student = userService.GetStudentById(user.Id);
+            RatingViewModel viewModel = new RatingViewModel();
+            viewModel.CourseId = courseId;
+            viewModel.StudentId = student.Id;
+            return View(viewModel);
+        }
+
+        [HttpPost("{id}/rate")]
+        public IActionResult RateCourse(RatingViewModel viewModel)
+        {
+            var user = authService.CurrentUser;
+            var student = userService.GetStudentById(user.Id);
+            courseService.RateCourse(viewModel.CourseId, viewModel.Value, student);
+            return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
+            
+        }
+
 
         private void InitializeDropDownLists(CourseViewModel viewModel)
 		{
