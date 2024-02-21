@@ -79,6 +79,7 @@ namespace AceAttitude.Services.Mapping
                 Email = user.Email,
                 CreatedOn = user.CreatedOn,
                 UserType = user.UserType.ToString(),
+                PictureFilePath = user.PictureFilePath,
             };
         }
 

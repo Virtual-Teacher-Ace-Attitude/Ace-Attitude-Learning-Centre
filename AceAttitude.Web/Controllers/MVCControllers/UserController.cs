@@ -21,7 +21,9 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
         private readonly IWebHostEnvironment webHostEnvironment;
 
-        public UserController(IUserService userService, IAuthService authService, ICourseService courseService, 
+        private readonly string InvalidUserTypeErrorMessage = "This action can only be performed by a teacher or an admin!";
+
+        public UserController(IUserService userService, IAuthService authService, ICourseService courseService,
             IMVCModelMapper modelMapper, IWebHostEnvironment webHostEnvironment)
         {
             this.userService = userService;
@@ -32,42 +34,42 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             this.webHostEnvironment = webHostEnvironment;
         }
 
-		[HttpGet]
-		public IActionResult Login()
-		{
-			var viewModel = new LoginViewModel();
+        [HttpGet]
+        public IActionResult Login()
+        {
+            var viewModel = new LoginViewModel();
 
-			return View(viewModel);
-		}
+            return View(viewModel);
+        }
 
-		[HttpPost]
-		public IActionResult Login(LoginViewModel viewModel)
-		{
-			if (!ModelState.IsValid)
-			{
-				return View(viewModel);
-			}
+        [HttpPost]
+        public IActionResult Login(LoginViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                return View(viewModel);
+            }
 
-			try
-			{
-				authService.Login(viewModel.Email, viewModel.Password);
+            try
+            {
+                authService.Login(viewModel.Email, viewModel.Password);
 
-				return RedirectToAction("Index", "Home");
-			}
-			catch (UnauthorizedOperationException e)
-			{
-				ModelState.AddModelError("Email", e.Message);
-				ModelState.AddModelError("Password", e.Message);
+                return RedirectToAction("Index", "Home");
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                ModelState.AddModelError("Email", e.Message);
+                ModelState.AddModelError("Password", e.Message);
 
-				return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
-			}
-			catch (EntityNotFoundException e)
-			{
-				return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
-			}
-		}
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+        }
 
-		[HttpGet]
+        [HttpGet]
         public IActionResult Logout()
         {
             authService.Logout();
@@ -138,6 +140,12 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
                 ApplicationUser profileUser = userService.ViewUserProfile(id, requestUser);
                 UserViewModel userViewModel = this.modelMapper.MapToUserViewModel(profileUser);
+
+                if (profileUser.UserType == UserType.Student)
+                {
+                    userViewModel.AverageGrade = this.userService.GetAverageStudentGrade(profileUser.Id);
+                }
+
                 return View(userViewModel);
             }
             catch (UnauthorizedOperationException e)
@@ -198,7 +206,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpPost]
-        public IActionResult ApplyForTeacherMVC([FromRoute]string id)
+        public IActionResult ApplyForTeacherMVC([FromRoute] string id)
         {
             try
             {
@@ -235,6 +243,85 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
                 List<Course> courses = courseService.GetAllTeacherCourses(id, requestUser).ToList();
                 return View(courses);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult SearchStudent()
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                if (requestUser.UserType == UserType.Student)
+                {
+                    throw new UnauthorizedOperationException(InvalidUserTypeErrorMessage);
+                }
+
+                SearchUserViewModel model = new SearchUserViewModel();
+
+                return View(model);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult SearchStudent(SearchUserViewModel model)
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                ApplicationUser student = this.userService.GetByEmailSecured(model.Email, requestUser);
+
+                return RedirectToAction("StudentDetails", "User", new { id = student.Id });
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet]
+        public IActionResult StudentDetails([FromRoute] string id)
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                if (requestUser.UserType == UserType.Student)
+                {
+                    throw new UnauthorizedOperationException(InvalidUserTypeErrorMessage);
+                }
+
+                ApplicationUser profileUser = userService.ViewUserProfile(id, requestUser);
+                UserViewModel userViewModel = this.modelMapper.MapToUserViewModel(profileUser);
+
+                userViewModel.AverageGrade = this.userService.GetAverageStudentGrade(profileUser.Id);
+
+                return View(userViewModel);
             }
             catch (UnauthorizedOperationException e)
             {
@@ -336,7 +423,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 string fileName = Guid.NewGuid().ToString() + Path.GetExtension(file.FileName);
 
                 // Path where the file will be saved
-                string filePath = Path.Combine(this.webHostEnvironment.WebRootPath, "images","profile-pictures", fileName);
+                string filePath = Path.Combine(this.webHostEnvironment.WebRootPath, "images", "profile-pictures", fileName);
 
                 // Save the file to wwwroot/profile-pictures folder
                 using (var stream = new FileStream(filePath, FileMode.Create))

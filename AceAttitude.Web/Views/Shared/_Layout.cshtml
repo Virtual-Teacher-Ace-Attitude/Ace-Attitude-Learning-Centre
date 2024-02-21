@@ -247,13 +247,13 @@
                                 {
                                     <a href="#" class="text-success">My Courses</a>
                                 }
-                                @if ((bool)ViewData["IsTeacher"])
+                                @if ((bool)ViewData["IsTeacher"] || (bool)ViewData["IsAdmin"])
                                 {
                                     <a asp-controller="User" asp-action="TeacherCourses" asp-route-id="@currentUser.Id" class="text-success">My Courses</a>
+                                    <a asp-controller="User" asp-action="SearchStudent" class="text-success">Search Students</a>
                                 }
                                 @if ((bool)ViewData["IsAdmin"])
                                 {
-                                    <a asp-controller="User" asp-action="TeacherCourses" asp-route-id="@currentUser.Id" class="text-success">My Courses</a>
                                     <a asp-controller="User" asp-action="Approve" class="text-warning">Approve Users</a>
                                     <a href="#" class="text-warning">Modify Users</a>
                                 }

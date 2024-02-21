@@ -166,6 +166,55 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
+        [HttpGet("{id}/admit")]
+        public IActionResult Admit([FromRoute] int id)
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                Course course = this.courseService.GetById(id);
+
+                ICollection<StudentCourses> studentCourses = this.courseService.GetUnapprovedStudentCourses(id);
+
+                return View(studentCourses);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost("{id}/admitStudent")]
+        public IActionResult AdmitStudentMVC(int studentcourseid)
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+                Teacher requestTeacher = this.userService.GetTeacherById(requestUser.Id);
+
+                StudentCourses studentCourse = this.courseService.GetStudentCourse(studentcourseid);
+
+                this.courseService.AdmitStudent(studentCourse.CourseId, studentCourse.StudentId, requestTeacher);
+
+                return RedirectToAction("Admit", "Course", new { id = studentCourse.CourseId });
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
         [HttpGet]
         [Route("{id}/edit")]
         public IActionResult Edit([FromRoute] int id)
@@ -257,5 +306,13 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 			viewModel.AgeGroups = new SelectList(ageSelectListItems, "Value", "Text");
 
 		}
-	}
+
+        private IActionResult ForbiddenOperation(string errorMessage, int statusCode)
+        {
+            Response.StatusCode = statusCode;
+            ViewData["ErrorMessage"] = errorMessage;
+
+            return View(viewName: "Error");
+        }
+    }
 }

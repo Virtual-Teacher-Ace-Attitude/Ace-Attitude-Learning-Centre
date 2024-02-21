@@ -38,5 +38,7 @@ namespace AceAttitude.Data.Repositories.Contracts
         public bool CheckEmailExists(string email);
 
         public string UpdateProfilePicturePath(string path, string userId);
+
+        public string GetAverageStudentGrade(string studentId);
     }
 }

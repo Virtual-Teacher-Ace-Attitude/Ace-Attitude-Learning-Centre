@@ -29,5 +29,9 @@ namespace AceAttitude.Data.Repositories.Contracts
         Student AdmitStudent(int courseId, string studentId);
 
         ICollection<Course> GetHomeCourses();
+
+        ICollection<StudentCourses> GetUnapprovedStudentCourses(int id);
+
+        public StudentCourses GetStudentCourse(int studentCoursesId);
     }
 }

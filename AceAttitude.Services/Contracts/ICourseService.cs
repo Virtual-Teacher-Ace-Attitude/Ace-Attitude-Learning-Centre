@@ -28,5 +28,9 @@ namespace AceAttitude.Services.Contracts
         ICollection<Course> GetAllTeacherCourses(string id, ApplicationUser requestUser);
 
         ICollection<Course> GetHomeCourses();
+
+        ICollection<StudentCourses> GetUnapprovedStudentCourses(int id);
+
+        public StudentCourses GetStudentCourse(int studentCoursesId);
     }
 }

@@ -4,7 +4,6 @@ using AceAttitude.Data.Models;
 using AceAttitude.Data.Models.Misc;
 using AceAttitude.Data.Repositories.Contracts;
 using AceAttitude.Services.Contracts;
-using AceAttitude.Web.DTO.Request;
 
 namespace AceAttitude.Services
 {
@@ -16,8 +15,10 @@ namespace AceAttitude.Services
         private readonly string UnableToViewProfileErrorMessage = "Only the creator of the profile or an admin can view it!";
         private readonly string UnableToEditProfileErrorMessage = "Only the creator of the profile or an admin can edit it!";
 
-        private readonly string InvalidUserTypeErrorMessage = "This action can only be performed by a {0} or admin!";
+        private readonly string InvalidUserTypeErrorMessage = "This action can only be performed by a {0} or an admin!";
         private readonly string StudentRequiredForApplicationErrorMessage = "You are already a teacher!";
+
+        private const string StudentNotFoundErrorMessage = "Student with email: {0} does not exist!";
 
         private readonly IUserRepository userRepository;
         private readonly IAuthHelper authHelper;
@@ -36,6 +37,23 @@ namespace AceAttitude.Services
         public ApplicationUser GetByEmail(string email)
         {
             return this.userRepository.GetByEmail(email);
+        }
+
+        public ApplicationUser GetByEmailSecured(string email, ApplicationUser requestUser)
+        {
+            if (requestUser.UserType == UserType.Student)
+            {
+                throw new UnauthorizedOperationException(string.Format(InvalidUserTypeErrorMessage, "teacher"));
+            }
+
+            ApplicationUser student = this.userRepository.GetByEmail(email);
+
+            if (student.UserType != UserType.Student)
+            {
+                throw new EntityNotFoundException(string.Format(StudentNotFoundErrorMessage, email));
+            }
+
+            return student;
         }
 
         public Student GetStudentById(string id)
@@ -182,6 +200,11 @@ namespace AceAttitude.Services
         public string UpdateProfilePicturePath(string path, string userId)
         {
             return this.userRepository.UpdateProfilePicturePath(path, userId);
+        }
+
+        public string GetAverageStudentGrade(string studentId)
+        {
+            return this.userRepository.GetAverageStudentGrade(studentId);
         }
     }
 }

@@ -24,6 +24,8 @@ namespace AceAttitude.Data.Repositories
 
         private const string StudentAlreadyAdmitedErrorMessage = "Student with ID: {0} has already been admited to course with ID: {1}.";
 
+        private const string StudentCoursesNotFoundErrorMessage = "Student course with id: {0} does not exist!";
+
         private readonly ApplicationDbContext context;
 
         private readonly IUserRepository userRepository;
@@ -90,6 +92,7 @@ namespace AceAttitude.Data.Repositories
         {
             ICollection<Course> courses = context.Courses
                 .Include(course => course.Ratings)
+                .Include(course => course.StudentCourses)
                 .Include(course => course.Teacher)
                 .ThenInclude(teacher => teacher.User)
                 .Where(course => course.TeacherId == id && course.DeletedOn.HasValue == false)
@@ -318,6 +321,32 @@ namespace AceAttitude.Data.Repositories
                 default:
                     return filteredCourses.OrderByDescending(c => c.StartingDate);
             }
+        }
+
+        public StudentCourses GetStudentCourse(int studentCoursesId)
+        {
+            StudentCourses studentCourse = this.context
+                .StudentCourses
+                .FirstOrDefault(sc => sc.Id == studentCoursesId)
+                ?? throw new EntityNotFoundException(string.Format(StudentCoursesNotFoundErrorMessage, studentCoursesId));
+
+            return studentCourse;
+        }
+
+        public ICollection<StudentCourses> GetUnapprovedStudentCourses(int id)
+        {
+            Course course = this.GetById(id);
+
+            ICollection<StudentCourses> studentCourses = this.context.
+                StudentCourses
+               .Include(sc => sc.Course)
+               .Include(sc => sc.Student)
+               .ThenInclude(s => s.User)
+               .Where(sc => sc.CourseId == course.Id && sc.IsApproved == false)
+               .ToList();
+                
+
+            return studentCourses;
         }
     }
 }
