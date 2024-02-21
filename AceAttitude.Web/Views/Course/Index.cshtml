@@ -139,6 +139,8 @@
                                     <a asp-controller="Course" asp-action="Details" asp-route-id="@course.Id" class="btn btn-link text-dark">
                                         <i class="fas fa-info-circle"></i> Details
                                     </a>
+
+
                                     @if ((bool)ViewData["IsAuthenticated"])
                                     {
                                         @if (course.TeacherId == currentUser.Id || (bool)ViewData["IsAdmin"])
@@ -157,6 +159,16 @@
                                                     </a>
                                                 </div>
                                             </div>
+                                        }
+                                        else if (currentUser.UserType == UserType.Student)
+                                        {
+                                            if (course.StudentCourses.Any(sc => sc.StudentId == currentUser.Id))
+                                            {
+                                                <a asp-controller="Course" asp-action="RateCourse" asp-route-id="@course.Id" class="btn btn-link text-dark">
+                                                    <i class="fas fa-info-circle"></i> Rate
+                                                </a>
+                                            }
+
                                         }
                                     }
                                 </div>
