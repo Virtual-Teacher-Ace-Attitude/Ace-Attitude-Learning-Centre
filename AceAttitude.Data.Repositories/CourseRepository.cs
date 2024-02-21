@@ -101,6 +101,19 @@ namespace AceAttitude.Data.Repositories
             return courses;
         }
 
+        public ICollection<Course> GetAllStudentCourses(string id)
+        {
+            ICollection<Course> courses = context.Courses
+                .Include(course => course.Ratings)
+                .Include(course => course.StudentCourses)
+                .ThenInclude(sc => sc.Student)
+                .ThenInclude(s => s.User)
+                .Where(course => course.StudentCourses.Any(sc => sc.StudentId == id) && course.DeletedOn.HasValue == false)
+                .ToList();
+
+            return courses;
+        }
+
         public ICollection<Student> GetAppliedStudents(int courseId)
         {
             var appliedStudents = context.Students
@@ -137,6 +150,7 @@ namespace AceAttitude.Data.Repositories
         {
             Course course = context.Courses
                 .Include(course => course.Lectures)
+                .Include(course => course.StudentCourses)
                 .Include(course => course.Comments)
                 .ThenInclude(comment => comment.User)
                 .Include(course => course.Ratings)

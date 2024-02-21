@@ -278,7 +278,35 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
             
         }
+        
 
+        [HttpPost("{id}/apply")]
+        public IActionResult ApplyForCourseMVC([FromRoute] int id)
+        {
+            try
+            {
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                Student applyingStudent = this.userService.GetStudentById(requestUser.Id);
+                this.courseService.ApplyForCourse(id, applyingStudent);
+
+                return RedirectToAction("Details", "Course", new { id });
+            }
+            catch (EntityNotFoundException e)
+            {
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                ViewData["ErrorMessage"] = e.Message;
+
+                return View("Error");
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                Response.StatusCode = StatusCodes.Status401Unauthorized;
+                ViewData["ErrorMessage"] = e.Message;
+
+                return View("Error");
+            }
+        }
 
         private void InitializeDropDownLists(CourseViewModel viewModel)
 		{

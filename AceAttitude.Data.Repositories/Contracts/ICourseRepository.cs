@@ -10,6 +10,8 @@ namespace AceAttitude.Data.Repositories.Contracts
 
         ICollection<Course> GetAllTeacherCourses(string id);
 
+        ICollection<Course> GetAllStudentCourses(string id);
+
         Course CreateCourse(Course course);
 
         Course UpdateCourse(int id, Course course);
