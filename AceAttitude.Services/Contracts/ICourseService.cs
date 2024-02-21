@@ -21,10 +21,12 @@ namespace AceAttitude.Services.Contracts
 
         Course RateCourse(int id, decimal rating, Student student);
 
-        public ICollection<Student> GetAppliedStudents(int courseId, Teacher teacher);
+        ICollection<Student> GetAppliedStudents(int courseId, Teacher teacher);
 
-        public Student AdmitStudent(int courseId, string studentId, Teacher teacher);
+        Student AdmitStudent(int courseId, string studentId, Teacher teacher);
 
-        public ICollection<Course> GetAllTeacherCourses(string id, ApplicationUser requestUser);
+        ICollection<Course> GetAllTeacherCourses(string id, ApplicationUser requestUser);
+
+        ICollection<Course> GetHomeCourses();
     }
 }

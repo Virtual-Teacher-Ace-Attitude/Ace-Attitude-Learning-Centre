@@ -89,5 +89,10 @@ namespace AceAttitude.Services
 
             return this.courseRepository.GetAllTeacherCourses(id);
         }
+
+        public ICollection<Course> GetHomeCourses()
+        {
+            return this.courseRepository.GetHomeCourses();
+        }
     }
 }

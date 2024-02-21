@@ -74,6 +74,18 @@ namespace AceAttitude.Data.Repositories
             return this.userRepository.GetStudentById(studentId);
         }
 
+        public ICollection<Course> GetHomeCourses()
+        {
+            ICollection<Course> courses = context.Courses
+                .Include(course => course.Ratings)
+                .Include(course => course.Teacher)
+                .ThenInclude(teacher => teacher.User)
+                .Where(course => course.Id == 1 || course.Id == 2 || course.Id == 3)
+                .ToList();
+
+            return courses;
+        }
+
         public ICollection<Course> GetAllTeacherCourses(string id)
         {
             ICollection<Course> courses = context.Courses

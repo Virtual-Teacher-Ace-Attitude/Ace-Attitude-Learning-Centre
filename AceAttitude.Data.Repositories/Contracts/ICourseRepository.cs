@@ -24,8 +24,10 @@ namespace AceAttitude.Data.Repositories.Contracts
 
         List<Course> GetFilteredCourses(string filterParam, string filterParamValue, string sortParam);
 
-        public ICollection<Student> GetAppliedStudents(int courseId);
+        ICollection<Student> GetAppliedStudents(int courseId);
 
-        public Student AdmitStudent(int courseId, string studentId);
+        Student AdmitStudent(int courseId, string studentId);
+
+        ICollection<Course> GetHomeCourses();
     }
 }
