@@ -25,6 +25,8 @@ namespace AceAttitude.Data.Models
 
         public ICollection<StudentCourses> StudentCourses { get; set; } = new List<StudentCourses>();
 
+        public ICollection<StudentSubmissions> StudentSubmissions { get; set; } = new List<StudentSubmissions>();
+
         public bool IsPromoted { get; set; }
 
         public bool AwaitingPromotion { get; set; }

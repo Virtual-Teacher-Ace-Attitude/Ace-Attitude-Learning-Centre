@@ -31,6 +31,8 @@ namespace AceAttitude.Data
 
         public DbSet<StudentCourses> StudentCourses { get; set; }
 
+        public DbSet<StudentSubmissions> StudentSubmissions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -53,15 +55,15 @@ namespace AceAttitude.Data
             DateTime standardCreationDate = DateTime.Now;
 
             List<ApplicationUser> users = new List<ApplicationUser>
-            {
+{
                 // Students
                 new ApplicationUser
                 {
                     Id = student1Id,
-                    Email = "student1@abv.bg",
+                    Email = "sarah.smith@example.com",
                     PasswordHash = standardPassword,
-                    FirstName = "Student",
-                    LastName = "One",
+                    FirstName = "Sarah",
+                    LastName = "Smith",
                     StudentId = student1Id,
                     CreatedOn = standardCreationDate,
                     UserType = UserType.Student,
@@ -70,10 +72,10 @@ namespace AceAttitude.Data
                 new ApplicationUser
                 {
                     Id = student2Id,
-                    Email = "student2@abv.bg",
+                    Email = "john.doe@example.com",
                     PasswordHash = standardPassword,
-                    FirstName = "Student",
-                    LastName = "Two",
+                    FirstName = "John",
+                    LastName = "Doe",
                     StudentId = student2Id,
                     CreatedOn = standardCreationDate.AddDays(1),
                     UserType = UserType.Student,
@@ -82,23 +84,23 @@ namespace AceAttitude.Data
                 new ApplicationUser
                 {
                     Id = student3Id,
-                    Email = "student3@abv.bg",
+                    Email = "emily.jackson@example.com",
                     PasswordHash = standardPassword,
-                    FirstName = "Student",
-                    LastName = "Three",
+                    FirstName = "Emily",
+                    LastName = "Jackson",
                     StudentId = student3Id,
                     CreatedOn = standardCreationDate.AddDays(2),
                     UserType = UserType.Student,
                 },
-
+            
                 // Teachers
                 new ApplicationUser
                 {
                     Id = teacher1Id,
-                    Email = "teacher1@abv.bg",
+                    Email = "alexander.arabadzhiev@example.com",
                     PasswordHash = standardPassword,
-                    FirstName = "Alexei",
-                    LastName = "Kalionski",
+                    FirstName = "Alexander",
+                    LastName = "Arabadzhiev",
                     TeacherId = teacher1Id,
                     CreatedOn = standardCreationDate,
                     UserType = UserType.Admin,
@@ -107,10 +109,10 @@ namespace AceAttitude.Data
                 new ApplicationUser
                 {
                     Id = teacher2Id,
-                    Email = "teacher2@abv.bg",
+                    Email = "alexei.kalionski@example.com",
                     PasswordHash = standardPassword,
-                    FirstName = "Alexander",
-                    LastName = "Arabadzhiev",
+                    FirstName = "Alexei",
+                    LastName = "Kalionski",
                     TeacherId = teacher2Id,
                     CreatedOn = standardCreationDate.AddDays(1),
                     UserType = UserType.Admin,
@@ -119,7 +121,7 @@ namespace AceAttitude.Data
                 new ApplicationUser
                 {
                     Id = teacher3Id,
-                    Email = "teacher3@abv.bg",
+                    Email = "georgi.aleksandrov@example.com",
                     PasswordHash = standardPassword,
                     FirstName = "Georgi",
                     LastName = "Aleksandrov",
@@ -189,8 +191,8 @@ namespace AceAttitude.Data
                 {
                     Id = 1,
                     CourseId = 1,
-                    Title = "Lecture 1",
-                    Description = "Description of lecture 1.",
+                    Title = "Classroom Language",
+                    Description = "Teaches kids basic vocabulary related to the classroom and classroom activities.",
                     CreatedOn = standardCreationDate,
                 },
 
@@ -198,8 +200,8 @@ namespace AceAttitude.Data
                 {
                     Id = 2,
                     CourseId = 2,
-                    Title = "Lecture 2",
-                    Description = "Description of lecture 2.",
+                    Title = "Introductions and Icebreakers",
+                    Description = "A speaking-oriented lecture for teenagers.",
                     CreatedOn = standardCreationDate.AddDays(1),
                 },
 
@@ -207,8 +209,8 @@ namespace AceAttitude.Data
                 {
                     Id = 3,
                     CourseId = 3,
-                    Title = "Lecture 3",
-                    Description = "Description of lecture 3.",
+                    Title = "Literature Appreciation",
+                    Description = "An in-depth analysis of classic and contemporary literary works.",
                     CreatedOn = standardCreationDate.AddDays(2),
                 },
             };
@@ -220,11 +222,11 @@ namespace AceAttitude.Data
                 new Course
                 {
                     Id = 1,
-                    TeacherId = teacher1Id, 
-                    Title = "Course 1",
-                    Description = "Description of course 1.",
-                    Level = Models.Misc.Level.A2,
-                    AgeGroup = Models.Misc.AgeGroup.Kids,
+                    TeacherId = teacher1Id,
+                    Title = "Oxford Adventurers",
+                    Description = "This course introduces fundamental English language skills and phonics to preschool children.",
+                    Level = Level.A1,
+                    AgeGroup = AgeGroup.Kids,
                     IsDraft = false,
                     IsCompleted = true,
                     StartingDate = standardCreationDate,
@@ -235,10 +237,10 @@ namespace AceAttitude.Data
                 {
                     Id = 2,
                     TeacherId = teacher2Id,
-                    Title = "Course 2",
-                    Description = "Description of course 2.",
-                    Level = Models.Misc.Level.B2,
-                    AgeGroup = Models.Misc.AgeGroup.Teens,
+                    Title = "First Certificate for Schools",
+                    Description = "This course thoroughly prepares high school students for their inaugural certification exam.",
+                    Level = Level.B2,
+                    AgeGroup = AgeGroup.Teens,
                     IsDraft = false,
                     IsCompleted = false,
                     StartingDate = standardCreationDate.AddMonths(1),
@@ -249,10 +251,10 @@ namespace AceAttitude.Data
                 {
                     Id = 3,
                     TeacherId = teacher3Id,
-                    Title = "Course 3",
-                    Description = "Description of course 3.",
-                    Level = Models.Misc.Level.C2,
-                    AgeGroup = Models.Misc.AgeGroup.Adults,
+                    Title = "Creative Writing Masterclass",
+                    Description = "Unlock your creativity with this masterclass on creative writing techniques and storytelling.",
+                    Level = Level.C2,
+                    AgeGroup = AgeGroup.Adults,
                     IsDraft = true,
                     IsCompleted = false,
                     StartingDate = standardCreationDate.AddMonths(2),
@@ -269,8 +271,8 @@ namespace AceAttitude.Data
                     Id = 1,
                     CourseId = 1,
                     ApplicationUserId = student1Id,
-                    Content = "Content of comment 1.",
-                    Likes = 1,
+                    Content = "I found the first lecture very informative. Looking forward to the rest of the course!",
+                    Likes = 5,
                     CreatedOn = standardCreationDate.AddDays(1),
                 },
 
@@ -279,8 +281,8 @@ namespace AceAttitude.Data
                     Id = 2,
                     CourseId = 2,
                     ApplicationUserId = student2Id,
-                    Content = "Content of comment 2.",
-                    Likes = 2,
+                    Content = "The workshop materials are comprehensive and well-organized. Enjoying the learning experience!",
+                    Likes = 7,
                     CreatedOn = standardCreationDate.AddDays(14),
                 },
 
@@ -289,8 +291,8 @@ namespace AceAttitude.Data
                     Id = 3,
                     CourseId = 3,
                     ApplicationUserId = student3Id,
-                    Content = "Content of comment 3.",
-                    Likes = 3,
+                    Content = "The masterclass has inspired me to start working on my novel. Thank you!",
+                    Likes = 10,
                     CreatedOn = standardCreationDate.AddMonths(1).AddDays(3),
                 },
             };
@@ -345,7 +347,7 @@ namespace AceAttitude.Data
                     Id = 1,
                     CourseId = 1,
                     StudentId = student1Id,
-                    Value = 5.0m,
+                    Value = 4.8m,
                     CreatedOn = standardCreationDate.AddDays(3),
                     IsRated = true,
                 },
@@ -355,7 +357,7 @@ namespace AceAttitude.Data
                     Id = 2,
                     CourseId = 1,
                     StudentId = student2Id,
-                    Value = 4.5m,
+                    Value = 4.6m,
                     CreatedOn = standardCreationDate.AddDays(4),
                     IsRated = true,
                 },
@@ -365,7 +367,7 @@ namespace AceAttitude.Data
                     Id = 3,
                     CourseId = 1,
                     StudentId = student3Id,
-                    Value = 4.5m,
+                    Value = 4.7m,
                     CreatedOn = standardCreationDate.AddDays(5),
                     IsRated = false,
                 },
@@ -435,7 +437,6 @@ namespace AceAttitude.Data
                     IsApproved = true,
                 },
             };
-
             modelBuilder.Entity<StudentCourses>().HasData(studentCourses);
         }
     }

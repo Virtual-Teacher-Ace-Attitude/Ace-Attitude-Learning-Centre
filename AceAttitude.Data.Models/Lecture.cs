@@ -25,6 +25,8 @@ namespace AceAttitude.Data.Models
 
         public Course Course { get; set; } = null!;
 
+        public ICollection<StudentSubmissions> StudentSubmissions { get; set; } = new List<StudentSubmissions>();
+
         [Required]
         public int CourseId { get; set; }
 
