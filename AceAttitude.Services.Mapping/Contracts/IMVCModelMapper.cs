@@ -21,5 +21,7 @@ namespace AceAttitude.Services.Mapping.Contracts
         public UserViewModel MapToUserViewModel(ApplicationUser user);
 
         public EditUserViewModel MapToEditUserViewModel(ApplicationUser user);
+
+        public ApproveTeacherViewModel MapToApproveTeacher(List<Student> students, List<Teacher> teachers);
     }
 }

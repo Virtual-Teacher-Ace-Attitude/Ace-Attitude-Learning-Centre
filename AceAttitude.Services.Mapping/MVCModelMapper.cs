@@ -91,5 +91,14 @@ namespace AceAttitude.Services.Mapping
                 LastName = user.LastName,
             };
         }
+
+        public ApproveTeacherViewModel MapToApproveTeacher(List<Student> students, List<Teacher> teachers)
+        {
+            return new ApproveTeacherViewModel
+            {
+                students = students,
+                teachers = teachers
+            };
+        }
     }
 }

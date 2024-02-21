@@ -1,0 +1,203 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Approve Users</title>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f0f0f0; /* Light gray background */
+        }
+
+        h2 {
+            text-align: center; /* Center the title */
+        }
+
+        .container {
+            display: flex;
+            justify-content: center; /* Center the containers horizontally */
+            align-items: center; /* Center the containers vertically */
+            gap: 20px; /* Add gap between columns */
+        }
+
+        .column {
+            width: 45%; /* Adjust width as needed */
+            background-color: #fff; /* White background for containers */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            overflow-y: auto; /* Enable vertical scrolling */
+            padding: 20px;
+        }
+
+        .user-list {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .user-item-teacher{
+            padding: 10px 0;
+            cursor: pointer; /* Change cursor to pointer on hover */
+            border-bottom: 1px solid #28a745; /* Green border between entries */
+        }
+
+        .user-item-student{
+            padding: 10px 0;
+            cursor: pointer; /* Change cursor to pointer on hover */
+            border-bottom: 1px solid #007bff; /* Blue border between entries */
+        }
+
+        .user-item {
+            padding: 10px 0;
+            cursor: pointer; /* Change cursor to pointer on hover */
+        }
+
+        .user-item-student:hover, .user-item-teacher:hover, .user-item:hover {
+            background-color: #f9f9f9; /* Light gray background on hover */
+        }
+
+        .selected {
+            background-color: #add8e6; /* Light blue background for selected item */
+        }
+
+        hr {
+            border: 0;
+            height: 10px;
+            background-color: #000000; /* Light gray color for horizontal line */
+        }
+
+        .approve-btn {
+            background-color: #007bff; /* Blue background for the button */
+            color: #fff; /* White text color */
+            border: none;
+            border-radius: 4px;
+            padding: 8px 16px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            margin-top: 10px; /* Add some space between entries and button */
+            display: block; /* Ensure button takes full width */
+            margin-left: auto; /* Center the button horizontally */
+            margin-right: auto; /* Center the button horizontally */
+        }
+
+        .approve-btn:hover {
+            background-color: #0056b3; /* Darker blue background on hover */
+        }
+
+        .approve-btn:disabled {
+            background-color: #6c757d; /* Grey background for disabled button */
+            cursor: not-allowed; /* Change cursor to not-allowed */
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="column">
+            <h2>Applying Students</h2>
+            <hr>
+            <ul class="user-list">
+                @for (int i = 0; i < Model.students.Count; i++)
+                {
+                    var student = Model.students[i];
+                    var name = student.User.FirstName + " " + student.User.LastName;
+
+                    if (i + 1 == Model.students.Count)
+                    {
+                        <li class="user-item" onclick="selectUser('@student.Id', 'student')">@name</li>
+                    }
+                    else
+                    {
+                        <li class="user-item-student" onclick="selectUser('@student.Id', 'student')">@name</li>
+                    }
+                }
+            </ul>
+            <hr> <!-- Horizontal line for visual separation -->
+            <form method="post" asp-controller="User" asp-action="ApproveStudentMVC">
+                <input type="hidden" id="selectedStudentId" name="selectedStudentId" />
+                <button type="submit" class="approve-btn" id="approveStudentBtn" disabled>Approve</button>
+            </form>
+        </div>
+        <div class="column">
+            <h2>Applying Teachers</h2>
+            <hr>
+            <ul class="user-list">
+                @for (int i = 0; i < Model.teachers.Count; i++)
+                {
+                    var teacher = Model.teachers[i];
+                    var name = teacher.User.FirstName + " " + teacher.User.LastName;
+
+                    if (i + 1 == Model.teachers.Count)
+                    {
+                        <li class="user-item" onclick="selectUser('@teacher.Id', 'teacher')">@name</li>
+                    }
+                    else
+                    {
+                        <li class="user-item-teacher" onclick="selectUser('@teacher.Id', 'teacher')">@name</li>
+                    }
+                }
+            </ul>
+            <hr> <!-- Horizontal line for visual separation -->
+            <form method="post" asp-controller="User" asp-action="ApproveTeacherMVC">
+                <input type="hidden" id="selectedTeacherId" name="selectedTeacherId" />
+                <button type="submit" class="approve-btn" id="approveTeacherBtn" disabled>Approve</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        // Disable approve buttons on page load
+        document.addEventListener('DOMContentLoaded', function () {
+            document.getElementById('approveStudentBtn').disabled = true;
+            document.getElementById('approveTeacherBtn').disabled = true;
+        });
+
+        function selectUser(userId, userType) {
+            // Clear previous selections
+            document.querySelectorAll('.user-item-student').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.user-item-teacher').forEach(item => {
+                item.classList.remove('selected');
+            });
+            document.querySelectorAll('.user-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+
+            // Highlight the selected item
+            if (userType === 'student') {
+                document.getElementById('selectedStudentId').value = userId;
+
+                document.getElementById('approveStudentBtn').disabled = false;
+                document.getElementById('approveTeacherBtn').disabled = true;
+            } else if (userType === 'teacher') {
+                document.getElementById('selectedTeacherId').value = userId;
+
+                document.getElementById('approveTeacherBtn').disabled = false;
+                document.getElementById('approveStudentBtn').disabled = true;
+            }
+
+            document.querySelectorAll('.user-item-student').forEach(item => {
+                if (item.textContent.includes(userId)) {
+                    item.classList.add('selected');
+                }
+            });
+
+            document.querySelectorAll('.user-item-teacher').forEach(item => {
+                if (item.textContent.includes(userId)) {
+                    item.classList.add('selected');
+                }
+            });
+
+            document.querySelectorAll('.user-item').forEach(item => {
+                if (item.textContent.includes(userId)) {
+                    item.classList.add('selected');
+                }
+            });
+        }
+    </script>
+
+</body>
+</html>

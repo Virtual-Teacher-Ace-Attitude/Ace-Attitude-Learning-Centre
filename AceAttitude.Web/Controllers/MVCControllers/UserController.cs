@@ -246,6 +246,75 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             }
         }
 
+        [HttpGet]
+        public IActionResult Approve()
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                List<Student> students = userService.GetUnapprovedStudents(requestUser).ToList();
+                List<Teacher> teachers = userService.GetUnapprovedTeachers(requestUser).ToList();
+
+                ApproveTeacherViewModel approveTeacherViewModel = this.modelMapper.MapToApproveTeacher(students, teachers);
+
+                return View(approveTeacherViewModel);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ApproveStudentMVC(string selectedStudentId)
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                this.userService.PromoteStudent(selectedStudentId, requestUser);
+
+                return RedirectToAction("Approve", "User");
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpPost]
+        public IActionResult ApproveTeacherMVC(string selectedTeacherId)
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                this.userService.ApproveTeacher(selectedTeacherId, requestUser);
+
+                return RedirectToAction("Approve", "User");
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
         [HttpPost]
         public IActionResult UploadProfilePicture(IFormFile file)
         {
