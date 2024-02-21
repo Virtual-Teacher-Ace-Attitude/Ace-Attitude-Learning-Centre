@@ -271,6 +271,7 @@ namespace AceAttitude.Data.Repositories
         {
             IQueryable<Course> allCourses = context.Courses.Where(c => c.DeletedOn.HasValue == false && c.IsDraft == false)
                 .Include(course => course.Ratings)
+                .Include(course => course.StudentCourses)
                 .Include(course => course.Teacher)
                 .ThenInclude(teacher => teacher.User);
 

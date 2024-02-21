@@ -260,18 +260,17 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpGet("{id}/rate")]
-        public IActionResult RateCourse([FromRoute] int courseId)
+        public IActionResult RateCourse([FromRoute] int id)
         {
             var user = authService.CurrentUser;
             var student = userService.GetStudentById(user.Id);
-            RatingViewModel viewModel = new RatingViewModel();
-            viewModel.CourseId = courseId;
-            viewModel.StudentId = student.Id;
+            RatingViewModel viewModel = new RatingViewModel() { StudentId = user.Id, CourseId = id};
+
             return View(viewModel);
         }
 
         [HttpPost("{id}/rate")]
-        public IActionResult RateCourse(RatingViewModel viewModel)
+        public IActionResult RateCourse([FromRoute]int id, RatingViewModel viewModel)
         {
             var user = authService.CurrentUser;
             var student = userService.GetStudentById(user.Id);
