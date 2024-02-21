@@ -33,14 +33,28 @@
     <div>
         <!-- Convert video file path to YouTube embed URL -->
         @{
-            string embedUrl = Model.VideoFilePath.Replace("watch?v=", "embed/") ;
+            string embedUrl = "";
+            if (Model.VideoFilePath != null)
+            {
+                embedUrl = Model.VideoFilePath.Replace("watch?v=", "embed/") ;
+                var random = string.Empty;  
+            }
+            else
+            {
+                embedUrl = "https://www.youtube.com/embed/yqrAPOZxgzU";
+            }
+
         }
-        @if (Model.VideoFilePath != null)
-        {
-            <div class="video-container">
+
+
+                        <div class="video-container">
                 <iframe width="560" height="315" src="@embedUrl" frameborder="0" allowfullscreen></iframe>
             </div>
-        }
+
+
+
+
+
         <!-- Embed YouTube video using the generated URL -->
 
 
