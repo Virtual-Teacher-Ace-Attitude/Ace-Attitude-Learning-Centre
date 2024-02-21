@@ -100,6 +100,12 @@
                                             <i class="fas fa-pencil-ruler"></i> Release
                                         </a>
                                     }
+                                    @if (course.StudentCourses.Any(sc => sc.IsApproved == false))
+                                    {
+                                        <a asp-controller="Course" asp-action="Admit" asp-route-id="@course.Id" class="btn btn-action btn-link text-primary">
+                                            <i class="fas fa-user-plus"></i> Admit
+                                        </a>
+                                    }
                                 </div>
                             </div>
                         </div>

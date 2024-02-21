@@ -30,6 +30,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             overflow-y: auto; /* Enable vertical scrolling */
             padding: 20px;
+            align-self: flex-start; /* Align to the start of the cross axis (top of the container) */
         }
 
         .user-list {
@@ -37,29 +38,28 @@
             padding: 0;
         }
 
-        .user-item-teacher{
+        .user-item-teacher {
             padding: 10px 0;
             cursor: pointer; /* Change cursor to pointer on hover */
             border-bottom: 1px solid #28a745; /* Green border between entries */
         }
 
-        .user-item-student{
+        .user-item-student {
             padding: 10px 0;
             cursor: pointer; /* Change cursor to pointer on hover */
             border-bottom: 1px solid #007bff; /* Blue border between entries */
         }
 
-        .user-item {
-            padding: 10px 0;
-            cursor: pointer; /* Change cursor to pointer on hover */
+            .user-item-student.selected {
+                background-color: #add8e6; /* Light blue background for selected student */
+            }
+
+        .user-item-teacher.selected {
+            background-color: #c1e7c1; /* Light green background for selected teacher */
         }
 
         .user-item-student:hover, .user-item-teacher:hover, .user-item:hover {
             background-color: #f9f9f9; /* Light gray background on hover */
-        }
-
-        .selected {
-            background-color: #add8e6; /* Light blue background for selected item */
         }
 
         hr {
@@ -90,6 +90,13 @@
             background-color: #6c757d; /* Grey background for disabled button */
             cursor: not-allowed; /* Change cursor to not-allowed */
         }
+
+        .empty-message {
+            text-align: center;
+            font-size: 1.5em; /* Adjust the font size as needed */
+            margin-top: 20px; /* Adjust the top margin as needed */
+            color: #666; /* Adjust the color as needed */
+        }
     </style>
 </head>
 <body>
@@ -99,51 +106,49 @@
             <h2>Applying Students</h2>
             <hr>
             <ul class="user-list">
-                @for (int i = 0; i < Model.students.Count; i++)
+                @foreach (var student in Model.students)
                 {
-                    var student = Model.students[i];
-                    var name = student.User.FirstName + " " + student.User.LastName;
-
-                    if (i + 1 == Model.students.Count)
-                    {
-                        <li class="user-item" onclick="selectUser('@student.Id', 'student')">@name</li>
-                    }
-                    else
-                    {
-                        <li class="user-item-student" onclick="selectUser('@student.Id', 'student')">@name</li>
-                    }
+                    var name = $"{student.User.FirstName} {student.User.LastName}";
+                    <li class="user-item-student" data-userid="@student.Id" onclick="selectUser('@student.Id', 'student')">@name</li>
                 }
             </ul>
-            <hr> <!-- Horizontal line for visual separation -->
-            <form method="post" asp-controller="User" asp-action="ApproveStudentMVC">
-                <input type="hidden" id="selectedStudentId" name="selectedStudentId" />
-                <button type="submit" class="approve-btn" id="approveStudentBtn" disabled>Approve</button>
-            </form>
+            @if (Model.students.Count == 0)
+            {
+                <p class="empty-message">There are no students currently awaiting approval.</p>
+            }
+            else
+            {
+                <hr> <!-- Horizontal line for visual separation -->
+
+                <form method="post" asp-controller="User" asp-action="ApproveStudentMVC">
+                    <input type="hidden" id="selectedStudentId" name="selectedStudentId" />
+                    <button type="submit" class="approve-btn" id="approveStudentBtn" disabled>Approve</button>
+                </form>
+            }
         </div>
         <div class="column">
             <h2>Applying Teachers</h2>
             <hr>
             <ul class="user-list">
-                @for (int i = 0; i < Model.teachers.Count; i++)
+                @foreach (var teacher in Model.teachers)
                 {
-                    var teacher = Model.teachers[i];
-                    var name = teacher.User.FirstName + " " + teacher.User.LastName;
-
-                    if (i + 1 == Model.teachers.Count)
-                    {
-                        <li class="user-item" onclick="selectUser('@teacher.Id', 'teacher')">@name</li>
-                    }
-                    else
-                    {
-                        <li class="user-item-teacher" onclick="selectUser('@teacher.Id', 'teacher')">@name</li>
-                    }
+                    var name = $"{teacher.User.FirstName} {teacher.User.LastName}";
+                    <li class="user-item-teacher" data-userid="@teacher.Id" onclick="selectUser('@teacher.Id', 'teacher')">@name</li>
                 }
             </ul>
-            <hr> <!-- Horizontal line for visual separation -->
-            <form method="post" asp-controller="User" asp-action="ApproveTeacherMVC">
-                <input type="hidden" id="selectedTeacherId" name="selectedTeacherId" />
-                <button type="submit" class="approve-btn" id="approveTeacherBtn" disabled>Approve</button>
-            </form>
+            @if (Model.teachers.Count == 0)
+            {
+                <p class="empty-message">There are no teachers currently awaiting approval.</p>
+            }
+            else
+            {
+                <hr> <!-- Horizontal line for visual separation -->
+
+                <form method="post" asp-controller="User" asp-action="ApproveTeacherMVC">
+                    <input type="hidden" id="selectedTeacherId" name="selectedTeacherId" />
+                    <button type="submit" class="approve-btn" id="approveTeacherBtn" disabled>Approve</button>
+                </form>
+            }
         </div>
     </div>
 
@@ -156,48 +161,23 @@
 
         function selectUser(userId, userType) {
             // Clear previous selections
-            document.querySelectorAll('.user-item-student').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.user-item-teacher').forEach(item => {
-                item.classList.remove('selected');
-            });
-            document.querySelectorAll('.user-item').forEach(item => {
+            document.querySelectorAll('.user-item-student, .user-item-teacher').forEach(item => {
                 item.classList.remove('selected');
             });
 
-            // Highlight the selected item
+            // Highlight the selected item and enable/disable approve buttons based on user type
             if (userType === 'student') {
+                document.querySelector(`.user-item-student[data-userid="${userId}"]`).classList.add('selected');
                 document.getElementById('selectedStudentId').value = userId;
-
                 document.getElementById('approveStudentBtn').disabled = false;
                 document.getElementById('approveTeacherBtn').disabled = true;
             } else if (userType === 'teacher') {
+                document.querySelector(`.user-item-teacher[data-userid="${userId}"]`).classList.add('selected');
                 document.getElementById('selectedTeacherId').value = userId;
-
                 document.getElementById('approveTeacherBtn').disabled = false;
                 document.getElementById('approveStudentBtn').disabled = true;
             }
-
-            document.querySelectorAll('.user-item-student').forEach(item => {
-                if (item.textContent.includes(userId)) {
-                    item.classList.add('selected');
-                }
-            });
-
-            document.querySelectorAll('.user-item-teacher').forEach(item => {
-                if (item.textContent.includes(userId)) {
-                    item.classList.add('selected');
-                }
-            });
-
-            document.querySelectorAll('.user-item').forEach(item => {
-                if (item.textContent.includes(userId)) {
-                    item.classList.add('selected');
-                }
-            });
         }
     </script>
-
 </body>
 </html>

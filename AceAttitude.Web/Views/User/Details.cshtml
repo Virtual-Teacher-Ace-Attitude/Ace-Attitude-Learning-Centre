@@ -133,6 +133,10 @@
             <p class="created-at"><i class="fas fa-calendar-alt"></i> Account Created: @Model.CreatedOn.ToShortDateString()</p> <!-- Calendar icon for account creation date -->
             @if ((bool)ViewData["IsStudent"])
             {
+                <p class="average-grade">
+                    <i class="fas fa-chart-line"></i> Average Grade: @Model.AverageGrade
+                </p>
+
                 <form method="post" asp-controller="User" asp-action="ApplyForTeacherMVC" asp-route-id="@Model.Id">
                     <button type="submit" class="btn btn-outline-primary mt-3">Apply for Teacher</button>
                 </form>

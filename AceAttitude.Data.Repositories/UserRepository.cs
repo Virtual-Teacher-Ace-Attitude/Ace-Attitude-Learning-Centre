@@ -90,7 +90,7 @@ namespace AceAttitude.Data.Repositories
                 .Include(teacher => teacher.CreatedCourses)
                 .Where(teacher => teacher.IsApproved == false && teacher.User.DeletedOn.HasValue == false).ToList();
 
-            this.EnsureCollectionNotEmpty(unapprovedTeachers.Count, TeachersNotAwaitingApprovalErrorMessage);
+            //this.EnsureCollectionNotEmpty(unapprovedTeachers.Count, TeachersNotAwaitingApprovalErrorMessage);
 
             return unapprovedTeachers;
         }
@@ -104,7 +104,7 @@ namespace AceAttitude.Data.Repositories
                 .ThenInclude(sc => sc.Course)
                 .Where(student => student.IsPromoted == false && student.AwaitingPromotion == true && student.User.DeletedOn.HasValue == false).ToList();
 
-            this.EnsureCollectionNotEmpty(unapprovedStudents.Count, TeachersNotAwaitingApprovalErrorMessage);
+            //this.EnsureCollectionNotEmpty(unapprovedStudents.Count, TeachersNotAwaitingApprovalErrorMessage);
 
             return unapprovedStudents;
         }
@@ -177,7 +177,6 @@ namespace AceAttitude.Data.Repositories
             userToEdit.PasswordHash = userToUpdate.PasswordHash;
             userToEdit.FirstName = userToUpdate.FirstName;
             userToEdit.LastName = userToUpdate.LastName;
-            userToEdit.PictureFilePath = userToUpdate.PictureFilePath;
 
             context.SaveChanges();
 
@@ -296,6 +295,24 @@ namespace AceAttitude.Data.Repositories
             this.context.SaveChanges();
 
             return path;
+        }
+
+        public string GetAverageStudentGrade(string studentId)
+        {
+            ICollection<StudentSubmissions> studentSubmissions = context.StudentSubmissions
+                .Where(ss => ss.StudentId == studentId)
+                .ToList();
+
+            if (studentSubmissions.Count == 0)
+            {
+                return "N/A";
+            }
+            else
+            {
+                string averageGrade = studentSubmissions.Average(ss => ss.Grade).ToString("F2");
+
+                return averageGrade;
+            }
         }
     }
 }

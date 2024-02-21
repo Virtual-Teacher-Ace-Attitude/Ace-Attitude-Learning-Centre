@@ -27,6 +27,8 @@ namespace AceAttitude.Services.Contracts
 
         public ApplicationUser GetByEmail(string email);
 
+        public ApplicationUser GetByEmailSecured(string email, ApplicationUser requestUser);
+
         public Teacher ViewTeacherProfile(string id, ApplicationUser requestUser);
 
         public Student ViewStudentProfile(string id, ApplicationUser requestUser);
@@ -46,5 +48,7 @@ namespace AceAttitude.Services.Contracts
         public Teacher PromoteAdmin(string id, ApplicationUser requestUser);
 
         public string UpdateProfilePicturePath(string path, string userId);
+
+        public string GetAverageStudentGrade(string studentId);
     }
 }
