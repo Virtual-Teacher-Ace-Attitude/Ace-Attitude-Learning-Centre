@@ -1,20 +1,175 @@
-﻿@{
+﻿@using AceAttitude.Data.Models
+@using AceAttitude.Data.Models.Misc
+@model List<Course>
+
+@{
     ViewData["Title"] = "Home Page";
     Layout = "_Layout";
+
+    string homePicturePath = "~/images/home-photo.jpg";
+
+    var kidsCoursePath = "~/images/kids-course.jpg";
+    var teensCoursePath = "~/images/teens-course.jpg";
+    var adultsCoursePath = "~/images/adults-course.jpg";
 }
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <title>Ace Attitude - About</title>
+    <title>Ace Attitude - Home</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
     <link rel="stylesheet" href="~/css/site.css" />
+
+    <!-- Google Font: Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
 
-    <div class="text-center">
-        <h1 class="display-4">Welcome</h1>
+    <!-- Home Page -->
+    <div class="jumbotron jumbotron-fluid bg-dark text-white">
+        <div class="container text-center">
+            <h1 class="display-4">Welcome to Ace-Attitude!</h1>
+            <p class="lead">Unlock Your Potential with Engaging English Learning</p>
+            <p class="lead">Join a Vibrant Community of Learners and Educators</p>
+            <hr class="my-4">
+            <p class="lead">Experience Interactive Courses, Exciting Games, and Personalized Learning</p>
+            <a class="btn btn-primary btn-lg" href="#explore" role="button">Explore Now</a>
+        </div>
     </div>
-</body>
 
+    <!-- About Section -->
+    <section id="about" class="py-5">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <h2 class="display-4 mb-4">About Ace Attitude</h2>
+                    <p class="lead">Ace Attitude is a revolutionary platform dedicated to making English learning interactive, engaging, and accessible for learners of all ages and skill levels. Our mission is to empower students and educators worldwide to achieve their language learning goals with confidence and enthusiasm.</p>
+                    <p>Through innovative courses, immersive games, and personalized learning experiences, we strive to create a supportive community where every learner can thrive and succeed.</p>
+                </div>
+                <div class="col-lg-6">
+                    <!-- Insert engaging visuals or videos -->
+                    <img src="@Url.Content(homePicturePath)" class="img-fluid" alt="About Ace Attitude">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Featured Courses Section -->
+    <section id="courses" class="py-5">
+        <div class="container">
+            <h2 class="display-4 text-center mb-5">Featured Courses</h2>
+            <div class="row justify-content-center">
+                @foreach (var course in Model)
+                {
+                    <div class="col-lg-4 mb-4">
+                        <div class="card">
+                            @if (course.AgeGroup == AgeGroup.Kids)
+                            {
+                                <img class="card-img-top" src="@Url.Content(kidsCoursePath)" alt="Course Image">
+                            }
+                            @if (course.AgeGroup == AgeGroup.Teens)
+                            {
+                                <img class="card-img-top" src="@Url.Content(teensCoursePath)" alt="Course Image">
+                            }
+                            @if (course.AgeGroup == AgeGroup.Adults)
+                            {
+                                <img class="card-img-top" src="@Url.Content(adultsCoursePath)" alt="Course Image">
+                            }
+                            <div class="card-body">
+                                <h5 class="card-title">@course.Title</h5>
+                                <p class="card-text">@course.Description</p>
+                                <a asp-controller="Course" asp-action="Details" asp-route-id="@course.Id" class="btn btn-primary">
+                                    <i class="fas fa-info-circle"></i> Details
+                                </a>
+@*                                <a href="#" class="btn btn-primary">Enroll Now</a>*@
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-5">
+        <div class="container">
+            <h2 class="display-4 text-center mb-5">What Our Users Say</h2>
+            <div class="row justify-content-center">
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">"Ace Attitude transformed my English learning experience. The courses are engaging, the games are fun, and the community support is invaluable!"</p>
+                            <footer class="blockquote-footer">John Doe, Student</footer>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">"I've never enjoyed learning a language as much as I do with Ace Attitude. The interactive lessons make it feel like a game!"</p>
+                            <footer class="blockquote-footer">Jane Smith, ESL Teacher</footer>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-4 mb-4">
+                    <div class="card">
+                        <div class="card-body">
+                            <p class="card-text">"Ace Attitude's approach to language learning is innovative and effective. I've seen significant improvement in my English skills since using their platform."</p>
+                            <footer class="blockquote-footer">Boris Kanwald, German Business Professional</footer>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call-to-Action Section -->
+    <section id="cta" class="bg-primary text-white py-5">
+        <div class="container text-center">
+            <h2 class="display-4 mb-4">Ready to Get Started?</h2>
+            <p class="lead">Join Ace Attitude today and embark on an exciting journey of English learning and discovery.</p>
+            <!-- Explore Courses button with scroll-to functionality -->
+            <a class="btn btn-light btn-lg" href="#explore" role="button" onclick="highlightButton('ageGroupButton')">Explore Courses</a>
+            <!-- Sign Up Now button with scroll-to functionality -->
+            <a class="btn btn-light btn-lg" href="#signup" role="button" onclick="highlightButton('registerButton')">Sign Up Now</a>
+        </div>
+    </section>
+
+    <!-- Explore More Section -->
+    <section id="explore" class="bg-dark text-white py-5">
+        <div class="container">
+            <h2 class="display-4 text-center mb-5">Explore More</h2>
+            <div class="row justify-content-center">
+                <div class="col-md-6 text-center">
+                    <p class="lead">Learn more about Ace Attitude and our mission to revolutionize English learning.</p>
+                    <a class="btn btn-light btn-lg" href="/Home/About" role="button">About Us</a>
+                </div>
+                <div class="col-md-6 text-center">
+                    <p class="lead">Explore our Developer API to interact with our application directly.</p>
+                    <a class="btn btn-light btn-lg" href="/api/swagger/index.html" role="button">Developer API</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Scripts -->
+    <script>
+        // Function to scroll to a section and highlight the corresponding button in the navbar
+        function highlightButton(buttonId) {
+            // Scroll to the specified section
+            $('html, body').animate({
+                scrollTop: $('#' + buttonId).offset().top - 100 // Adjust offset as needed
+            }, 500);
+
+            // Highlight the corresponding button temporarily
+            $('#' + buttonId).addClass('highlighted');
+            setTimeout(function () {
+                $('#' + buttonId).removeClass('highlighted');
+            }, 5000); // Adjust duration as needed
+        }
+    </script>
+
+
+</body>
+</html>

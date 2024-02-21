@@ -41,6 +41,8 @@
 
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500&display=swap">
 
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+Tamma+2:wght@400;500&display=swap">
+
     <!-- Styles for the registration modal -->
     <style>
         /* Modal Content */
@@ -70,7 +72,7 @@
     <style>
         /* Custom navbar */
         .custom-navbar {
-            background-color: #001f3f;
+            background-color: #4B0082
         }
 
         /* Profile picture icon */
@@ -143,51 +145,72 @@
             /* Add any additional styling here */
         }
 
-            /* Apply hover effect */
-            .custom-navbar .navbar-nav .nav-link:hover,
-            .custom-navbar .navbar-nav .btn:hover {
-                color: #555; /* Choose your desired hover color */
-                /* Add any additional hover styling here */
-            }
+        /* Apply hover effect */
+        .custom-navbar .navbar-nav .nav-link:hover,
+        .custom-navbar .navbar-nav .btn:hover {
+            color: #555; /* Choose your desired hover color */
+            /* Add any additional hover styling here */
+        }
+
+        .site-name {
+            font-family: 'Baloo Tamma 2', cursive;
+            color: white; /* Set font color to white */
+        }
+
+        /* Set color of the icon to white */
+        .navbar-brand .fa-graduation-cap {
+            color: white;
+        }
+
+        .container-separator {
+            padding-top: 50px; /* Add some top padding to push it down */
+        }
     </style>
 
     @RenderSection("Styles", required: false)
 </head>
+
 <body style="background-color: #f0f8ff; position: relative;">
 
-<header>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light custom-navbar">
-        <a class="navbar-brand" href="/Home/Index">Ace Attitude Learning Centre</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
+    <header>
+        <nav class="navbar navbar-expand-lg navbar-light custom-navbar" style="background-color: #4B0082;">
+            <a class="navbar-brand" href="/Home/Index">
+                <i class="fa-solid fa-graduation-cap"></i> <!-- Font Awesome book with lightbulb icon -->
+                <span class="site-name">Ace-Attitude Learning Center</span> <!-- Unique font site name -->
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto align-items-center">
+                    <!-- Added align-items-center class -->
+                    @if (!(bool)ViewData["IsAuthenticated"])
+                    {
+                        <li class="nav-item">
+                            <a asp-controller="User" asp-action="Login" class="btn" style="color: #fff;">
+                                <i class="fas fa-sign-in-alt"></i> Login
+                            </a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="btn nav-link register-link" style="color: #fff;">
+                                <i class="fas fa-user-plus"></i> Register
+                            </a>
+                        </li>
+                    }
                     <li class="nav-item">
-                        @if (!(bool)ViewData["IsAuthenticated"])
-                        {
-                            <div class="btn-group" role="group">
-                                <a asp-controller="User" asp-action="Login" class="btn btn-outline-success">Login</a>
-                                <a class="btn btn-outline-primary nav-link register-link">Register</a>
-                            </div>
-                        }
-                    </li>
-                    <li class="nav-item">
-                        <a class="btn" href="/home/about">
+                        <a class="btn" href="/home/about" style="color: #fff;">
                             <i class="fas fa-info-circle"></i> About
                         </a>
                     </li>
-
                     <!-- Games Button -->
                     <li class="nav-item">
-                        <a asp-controller="Games" asp-action="Index" class="nav-link">
+                        <a asp-controller="Games" asp-action="Index" class="nav-link" style="color: #fff;">
                             <i class="fas fa-gamepad"></i> Games
                         </a>
                     </li>
-
                     <!-- Age-Group Button with Dropdown -->
                     <li class="nav-item" style="position: relative;">
-                        <a class="nav-link" href="#" id="ageGroupButton">
+                        <a class="nav-link" href="#" id="ageGroupButton" style="color: #fff;">
                             <i class="fas fa-child"></i> Age-Group
                         </a>
                         <div class="dropdown-box" id="age-group-options-box">
@@ -197,10 +220,9 @@
                             <a asp-controller="Course" asp-action="Index" asp-route-filterParam="age" asp-route-filterParamValue="Adults" class="btn">Adults</a>
                         </div>
                     </li>
-
                     <!-- Level Button with Dropdown -->
                     <li class="nav-item" style="position: relative;">
-                        <a class="nav-link" href="#" id="levelButton">
+                        <a class="nav-link" href="#" id="levelButton" style="color: #fff;">
                             <i class="fas fa-layer-group"></i> Level
                         </a>
                         <div class="dropdown-box" id="level-options-box">
@@ -213,41 +235,41 @@
                             <a asp-controller="Course" asp-action="Index" asp-route-filterParam="level" asp-route-filterParamValue="C2" class="btn">C2</a>
                         </div>
                     </li>
-
-                @if ((bool)ViewData["IsAuthenticated"])
-                {
-                    <li class="nav-item" style="margin-left: 10px; position: relative;">
+                    @if ((bool)ViewData["IsAuthenticated"])
+                    {
+                        <li class="nav-item" style="margin-left: 10px; position: relative;">
                             <img src="@Url.Content(picturePath)" alt="Profile" class="rounded-circle img-thumbnail profile-icon" id="profile-icon">
-                        <div class="profile-options-box" id="profile-options-box">
-                            <a asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id" class="text-primary">View Profile</a>
-                            <a asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" class="text-primary">Edit Profile</a>
-                            @if ((bool)ViewData["IsStudent"])
-                            {
-                                <a href="#" class="text-danger">My Courses</a>
-                            }
-                            @if ((bool)ViewData["IsTeacher"])
-                            {
-                            <a asp-controller="User" asp-action="TeacherCourses" asp-route-id="@currentUser.Id" class="text-primary">My Courses</a>
-                            }
-                            @if ((bool)ViewData["IsAdmin"])
-                            {
+                            <!-- List of user actions -->
+                            <div class="profile-options-box" id="profile-options-box">
+                                <a asp-controller="User" asp-action="Details" asp-route-id="@currentUser.Id" class="text-primary">View Profile</a>
+                                <a asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" class="text-primary">Edit Profile</a>
+                                @if ((bool)ViewData["IsStudent"])
+                                {
+                                    <a href="#" class="text-danger">My Courses</a>
+                                }
+                                @if ((bool)ViewData["IsTeacher"])
+                                {
                                     <a asp-controller="User" asp-action="TeacherCourses" asp-route-id="@currentUser.Id" class="text-primary">My Courses</a>
-                                <a href="#" class="text-danger">Approve Users</a>
-                                <a href="#" class="text-danger">Modify Users</a>
-                            }
-                            <a asp-controller="User" asp-action="Logout" class="text-warning">Sign Out</a>
-                        </div>
-                    </li>
-                }
+                                }
+                                @if ((bool)ViewData["IsAdmin"])
+                                {
+                                    <a asp-controller="User" asp-action="TeacherCourses" asp-route-id="@currentUser.Id" class="text-primary">My Courses</a>
+                                    <a href="#" class="text-danger">Approve Users</a>
+                                    <a href="#" class="text-danger">Modify Users</a>
+                                }
+                                <a asp-controller="User" asp-action="Logout" class="text-warning">Sign Out</a>
+                            </div>
+                        </li>
+                    }
                     <li class="nav-item ml-auto">
-                        <a class="btn" href="/api/swagger/index.html">
+                        <a class="btn" href="/api/swagger/index.html" style="color: #fff;">
                             <i class="fas fa-code"></i> Developer API
                         </a>
                     </li>
-            </ul>
-        </div>
-    </nav>
-</header>
+                </ul>
+            </div>
+        </nav>
+    </header>
 
 <div class="container">
     <main role="main" class="pb-3">
@@ -266,7 +288,7 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <input type="image" src="~/images/students.png" alt="Student" class="img-fluid mb-2 student-image" style="max-width: 100px;">
-                                <p>"Register as a student and dive into our courses instantly! Start your learning journey now with expert guidance and engaging content."</p>
+                                <p>Register as a student and dive into our courses instantly! Start your learning journey now with expert guidance and engaging content.</p>
                             </div>
                             <div class="col-md-6">
                                 <input type="image" src="~/images/teacher.png" alt="Teacher" class="img-fluid mb-2 teacher-image" style="max-width: 100px;">
@@ -281,15 +303,17 @@
             </div>
         </div>
 
+            <div class="container-separator"> </div>
+
         @RenderBody()
     </main>
 </div>
 
-<footer class="footer">
-    <div class="container">
-        <span class="text-muted">© Copyright @DateTime.Now.Year, Ace Attitude Learning Centre</span>
-    </div>
-</footer>
+    <footer class="footer" style="position: fixed; bottom: 10px; right: 10px;">
+        <div class="container">
+            <span class="text-muted font-family: 'Roboto', sans-serif;">© Copyright @DateTime.Now.Year, Ace Attitude Learning Centre</span>
+        </div>
+    </footer>
 
 <script src="~/lib/jquery/dist/jquery.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

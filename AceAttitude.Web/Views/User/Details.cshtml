@@ -31,37 +31,71 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>User Profile - @Model.Email</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <!-- Google Font: Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
     <style>
         body {
-            background-color: #FFD700; /* Light Red-Orange Background Color */
+            background-color: #F8F9FA; /* Light Gray Background Color */
             color: #333; /* Dark Text Color */
-            font-family: Arial, sans-serif;
+            font-family: 'Montserrat', sans-serif; /* Use Montserrat font */
             text-align: center;
         }
 
         .container {
             max-width: 600px; /* Limit width to provide a centered grid */
-            padding-top: 50px; /* Add some top padding to push it down */
+            margin: 50px auto; /* Center the container vertically */
         }
 
         .user-info {
             margin-top: 20px;
-            background-color: #f0f8ff; /* Very light blue background color */
-            border: 2px solid #007bff; /* Darker blue outline */
+            background-color: #FFF; /* White Background Color */
+            border: 2px solid #4B0082; /* Purple Outline */
             padding: 20px; /* Add padding inside the box */
-            border-radius: 8px; /* Add some border radius for a softer look */
+            border-radius: 10px; /* Add some border radius for a softer look */
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow for depth */
         }
 
-        /* Larger profile picture on details page */
         .profile-icon-large {
-            width: 100px; /* Adjust as needed */
-            height: 100px; /* Adjust as needed */
+            width: 120px; /* Adjust as needed */
+            height: 120px; /* Adjust as needed */
             border-radius: 50%;
-            border: 3px solid #fff; /* White border around the profile picture */
+            border: 4px solid #4B0082; /* Purple Border */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Add subtle shadow */
+        }
+
+        .user-role-admin {
+            background-color: #ffc107; /* Yellow Background Color */
+            color: #333; /* Dark Text Color */
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 20px; /* Round the corners */
+            margin-bottom: 10px;
+        }
+
+        .user-role-teacher {
+            background-color: #28a745; /* Yellow Background Color */
+            color: #333; /* Dark Text Color */
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 20px; /* Round the corners */
+            margin-bottom: 10px;
+        }
+
+        .user-role-student {
+            background-color: #007bff;
+            color: #333; /* Dark Text Color */
+            font-size: 14px;
+            font-weight: bold;
+            padding: 5px 10px;
+            border-radius: 20px; /* Round the corners */
+            margin-bottom: 10px;
         }
 
         .created-at {
-            color: #888; /* Lighter text color for additional information */
+            color: #888; /* Lighter Text Color for Additional Information */
             margin-top: 10px;
         }
     </style>
@@ -78,23 +112,29 @@
         <div class="user-info">
             @if ((bool)ViewData["IsStudent"])
             {
-                <p class="text-warning">Student</p>
+                <div class="user-role-student">
+                        <span><i class="fas fa-user-graduate"></i> Student</span> <!-- Student icon -->
+                </div>
             }
             else if ((bool)ViewData["IsTeacher"])
             {
-                <p class="text-warning">Teacher</p>
+                <div class="user-role-teacher">
+                    <span><i class="fas fa-chalkboard-teacher"></i> Teacher</span> <!-- Teacher icon -->
+                </div>
             }
             else if ((bool)ViewData["IsAdmin"])
             {
-                <p class="text-warning">Administrator</p>
+                <div class="user-role-admin">
+                    <span><i class="fas fa-user-tie"></i> Admin</span> <!-- Admin icon -->
+                </div>
             }
-            <h2>Name: @Model.FirstName @Model.LastName</h2>
+            <h2 class="mb-4">Name: @Model.FirstName @Model.LastName</h2>
             <p>Email: @Model.Email</p>
-            <p class="created-at">Account Created: @Model.CreatedOn.ToShortDateString()</p>
+            <p class="created-at"><i class="fas fa-calendar-alt"></i> Account Created: @Model.CreatedOn.ToShortDateString()</p> <!-- Calendar icon for account creation date -->
             @if ((bool)ViewData["IsStudent"])
             {
                 <form method="post" asp-controller="User" asp-action="ApplyForTeacherMVC" asp-route-id="@Model.Id">
-                    <button type="submit" class="btn btn-outline-primary">Apply for Teacher</button>
+                    <button type="submit" class="btn btn-outline-primary mt-3">Apply for Teacher</button>
                 </form>
             }
         </div>

@@ -12,6 +12,10 @@
     var currentUser = Context.Session.Keys.Contains("CurrentUser") ? AuthService.CurrentUser : null;
     ViewData["IsAdmin"] = currentUser?.UserType == UserType.Admin;
     ViewData["IsTeacher"] = currentUser?.UserType == UserType.Teacher;
+
+    var kidsCoursePath = "~/images/kids-course.jpg";
+    var teensCoursePath = "~/images/teens-course.jpg";
+    var adultsCoursePath = "~/images/adults-course.jpg";
 }
 
 <!DOCTYPE html>
@@ -20,6 +24,7 @@
     <meta charset="utf-8" />
     <title>Ace Attitude - Courses</title>
     <link rel="stylesheet" href="~/css/site.css" />
+    <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
     <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
 </head>
 <body>
@@ -30,9 +35,9 @@
             color: #333;
         }
 
-            .date i {
-                margin-right: 5px; /* Add space between the icon and the date */
-            }
+        .date i {
+            margin-right: 5px; /* Add space between the icon and the date */
+        }
 
         .starting-date {
             font-size: 14px;
@@ -107,7 +112,18 @@
                 {
                     <div class="col-md-4 mb-4">
                         <div class="card">
-                            <img src="~/images/wordsearch.jpg" class="card-img-top" alt="Course Image">
+                            @if (course.AgeGroup == AgeGroup.Kids)
+                            {
+                                <img src="@Url.Content(kidsCoursePath)" class="card-img-top" alt="Course Image">
+                            }
+                            @if (course.AgeGroup == AgeGroup.Teens)
+                            {
+                                <img src="@Url.Content(teensCoursePath)" class="card-img-top" alt="Course Image">
+                            }
+                            @if (course.AgeGroup == AgeGroup.Adults)
+                            {
+                                <img src="@Url.Content(adultsCoursePath)" class="card-img-top" alt="Course Image">
+                            }
                             <div class="card-body">
                                 <h5 class="card-title">@course.Title</h5>
                                 <p class="card-text">@course.Description</p>
