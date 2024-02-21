@@ -13,7 +13,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         private readonly IAuthService authService;
         private readonly IMVCModelMapper modelMapper;
 
-        public CommentController(ICommentService commentService, ICourseService courseService, 
+        public CommentController(ICommentService commentService, ICourseService courseService,
             IAuthService authService, IMVCModelMapper modelMapper)
         {
             this.commentService = commentService;
@@ -143,10 +143,19 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         [Route("course/{courseId}/{commentId}/like")]
         public IActionResult LikeComment([FromRoute] int courseId, [FromRoute] int commentId)
         {
-            var user = authService.CurrentUser;
-            authService.EnsureUserLoggedIn();
-            commentService.LikeComment( commentId, courseId, user);
-            return RedirectToAction("Details", "Course", new { id = courseId });
+            try
+            {
+                var user = authService.CurrentUser;
+                authService.EnsureUserLoggedIn();
+                commentService.LikeComment(commentId, courseId, user);
+                return RedirectToAction("Details", "Course", new { id = courseId });
+            }
+            catch (UnauthorizedOperationException ex)
+            {
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                ViewData["ErrorMessage"] = ex.Message;
+                return View("Error");
+            }
         }
     }
 }

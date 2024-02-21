@@ -21,84 +21,131 @@
 <html lang="en">
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" integrity="sha512-BlKg18TW+s0ucLUV2V8ZuWZk6D9VdGqFGF6W0+r1Eq6xX+H5il67krZy9byr8TNPZwTfzg2Cz+bCD2dUwEKVoQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
-    <link rel="stylesheet" href="~/css/site.css" />
+    <!-- Google Font: Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" asp-append-version="true" />
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+            color: #333; /* Dark text color */
+        }
 
-    <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
+        .card {
+            border: none; /* Remove default card border */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Add subtle box shadow */
+            transition: box-shadow 0.3s ease; /* Smooth transition on hover */
+        }
+
+            .card:hover {
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Increase box shadow on hover */
+            }
+
+        .card-title {
+            font-weight: 700; /* Bold card title */
+            color: #007bff; /* Blue title color */
+        }
+
+        .card-text {
+            color: #666; /* Dark gray text color */
+        }
+
+        .comment-section {
+            margin-top: 20px; /* Add some space between card and comment section */
+        }
+
+        .comment-card {
+            margin-bottom: 20px; /* Add space between comment cards */
+        }
+
+            .comment-card .card-title {
+                font-weight: 600; /* Bold commenter name */
+                color: #007bff; /* Blue commenter name color */
+            }
+
+            .comment-card .card-subtitle {
+                color: #888; /* Light gray date color */
+            }
+
+        .like-btn {
+            color: #007bff; /* Blue like button color */
+        }
+
+        .add-comment-btn {
+            margin-bottom: 10px; /* Add space below add comment button */
+        }
+    </style>
 </head>
 
 <body>
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">@Model.Title</h5>
-            <p class="card-text">@Model.Description</p>
-            <p class="card-text"><small class="text-body-secondary">@Model.Level</small></p>
-            <p class="card-text"><small class="text-body-secondary">@Model.AgeGroup</small></p>
-            <p class="card-text"><small class="text-body-secondary">Teacher: @Model.Teacher.User.FirstName @Model.Teacher.User.LastName</small></p>
-        </div>
-    </div>
-
-    @if ((bool)ViewData["IsAuthenticated"])
-    {
-        if (!((bool)ViewData["IsStudent"] && !(Model.StudentCourses.Any(sc => sc.CourseId == Model.Id && sc.StudentId == currentUser.Id))))
-        {
-            <h3>Lectures:</h3>
-            <div class="list-group">
-                @foreach (var lecture in Model.Lectures)
-                {
-                    if (!lecture.DeletedOn.HasValue)
-                    {
-                        <a asp-controller="Lecture" asp-action="Details" asp-route-lectureId="@lecture.Id" asp-route-courseId="@Model.Id" class="list-group-item list-group-item-action">@lecture.Title</a>
-                    }
-                }
+    <div class="container">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">@Model.Title</h5>
+                <p class="card-text">@Model.Description</p>
+                <p class="card-text"><i class="fas fa-layer-group"></i> Level: @Model.Level</p>
+                <p class="card-text"><i class="fas fa-child"></i> Age Group: @Model.AgeGroup</p>
+                <p class="card-text"><i class="fas fa-chalkboard-teacher"></i> Teacher: @Model.Teacher.User.FirstName @Model.Teacher.User.LastName</p>
             </div>
-        }
-    }
+        </div>
 
-    @if (currentUser != null && currentUser.Id == Model.TeacherId)
-    {
-        <a asp-controller="Lecture" asp-action="CreateLecture" asp-route-courseId="@Model.Id" class="btn btn-primary add-comment-btn">Add Lecture</a>
-    }
-
-
-    <div class="comment-section">
-        <h3>Comments:</h3>
-
-        <a asp-controller="Comment" asp-action="AddComment" asp-route-courseId="@Model.Id" class="btn btn-primary add-comment-btn">Add Comment</a>
-
-        @foreach (var comment in Model.Comments)
+        @if ((bool)ViewData["IsAuthenticated"])
         {
-            if (!comment.DeletedOn.HasValue)
+            if (!((bool)ViewData["IsStudent"] && !(Model.StudentCourses.Any(sc => sc.CourseId == Model.Id && sc.StudentId == currentUser.Id))))
             {
-                <div class="card comment-card">
-                    <div class="card-body">
-                        <h5 class="card-title">@comment.User.FirstName @comment.User.LastName</h5>
-                        <h6 class="card-subtitle mb-2 text-muted">Date: @comment.CreatedOn</h6>
-                        <p class="card-text">@comment.Content</p>
-                        <div class="likes-box">
-
-                            <form asp-controller="Comment" asp-action="LikeComment" asp-route-courseId="@Model.Id" asp-route-commentId="@comment.Id" method="post">
-                                <button type="submit" class="btn btn-link like-btn">
-                                    <i class="fas fa-thumbs-up"></i> @comment.Likes
-                                </button>
-                            </form>
-
-                        </div>
-                        @if (currentUser != null && currentUser.Id == comment.ApplicationUserId)
+                <h3>Lectures:</h3>
+                <div class="list-group">
+                    @foreach (var lecture in Model.Lectures)
+                    {
+                        if (!lecture.DeletedOn.HasValue)
                         {
-                            <a asp-controller="Comment" asp-action="EditComment" asp-route-courseId="@Model.Id" asp-route-commentId="@comment.Id" class="btn btn-warning">Edit</a>
+                            <a asp-controller="Lecture" asp-action="Details" asp-route-lectureId="@lecture.Id" asp-route-courseId="@Model.Id" class="list-group-item list-group-item-action">@lecture.Title</a>
                         }
-                        @if (currentUser != null && (currentUser.Id == comment.ApplicationUserId || currentUser.UserType == UserType.Admin))
-                        {
-                            <a asp-controller="Comment" asp-action="DeleteComment" asp-route-courseId="@Model.Id" asp-route-commentId="@comment.Id" class="btn btn-danger">Delete</a>
-                        }
-                    </div>
+                    }
                 </div>
             }
+            <div class="mt-4">
+                <!-- Add margin top -->
+                <a asp-controller="Lecture" asp-action="CreateLecture" asp-route-courseId="@Model.Id" class="btn btn-primary add-lecture-btn">Add Lecture</a>
+            </div>
         }
+
+        <div class="comment-section">
+            <h3>Comments:</h3>
+
+            <a asp-controller="Comment" asp-action="AddComment" asp-route-courseId="@Model.Id" class="btn btn-primary add-comment-btn">Add Comment</a>
+
+            @foreach (var comment in Model.Comments)
+            {
+                if (!comment.DeletedOn.HasValue)
+                {
+                    <div class="card comment-card">
+                        <div class="card-body">
+                            <h5 class="card-title">@comment.User.FirstName @comment.User.LastName</h5>
+                            <h6 class="card-subtitle mb-2 text-muted">Date: @comment.CreatedOn</h6>
+                            <p class="card-text">@comment.Content</p>
+                            <div class="likes-box">
+                                <form asp-controller="Comment" asp-action="LikeComment" asp-route-courseId="@Model.Id" asp-route-commentId="@comment.Id" method="post">
+                                    <button type="submit" class="btn btn-link like-btn">
+                                        <i class="fas fa-thumbs-up"></i> @comment.Likes
+                                    </button>
+                                </form>
+                            </div>
+                            @if (currentUser != null && currentUser.Id == comment.ApplicationUserId)
+                            {
+                                <a asp-controller="Comment" asp-action="EditComment" asp-route-courseId="@Model.Id" asp-route-commentId="@comment.Id" class="btn btn-warning">Edit</a>
+                            }
+                            @if (currentUser != null && (currentUser.Id == comment.ApplicationUserId || currentUser.UserType == UserType.Admin))
+                            {
+                                <a asp-controller="Comment" asp-action="DeleteComment" asp-route-courseId="@Model.Id" asp-route-commentId="@comment.Id" class="btn btn-danger">Delete</a>
+                            }
+                        </div>
+                    </div>
+                }
+            }
+        </div>
     </div>
 </body>
-
-</html/>
+</html>
