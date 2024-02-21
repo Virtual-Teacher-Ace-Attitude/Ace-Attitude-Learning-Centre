@@ -19,6 +19,15 @@ HTML, CSS, and JavaScript for frontend development.
 Bootstrap framework for responsive design.
 SQL Server for database management.
 Git for version control and collaboration.
+Merriam-Webster Learner's Dictionary API
+
+Installation:
+Clone the repository to your local machine.
+Open the solution file in Visual Studio.
+Restore NuGet packages and build the solution.
+Configure the database connection string in appsettings.json.
+Run the database migrations to create the necessary tables.
+Start the application and navigate to the specified URL in your web browser.
 
 ## Database Diagram
 
