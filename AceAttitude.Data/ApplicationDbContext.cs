@@ -260,6 +260,20 @@ namespace AceAttitude.Data
                     StartingDate = standardCreationDate.AddMonths(2),
                     CreatedOn = standardCreationDate.AddMonths(1),
                 },
+
+                new Course
+                {
+                    Id = 4,
+                    TeacherId = teacher2Id,
+                    Title = "Public Speaking",
+                    Description = "Master the essentials of public communication by learning to express yourself elequently.",
+                    Level = Level.B1,
+                    AgeGroup = AgeGroup.Teens,
+                    IsDraft = false,
+                    IsCompleted = false,
+                    StartingDate = standardCreationDate,
+                    CreatedOn = standardCreationDate,
+                },
             };
 
             modelBuilder.Entity<Course>().HasData(courses);

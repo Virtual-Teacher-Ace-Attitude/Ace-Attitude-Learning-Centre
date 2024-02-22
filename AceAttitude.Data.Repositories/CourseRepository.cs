@@ -41,7 +41,7 @@ namespace AceAttitude.Data.Repositories
 
         public Course CreateCourse(Course course)
         {
-            course.CreatedOn = DateTime.Now;
+            course.StartingDate = DateTime.Now;
             course.IsDraft = true;
             context.Courses.Add(course);
             context.SaveChanges();
@@ -216,8 +216,6 @@ namespace AceAttitude.Data.Repositories
             Course courseToUpdate = GetById(id);
             courseToUpdate.Title = course.Title;
             courseToUpdate.Description = course.Description;
-            courseToUpdate.AgeGroup = course.AgeGroup;
-            courseToUpdate.Level = course.Level;
             courseToUpdate.ModifiedOn = DateTime.Now;
 
             context.SaveChanges();

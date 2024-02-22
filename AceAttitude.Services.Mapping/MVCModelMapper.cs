@@ -48,6 +48,15 @@ namespace AceAttitude.Services.Mapping
             };
         }
 
+        public Course MapToCourseEdit(CourseViewModel courseViewModel)
+        {
+            return new Course
+            {
+                Title = courseViewModel.Title,
+                Description = courseViewModel.Description,
+            };
+        }
+
         public Comment MapViewModelToComment(CommentViewModel model)
         {
             return new Comment()

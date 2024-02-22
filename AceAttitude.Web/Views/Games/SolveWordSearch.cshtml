@@ -1,4 +1,4 @@
-﻿@* @model Tuple<char[,], List<string>>
+﻿@model Tuple<char[,], List<string>>
 
 <!DOCTYPE html>
 <html lang="en">
@@ -7,231 +7,87 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Word Search Grid</title>
     <style>
-        .container {
-            display: flex;
-        }
+.container {
+    display: flex;
+    align-items: center; /* Center vertically */
+}
 
-        .grid-container {
-            margin-right: 20px; /* Add margin to create space for definitions */
-        }
+.grid-container {
+    margin-right: 20px; /* Add margin to create space for definitions */
+    border: 2px solid black; /* Add border around the grid */
+    padding: 10px; /* Add padding for better appearance */
+}
 
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(@Model.Item1.GetLength(1), 50px); /* Set column width based on the number of columns */
-            gap: 2px; /* Adjust gap between squares */
-        }
+.grid {
+    display: grid;
+    grid-template-columns: repeat(@Model.Item1.GetLength(1), 40px); /* Set column width based on the number of columns */
+    gap: 2px; /* Adjust gap between squares */
+    border: 1px solid black; /* Add border to each square */
+}
 
-        .square {
-            width: 50px; /* Adjust square size as needed */
-            height: 50px; /* Adjust square size as needed */
-            background-color: #ffffff; /* Change background color as needed */
-            border: 1px solid #000000; /* Change border color as needed */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer; /* Add cursor pointer to indicate clickability */
-        }
+.square {
+    width: 40px; /* Adjusted square size */
+    height: 40px; /* Adjusted square size */
+    background-color: #ffffff; /* Change background color as needed */
+    border: 1px solid #000000; /* Change border color as needed */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer; /* Add cursor pointer to indicate clickability */
+}
 
-        .definitions {
-            font-family: Arial, sans-serif;
-        }
+.definitions-container-outer {
+            border: 2px solid #000000;
+    padding: 10px;
+    max-width: max-content; /* Adjust to fit content width */
+    max-height: max-content; /* Adjust to fit content height */
+    overflow: auto; /* Add overflow property to enable scrolling if necessary */
+}
+
+.definitions-container-inner {
+            border: 2px solid #000000;
+    padding: 10px;
+}
+
+.definitions {
+    font-family: Arial, sans-serif;
+    margin-top: 10px; /* Add space above definitions */
+}
+
+.definition-item {
+    margin-bottom: 10px; /* Add space below each definition */
+}
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="grid-container">
-            <div class="grid">
+<div class="container">
+    <div class="grid-container">
+        <div class="grid">
                 @for (int i = 0; i < Model.Item1.GetLength(0); i++)
                 {
                     @for (int j = 0; j < Model.Item1.GetLength(1); j++)
                     {
                         char letter = Model.Item1[i, j];
                         string letterClass = char.IsUpper(letter) ? "not-word" : "word"; /* Determine CSS class based on whether letter is part of a word */
-                        <div class="square @letterClass" data-letter="@letter">@letter</div>
+                            <div class="square @letterClass" data-letter="@letter">@letter</div>
                     }
                 }
-            </div>
-        </div>
-        <div class="definitions">
-            <ol>
-                @for (int i = 0; i < Model.Item2.Count; i++)
-                {
-                    string word = Model.Item2[i];
-                    <li>@word - <span id="definition-@i"></span></li>
-                }
-            </ol>
         </div>
     </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const words = @Html.Raw(Json.Serialize(Model.Item2));
-
-            // Fetch definitions for each word from Merriam-Webster API
-            words.forEach((word, index) => {
-                fetchDefinition(word, index);
-            });
-        });
-
-        async function fetchDefinition(word, index) {
-            const apiKey = '05871b37-c705-455e-b4ce-a9ba667a7645';
-            const url = `https://www.dictionaryapi.com/api/v3/references/learners/json/${word}?key=${apiKey}`;
-
-            try {
-                const response = await fetch(url);
-                if (response.ok) {
-                    const data = await response.json();
-                    // Parse the response data and extract definition
-                    const definition = data[0].shortdef[0];
-                    // Display definition next to the corresponding word
-                    document.getElementById(`definition-${index}`).textContent = definition;
-                } else {
-                    console.error(`Failed to fetch definition for ${word}`);
-                }
-            } catch (error) {
-                console.error('Error fetching definition:', error.message);
-            }
-        }
-
-        document.querySelectorAll('.square').forEach(square => {
-            square.addEventListener('click', function () {
-                if (this.classList.contains('not-word')) {
-                    this.style.backgroundColor = 'red'; // Flash red for letters not part of a word
-                    setTimeout(() => {
-                        this.style.backgroundColor = '#ffffff'; // Reset background color after brief delay
-                    }, 500); // Adjust duration as needed (500ms = half a second)
-                } else {
-                    this.style.backgroundColor = 'green'; // Highlight green for letters part of a word
-                }
-
-                // Check if all lowercase letters have been selected
-                const selectedLetters = document.querySelectorAll('.word');
-                const allLettersSelected = [...selectedLetters].every(letter => letter.style.backgroundColor === 'green');
-
-                if (allLettersSelected) {
-                    // Show pop-up message
-                    alert("Congratulations, you have solved the word search!");
-                }
-            });
-        });
-
-        // Function to check if all letters of a word are highlighted
-        function checkWord(word) {
-            const squares = document.querySelectorAll('.square');
-            const highlighted = Array.from(squares).filter(square => square.textContent === word && square.style.backgroundColor === 'green');
-            return highlighted.length === word.length;
-        }
-
-        // Add tick mark next to definition when all letters of the word are highlighted
-        setInterval(() => {
-            const words = @Html.Raw(Json.Serialize(Model.Item2));
-            words.forEach((word, index) => {
-                if (checkWord(word)) {
-                    const definition = document.getElementById(`definition-${index}`);
-                    if (!definition.querySelector('.tick')) {
-                        const tick = document.createElement('span');
-                        tick.className = 'tick';
-                        tick.textContent = '✔';
-                        definition.appendChild(tick);
-                    }
-                }
-            });
-        }, 100);
-    </script>
-
-</body>
-</html> *@
-
-@model Tuple<char[,], List<string>>
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Word Search Grid</title>
-    <style>
-        .container {
-            display: flex;
-        }
-
-        .grid-container {
-            margin-right: 20px; /* Add margin to create space for definitions */
-            border: 2px solid black; /* Add border around the grid */
-            padding: 10px; /* Add padding for better appearance */
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(@Model.Item1.GetLength(1), 40px); /* Set column width based on the number of columns */
-            gap: 2px; /* Adjust gap between squares */
-            border: 1px solid black; /* Add border to each square */
-        }
-
-        .square {
-            width: 40px; /* Adjusted square size */
-            height: 40px; /* Adjusted square size */
-            background-color: #ffffff; /* Change background color as needed */
-            border: 1px solid #000000; /* Change border color as needed */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            cursor: pointer; /* Add cursor pointer to indicate clickability */
-        }
-
-        .definitions {
-            font-family: Arial, sans-serif;
-            margin-top: 10px; /* Add space above definitions */
-        }
-
-        .definition-item {
-            margin-bottom: 10px; /* Add space below each definition */
-        }
-
-        .definitions-container-outer {
-            display: inline-block;
-            border: 2px solid purple;
-            padding: 10px;
-            max-width: max-content; /* Adjust to fit content width */
-            max-height: max-content; /* Adjust to fit content height */
-            overflow: auto; /* Add overflow property to enable scrolling if necessary */
-        }
-
-        .definitions-container-inner {
-            border: 2px solid blue;
-            padding: 10px;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <div class="grid-container">
-            <div class="grid">
-                @for (int i = 0; i < Model.Item1.GetLength(0); i++)
-                {
-                    @for (int j = 0; j < Model.Item1.GetLength(1); j++)
-                    {
-                        char letter = Model.Item1[i, j];
-                        string letterClass = char.IsUpper(letter) ? "not-word" : "word"; /* Determine CSS class based on whether letter is part of a word */
-                        <div class="square @letterClass" data-letter="@letter">@letter</div>
-                    }
-                }
-            </div>
-        </div>
-        <div class="definitions-container-outer">
-            <div class="definitions-container-inner">
-                <div class="definitions">
-                    <ol>
+    <div class="definitions-container-outer">
+        <div class="definitions-container-inner">
+            <div class="definitions">
+                <ol>
                         @for (int i = 0; i < Model.Item2.Count; i++)
                         {
                             string word = Model.Item2[i];
                             <li class="definition-item">@word - <span id="definition-@i"></span></li>
                         }
-                    </ol>
-                </div>
+                </ol>
             </div>
         </div>
     </div>
+</div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

@@ -96,9 +96,11 @@
                                     </a>
                                     @if (course.IsDraft)
                                     {
-                                        <a asp-controller="Course" asp-action="ReleaseCourse" asp-route-id="@course.Id" class="btn btn-action btn-link text-primary">
-                                            <i class="fas fa-pencil-ruler"></i> Release
-                                        </a>
+                                        <form method="post" asp-controller="Course" asp-action="ReleaseCourseMVC" asp-route-id="@course.Id">
+                                            <button type="submit" class="btn btn-action btn-link text-primary">
+                                                <i class="fas fa-pencil-ruler"></i> Release
+                                            </button>
+                                        </form>
                                     }
                                     @if (course.StudentCourses.Any(sc => sc.IsApproved == false))
                                     {

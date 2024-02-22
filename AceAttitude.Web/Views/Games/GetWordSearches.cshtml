@@ -2,6 +2,9 @@
 @using AceAttitude.Data.Models
 @model List<string>
 
+@{
+    string gamePicturePath = "~/images/WordSearches/do-you-speak-it.jpg";
+}
 
 <style>
     /* Custom styles for button names */
@@ -17,13 +20,21 @@
     <div class="row row-cols-1 row-cols-md-2">
         @for (int i = 1; i <= Model.Count; i++)
         {
-            string imagePath = i.ToString() + ".jpg";
+            if (i < 7)
+            {
+                gamePicturePath = "~/images/WordSearches/" + i.ToString() + ".jpg";   
+            }
+            else
+            {
+                gamePicturePath = "~/images/WordSearches/do-you-speak-it.jpg";
+            }
+
             <div class="col">
                 <a asp-controller="Games" asp-action="SolveWordSearch" asp-route-title="@Model[i-1]" class="card-link">
                     <div class="card mb-3">
                         <div class="row g-0">
                             <div class="col-md-4">
-                                <img src="~/images/WordSearches/@imagePath" class="img-fluid rounded-start" alt="...">
+                                <img src="@Url.Content(gamePicturePath)" class="img-fluid rounded-start" alt="...">
                             </div>
                             <div class="col-md-8">
                                 <div class="card-body d-flex align-items-center">
