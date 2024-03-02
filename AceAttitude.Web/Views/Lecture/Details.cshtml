@@ -11,72 +11,152 @@
 @using AceAttitude.Data.Models
 @model Lecture
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Ace Attitude - Lecture Details</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+    <link rel="stylesheet" href="~/css/site.css" />
+
+    <!-- Google Font: Montserrat -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/c21727a50d.js" crossorigin="anonymous"></script>
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            background-color: #f8f9fa; /* Light gray background */
+        }
+
+        .lecture-details-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .lecture-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .lecture-title {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .lecture-description {
+            color: #555;
+            margin-bottom: 15px;
+        }
+
+        .lecture-link {
+            text-decoration: none;
+            color: #007bff;
+            transition: color 0.3s;
+        }
+
+            .lecture-link:hover {
+                color: #0056b3;
+            }
+
+        .lecture-button {
+            margin-right: 10px;
+        }
+
+        .video-container {
+            position: relative;
+            width: 100%;
+            padding-bottom: 56.25%; /* 16:9 Aspect Ratio */
+            overflow: hidden;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+            .video-container iframe {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+            }
+
+        .assignment-card {
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+            padding: 20px;
+        }
+
+        .assignment-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 15px;
+        }
+
+        .upload-form input[type="file"] {
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+
 <body>
-    <div class="card mb-3">
-        <div class="card-body">
-            <h5 class="card-title">Title: @Model.Title</h5>
-            <p class="card-text">@Model.Description</p>
-            <p class="card-text"><small class="text-body-secondary">Assignment: @Model.TextFilePath</small></p>
-            <p class="card-text"><small class="text-body-secondary">Video: @Model.VideoFilePath</small></p>
+    <div class="lecture-details-container">
+        <div class="lecture-card">
+            <h5 class="lecture-title">Title: @Model.Title</h5>
+            <p class="lecture-description">@Model.Description</p>
+            <p class="lecture-description">Assignment: <a href="@Model.TextFilePath" class="lecture-link">@Model.TextFilePath</a></p>
+            <p class="lecture-description">Video: <a href="@Model.VideoFilePath" class="lecture-link">@Model.VideoFilePath</a></p>
 
             @if (currentUser != null && currentUser.Id == Model.Course.TeacherId)
             {
-                <a asp-controller="Lecture" asp-action="EditLecture" asp-route-courseId="@Model.CourseId" asp-route-lectureId="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-controller="Lecture" asp-action="EditLecture" asp-route-courseId="@Model.CourseId" asp-route-lectureId="@Model.Id" class="btn btn-warning lecture-button">Edit</a>
             }
             @if (currentUser != null && (currentUser.Id == Model.Course.TeacherId || currentUser.UserType == UserType.Admin))
             {
-                <a asp-controller="Lecture" asp-action="DeleteLecture" asp-route-courseId="@Model.CourseId" asp-route-lectureId="@Model.Id" class="btn btn-danger">Delete</a>
+                <a asp-controller="Lecture" asp-action="DeleteLecture" asp-route-courseId="@Model.CourseId" asp-route-lectureId="@Model.Id" class="btn btn-danger lecture-button">Delete</a>
             }
         </div>
-    </div>
 
-    <div>
-        <!-- Convert video file path to YouTube embed URL -->
-        @{
-            string embedUrl = "";
-            if (Model.VideoFilePath != null)
+        <div class="video-container">
+            @if (Model.VideoFilePath == null)
             {
-                embedUrl = Model.VideoFilePath.Replace("watch?v=", "embed/") ;
-                var random = string.Empty;  
+                <iframe src="https://www.youtube.com/embed/yqrAPOZxgzU" frameborder="0" allowfullscreen></iframe>
             }
             else
             {
-                embedUrl = "https://www.youtube.com/embed/yqrAPOZxgzU";
+                <iframe src="@Model.VideoFilePath.Replace("watch?v=", "embed/")" frameborder="0" allowfullscreen></iframe>
             }
+        </div>
 
-        }
+        <div class="assignment-card">
+            <h5 class="assignment-title">Assignment</h5>
 
+            <a asp-controller="Lecture" asp-action="GetAssignmentFile" asp-route-lectureId="@Model.Id" asp-route-courseId="@Model.CourseId" class="btn btn-primary lecture-button">Download Assignment</a>
 
-                        <div class="video-container">
-                <iframe width="560" height="315" src="@embedUrl" frameborder="0" allowfullscreen></iframe>
-            </div>
-
-
-
-
-
-        <!-- Embed YouTube video using the generated URL -->
-
-
-        <div class="card" style="width: 18rem;">
-            <img src="~/images/assignment.jpg" class="card-img-top" alt="...">
-            <div class="card-body">
-                <h5 class="card-title">Assignment</h5>
-
-                <a asp-controller="Lecture" asp-action="GetAssignmentFile" asp-route-lectureId="@Model.Id" asp-route-courseId="@Model.CourseId" class="btn btn-primary">Download</a>
+            <div class="upload-form">
                 <h5>Upload an assignment:</h5>
                 <form asp-controller="Lecture" asp-action="AddAssignment" asp-route-lectureId="@Model.Id" asp-route-courseId="@Model.CourseId" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" />
-                    <button type="submit">Upload</button>
+                    <input type="file" name="file" class="form-control-file" />
+                    <button type="submit" class="btn btn-success lecture-button">Upload</button>
                 </form>
+            </div>
 
-         
+            <div class="submit-form">
                 <h5>Submit an assignment:</h5>
                 <form asp-controller="Lecture" asp-action="SubmitAssignment" asp-route-lectureId="@Model.Id" asp-route-courseId="@Model.CourseId" method="post" enctype="multipart/form-data">
-                    <input type="file" name="file" />
-                    <button type="submit">Submit</button>
+                    <input type="file" name="file" class="form-control-file" />
+                    <button type="submit" class="btn btn-info lecture-button">Submit</button>
                 </form>
             </div>
         </div>
     </div>
 </body>
+</html>

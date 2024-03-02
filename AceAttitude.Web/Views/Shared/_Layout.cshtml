@@ -245,7 +245,7 @@
                                 <a asp-controller="User" asp-action="Edit" asp-route-id="@currentUser.Id" class="text-primary">Edit Profile</a>
                                 @if ((bool)ViewData["IsStudent"])
                                 {
-                                    <a href="#" class="text-success">My Courses</a>
+                                    <a asp-controller="User" asp-action="StudentCourses" asp-route-id="@currentUser.Id" class="text-success">My Courses</a>
                                 }
                                 @if ((bool)ViewData["IsTeacher"] || (bool)ViewData["IsAdmin"])
                                 {
@@ -255,7 +255,7 @@
                                 @if ((bool)ViewData["IsAdmin"])
                                 {
                                     <a asp-controller="User" asp-action="Approve" class="text-warning">Approve Users</a>
-                                    <a href="#" class="text-warning">Modify Users</a>
+@*                                    <a href="#" class="text-warning">Modify Users</a>*@
                                 }
                                 <a asp-controller="User" asp-action="Logout" class="text-danger">Sign Out</a>
                             </div>

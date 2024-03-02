@@ -90,6 +90,13 @@ namespace AceAttitude.Services
             return this.courseRepository.GetAllTeacherCourses(id);
         }
 
+        public ICollection<Course> GetAllStudentCourses(string id, ApplicationUser requestUser)
+        {
+            authHelper.EnsureIdMatchingOrAdmin(id, requestUser, NotAccountOwnerErrorMessage);
+
+            return this.courseRepository.GetAllStudentCourses(id);
+        }
+
         public ICollection<Course> GetHomeCourses()
         {
             return this.courseRepository.GetHomeCourses();

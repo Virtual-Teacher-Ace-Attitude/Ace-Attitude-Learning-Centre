@@ -255,6 +255,32 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpGet]
+        public IActionResult StudentCourses([FromRoute] string id)
+        {
+            try
+            {
+                this.authService.EnsureUserLoggedIn();
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                List<Course> courses = courseService.GetAllStudentCourses(id, requestUser).ToList();
+
+                StudentCourseViewModel model = new StudentCourseViewModel();
+                model.Courses = courses;
+                model.AverageGrade = this.userService.GetAverageStudentGrade(requestUser.Id);
+
+                return View(model);
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status401Unauthorized);
+            }
+            catch (EntityNotFoundException e)
+            {
+                return this.ForbiddenOperation(e.Message, StatusCodes.Status404NotFound);
+            }
+        }
+
+        [HttpGet]
         public IActionResult SearchStudent()
         {
             try

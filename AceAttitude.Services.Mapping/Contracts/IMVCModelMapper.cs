@@ -12,6 +12,8 @@ namespace AceAttitude.Services.Mapping.Contracts
 
         public Course MapToCourse(CourseViewModel courseViewModel);
 
+        public Course MapToCourseEdit(CourseViewModel courseViewModel);
+
         public Comment MapViewModelToComment(CommentViewModel model);
 
         public Lecture MapViewModelToLecture(LectureViewModel viewModel);

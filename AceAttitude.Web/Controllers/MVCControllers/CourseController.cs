@@ -119,7 +119,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
                 var teacher = userService.GetTeacherById(user.Id);
                 _ = courseService.DeleteCourse(id, teacher);
 
-                return RedirectToAction("Index", "Post");
+                return RedirectToAction("Index", "Course", new { id });
             }
             catch (EntityNotFoundException ex)
             {
@@ -131,7 +131,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpPost]
-        public IActionResult ReleaseCourse(int courseId)
+        public IActionResult ReleaseCourseMVC(int id)
         {
             try
             {
@@ -139,7 +139,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
 
                 Teacher teacher = this.userService.GetTeacherById(requestUser.Id);
 
-                Course releasedCourse = courseService.ReleaseCourse(courseId, teacher);
+                Course releasedCourse = courseService.ReleaseCourse(id, teacher);
 
                 return RedirectToAction("Details", "Course", new { id = releasedCourse.Id });
             }
@@ -247,13 +247,13 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         [Route("{id}/edit")]
         public IActionResult Edit([FromRoute] int id, CourseViewModel courseViewModel)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(courseViewModel);
-            }
+            //if (!ModelState.IsValid)
+            //{
+            //    return View(courseViewModel);
+            //}
             var user = authService.CurrentUser;
             var teacher = userService.GetTeacherById(user.Id);
-            var course = modelMapper.MapToCourse(courseViewModel);
+            var course = modelMapper.MapToCourseEdit(courseViewModel);
             var updatedCourse = courseService.UpdateCourse(id, course, teacher);
 
             return RedirectToAction("Details", "Course", new { id = updatedCourse.Id });
@@ -278,7 +278,35 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             return RedirectToAction("Details", "Course", new { id = viewModel.CourseId });
             
         }
+        
 
+        [HttpPost("{id}/apply")]
+        public IActionResult ApplyForCourseMVC([FromRoute] int id)
+        {
+            try
+            {
+                ApplicationUser requestUser = this.authService.CurrentUser;
+
+                Student applyingStudent = this.userService.GetStudentById(requestUser.Id);
+                this.courseService.ApplyForCourse(id, applyingStudent);
+
+                return RedirectToAction("Details", "Course", new { id });
+            }
+            catch (EntityNotFoundException e)
+            {
+                Response.StatusCode = StatusCodes.Status404NotFound;
+                ViewData["ErrorMessage"] = e.Message;
+
+                return View("Error");
+            }
+            catch (UnauthorizedOperationException e)
+            {
+                Response.StatusCode = StatusCodes.Status401Unauthorized;
+                ViewData["ErrorMessage"] = e.Message;
+
+                return View("Error");
+            }
+        }
 
         private void InitializeDropDownLists(CourseViewModel viewModel)
 		{
