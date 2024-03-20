@@ -69,7 +69,7 @@
                     {
                         char letter = Model.Item1[i, j];
                         string letterClass = char.IsUpper(letter) ? "not-word" : "word"; /* Determine CSS class based on whether letter is part of a word */
-                            <div class="square @letterClass" data-letter="@letter">@letter</div>
+                            <div class="square @letterClass" data-letter="@letter">@char.ToUpper(letter)</div>
                     }
                 }
         </div>
