@@ -10,6 +10,9 @@ namespace AceAttitude.Services.Games
 
         private const string CapitalLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
 
+        //The dictionary contains every placed character with a list of the coordinate of every instance of that character on the grid.
+        private Dictionary<char, List<Tuple<int, int>>> placedLetters = new Dictionary<char, List<Tuple<int, int>>>();
+
         private static Dictionary<string, List<string>> wordLists = new Dictionary<string, List<string>>()
 {
     { "colors", new List<string> { "black", "blue", "pink", "green", "red", "yellow", "orange", "purple", "white" } },
@@ -28,172 +31,110 @@ namespace AceAttitude.Services.Games
 
         public char[,] GenerateWordSearch(List<string> words)
         {
-            if (words.Count > board.GetLength(0))
-            {
-                throw new ArgumentException("Please choose a number of words less than the board length.");
-            }
-
             foreach (string word in words)
             {
-                if (IsNotWord(word) || IsTooLong(word))
+                bool connected = TryConnectWord(word);
+                if (!connected)
                 {
-                    throw new ArgumentException($"The word {word} is either too long or contains invalid characters!");
+                    bool placed = false;
+                    for (int i = 0; i < 100; i++)
+                    {
+                        int x = randomizer.Next(board.GetLength(0));
+                        int y = randomizer.Next(board.GetLength(1));
+                        int[] directionOrder = ShuffleOrder(8);
+                        for (int j = 0; j < 8; j++)
+                        {
+                            placed = PlaceWord(word, x, y, directionOrder[j]);
+                            if (placed)
+                            {
+                                break;
+                            }
+                        }
+                        if (placed)
+                        {
+                            break;
+                        }
+                    }
+
                 }
-
-                PlaceWord(word);
             }
-
             FillEmptyCells();
             return board;
         }
 
-        private bool IsNotWord(string word)
+        private bool TryConnectWord(string word)
         {
-            return word.Any(c => !char.IsLetter(c));
-        }
-
-        private bool IsTooLong(string word)
-        {
-            return word.Length > board.GetLength(0);
-        }
-
-        private void PlaceWord(string word)
-        {
-            bool wordPlaced = false;
-            int attempts = 0;
-
-            while (!wordPlaced && attempts < 100)
-            {
-                int startRow = randomizer.Next(board.GetLength(0));
-                int startCol = randomizer.Next(board.GetLength(0));
-                int direction = randomizer.Next(4);  // 0: horizontal, 1: vertical, 2: diagonal down, 3: diagonal up
-
-                switch (direction)
-                {
-                    case 0:
-                        wordPlaced = PlaceHorizontally(startRow, startCol, word);
-                        break;
-                    case 1:
-                        wordPlaced = PlaceVertically(startRow, startCol, word);
-                        break;
-                    case 2:
-                        wordPlaced = PlaceDiagonallyDown(startRow, startCol, word);
-                        break;
-                    case 3:
-                        wordPlaced = PlaceDiagonallyUp(startRow, startCol, word);
-                        break;
-                }
-
-                attempts++;
-            }
-
-            if (!wordPlaced)
-            {
-                // Handle the case when a word couldn't be placed after multiple attempts
-                Console.WriteLine($"Failed to place the word: {word}");
-            }
-        }
-
-        private bool PlaceHorizontally(int startRow, int startCol, string word)
-        {
-            int endCol = startCol + word.Length - 1;
-
-            if (endCol >= board.GetLength(1))
-            {
-                return false;
-            }
-
+            int[] letterOrder = ShuffleOrder(word.Length);
             for (int i = 0; i < word.Length; i++)
             {
-                if (board[startRow, startCol + i] != '\0' && board[startRow, startCol + i] != word[i])
+
+                int letterPosition = letterOrder[i];
+                char letter = word[letterPosition];
+                if (placedLetters.ContainsKey(letter))
                 {
-                    return false;
-                }
-            }
-
-            for (int i = 0; i < word.Length; i++)
-            {
-                board[startRow, startCol + i] = word[i];
-            }
-
-            return true;
-        }
-
-        private bool PlaceVertically(int startRow, int startCol, string word)
-        {
-            int endRow = startRow + word.Length - 1;
-
-            if (endRow >= board.GetLength(0))
-            {
-                return false;
-            }
-
-            for (int i = 0; i < word.Length; i++)
-            {
-                if (board[startRow + i, startCol] != '\0' && board[startRow + i, startCol] != word[i])
-                {
-                    return false;
+                    foreach (Tuple<int, int> coordinates in placedLetters[letter])
+                    {
+                        int x = coordinates.Item1;
+                        int y = coordinates.Item2;
+                        for (int j = 0; j < 8; j++)
+                        {
+                            int[] directionOrder = ShuffleOrder(8);
+                            switch (directionOrder[j])
+                            {
+                                case 0:
+                                    if (PlaceWord(word, x - letterPosition, y, j))
+                                    {
+                                        return true;
+                                    }
+                                    break;
+                                case 1:
+                                    if (PlaceWord(word, x + letterPosition, y, j))
+                                    {
+                                        return true;
+                                    }
+                                    break;
+                                case 2:
+                                    if (PlaceWord(word, x, y - letterPosition, j))
+                                    {
+                                        return true;
+                                    }
+                                    break;
+                                case 3:
+                                    if (PlaceWord(word, x, y + letterPosition, j))
+                                    {
+                                        return true;
+                                    }
+                                    break;
+                                case 4:
+                                    if (PlaceWord(word, x - letterPosition, y - letterPosition, j))
+                                    {
+                                        return true;
+                                    }
+                                    break;
+                                case 5:
+                                    if (PlaceWord(word, x + letterPosition, y - letterPosition, j))
+                                    {
+                                        return true;
+                                    }
+                                    break;
+                                case 6:
+                                    if (PlaceWord(word, x - letterPosition, y + letterPosition, j))
+                                    {
+                                        return true;
+                                    }
+                                    break;
+                                case 7:
+                                    if (PlaceWord(word, x + letterPosition, y + letterPosition, j))
+                                    {
+                                        return true;
+                                    }
+                                    break;
+                            }
+                        }
+                    }
                 }
             }
-
-            for (int i = 0; i < word.Length; i++)
-            {
-                board[startRow + i, startCol] = word[i];
-            }
-
-            return true;
-        }
-
-        private bool PlaceDiagonallyDown(int startRow, int startCol, string word)
-        {
-            int endRow = startRow + word.Length - 1;
-            int endCol = startCol + word.Length - 1;
-
-            if (endRow >= board.GetLength(0) || endCol >= board.GetLength(1))
-            {
-                return false;
-            }
-
-            for (int i = 0; i < word.Length; i++)
-            {
-                if (board[startRow + i, startCol + i] != '\0' && board[startRow + i, startCol + i] != word[i])
-                {
-                    return false;
-                }
-            }
-
-            for (int i = 0; i < word.Length; i++)
-            {
-                board[startRow + i, startCol + i] = word[i];
-            }
-
-            return true;
-        }
-
-        private bool PlaceDiagonallyUp(int startRow, int startCol, string word)
-        {
-            int endRow = startRow - word.Length + 1;
-            int endCol = startCol + word.Length - 1;
-
-            if (endRow < 0 || endCol >= board.GetLength(1))
-            {
-                return false;
-            }
-
-            for (int i = 0; i < word.Length; i++)
-            {
-                if (board[startRow - i, startCol + i] != '\0' && board[startRow - i, startCol + i] != word[i])
-                {
-                    return false;
-                }
-            }
-
-            for (int i = 0; i < word.Length; i++)
-            {
-                board[startRow - i, startCol + i] = word[i];
-            }
-
-            return true;
+            return false;
         }
 
         private void FillEmptyCells()
@@ -204,11 +145,119 @@ namespace AceAttitude.Services.Games
                 {
                     if (board[i, j] == '\0')
                     {
-                        char letter = CapitalLetters[randomizer.Next(CapitalLetters.Length)];
-                        board[i, j] = letter;
+                        board[i, j] = CapitalLetters[randomizer.Next(CapitalLetters.Length)];
                     }
                 }
             }
+        }
+
+        //Directions:
+        //0 -> left-right
+        //1 -> right-left
+        //2 -> up-down
+        //3 -> down-up
+        //4 -> up-down right diagonal
+        //5 -> down-up right diagonal
+        //6 -> up-down left diagonal
+        //7 -> down-up left diagonal
+        private bool PlaceWord(string word, int x, int y, int direction)
+        {
+            int dx = 0, dy = 0;
+
+            switch (direction)
+            {
+                case 0: dx = 1; break;
+                case 1: dx = -1; break;
+                case 2: dy = 1; break;
+                case 3: dy = -1; break;
+                case 4: dx = 1; dy = 1; break;
+                case 5: dx = 1; dy = -1; break;
+                case 6: dx = -1; dy = 1; break;
+                case 7: dx = -1; dy = -1; break;
+            }
+
+            if (!IsValidPlacement(word, x, y, dx, dy))
+            {
+                return false;
+            }
+
+            int counter = 0;
+
+            while (counter < word.Length)
+            {
+                char currentChar = word[counter];
+
+                if (!placedLetters.ContainsKey(currentChar))
+                {
+                    placedLetters.Add(currentChar, new List<Tuple<int, int>>());
+                }
+                if (board[y, x] == '\0')
+                {
+                    placedLetters[currentChar].Add(new Tuple<int, int>(x, y));
+                }
+
+                board[y, x] = currentChar;
+
+                x += dx;
+                y += dy;
+
+                counter++;
+            }
+            return true;
+
+        }
+
+        private bool IsValidPlacement(string word, int x, int y, int dx, int dy)
+        {
+            int counter = 0;
+            while (counter < word.Length)
+            {
+                if (IsOutOfBounds(x, y) || IsOccupiedSpace(word[counter], x, y))
+                {
+                    return false;
+                }
+                x += dx;
+                y += dy;
+                counter++;
+            }
+            return true;
+
+        }
+
+        private bool IsOutOfBounds(int x, int y)
+        {
+            if (x < 0 || x >= board.GetLength(0) || y < 0 || y >= board.GetLength(1))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private bool IsOccupiedSpace(char c, int x, int y)
+        {
+            if (board[y, x] == '\0' || c == board[y, x])
+            {
+                return false;
+            }
+            return true;
+        }
+
+        private int[] ShuffleOrder(int length)
+        {
+            int[] order = new int[length];
+            List<int> temp = new List<int>(length);
+            for (int i = 0; i < length; i++)
+            {
+                temp.Add(i);
+            }
+            for (int i = 0; i < length; i++)
+            {
+                int position = randomizer.Next(temp.Count);
+                order[i] = temp[position];
+                temp.RemoveAt(position);
+            }
+            return order;
+
         }
 
 
