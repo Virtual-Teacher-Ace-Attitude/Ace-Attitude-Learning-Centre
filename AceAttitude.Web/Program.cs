@@ -85,6 +85,7 @@ namespace AceAttitude.Web
 
             builder.Services.AddScoped<WordSearchGenerator>();
             builder.Services.AddScoped<MemoryGameGenerator>();
+            builder.Services.AddScoped<StoryCardsPicker>();
 
             var app = builder.Build();
 
