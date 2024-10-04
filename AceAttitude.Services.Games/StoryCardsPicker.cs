@@ -6,28 +6,15 @@ namespace AceAttitude.Services.Games
     {
         private const int cardCount = 30;
 
-        private const int minHandSize = 3;
-
-        private const int maxHandSize = 7;
-
-        private readonly int handSize;
-
         private Random randomizer = new Random();
 
-        public StoryCardsPicker(int handSize)
-        {
-            if (handSize < minHandSize || handSize > maxHandSize)
-            {
-                throw new InvalidUserInputException($"Hand size cannot be higher than {maxHandSize} or lower than {minHandSize}.");
-            }
-            this.handSize = handSize;
-        }
+        public int HandSize {  get; set; } 
 
         public int[] GenerateCardIndexList()
         {
-            int[] cardIndexList = new int[handSize];
+            int[] cardIndexList = new int[HandSize];
 
-            for (int i = 0; i < handSize; i++)
+            for (int i = 0; i < HandSize; i++)
             {
                 int nextCardIndex = randomizer.Next(1, cardCount + 1);
                 if (cardIndexList.Contains(nextCardIndex))

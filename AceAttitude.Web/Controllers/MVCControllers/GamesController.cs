@@ -9,10 +9,13 @@ namespace AceAttitude.Web.Controllers.MVCControllers
     {
         private readonly WordSearchGenerator wordSearchGenerator;
         private readonly MemoryGameGenerator memoryGameGenerator;
-        public GamesController(WordSearchGenerator wordSearchGenerator, MemoryGameGenerator memoryGameGenerator)
+        private readonly StoryCardsPicker storyCardsPicker;
+
+        public GamesController(WordSearchGenerator wordSearchGenerator, MemoryGameGenerator memoryGameGenerator, StoryCardsPicker storyCardsPicker)
         {
             this.memoryGameGenerator = memoryGameGenerator;
             this.wordSearchGenerator = wordSearchGenerator;
+            this.storyCardsPicker = storyCardsPicker;
         }
 
         [HttpGet("index")]
@@ -55,7 +58,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
             List<string> pairs1 = viewModel.Pairs1.Split(",").Select(word => word.Trim()).ToList();
             List<string> pairs2 = viewModel.Pairs2.Split(",").Select(word => word.Trim()).ToList();
             this.memoryGameGenerator.makeWordSet(pairs1, pairs2, viewModel.Title);
-            return RedirectToAction("SolveMemoryGame", "Games", new { title =  viewModel.Title });
+            return RedirectToAction("SolveMemoryGame", "Games", new { title = viewModel.Title });
         }
 
         [HttpGet("wordSearches")]
@@ -66,7 +69,7 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         }
 
         [HttpGet("wordSearches/{title}")]
-        public IActionResult SolveWordSearch([FromRoute] string title) 
+        public IActionResult SolveWordSearch([FromRoute] string title)
         {
             List<string> words = wordSearchGenerator.getWordList(title);
             char[,] wordSearch = wordSearchGenerator.GenerateWordSearch(words);
@@ -80,6 +83,16 @@ namespace AceAttitude.Web.Controllers.MVCControllers
         {
             Dictionary<string, string> memoryGame = memoryGameGenerator.GetPairs(title);
             return View(memoryGame);
+        }
+
+        [HttpGet("storyCards")]
+
+        public IActionResult DrawStoryCards()
+        {
+            int handSize = 5;
+            this.storyCardsPicker.HandSize = handSize;
+            int[] cardIndexes = storyCardsPicker.GenerateCardIndexList();
+            return View(cardIndexes);
         }
     }
 }

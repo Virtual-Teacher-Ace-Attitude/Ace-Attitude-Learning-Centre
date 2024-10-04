@@ -1,0 +1,97 @@
+﻿@model int[]
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Story Cards</title>
+    <style>
+        .container {
+            display: flex;
+            justify-content: flex-start; /* Deck on the left, cards on the right */
+            align-items: center;
+            margin-top: 20px;
+        }
+
+        .deck-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-right: 120px; /* Space between deck and cards */
+        }
+
+        .deck {
+            width: 200px;
+            height: 300px;
+            background-image: url('/images/story-cards/deck.jpg');
+            background-size: cover;
+            cursor: pointer;
+        }
+
+        .card-hand-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 100%; /* Cards fill available space */
+        }
+
+        .card-hand {
+            display: flex;
+            justify-content: space-around;
+            width: 100%;
+        }
+
+        .card {
+            width: 200px;
+            height: 300px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+            text-align: center;
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Ensures no content overflows the card */
+        }
+
+            .card img {
+                width: 100%;
+                height: 100%;
+                object-fit: cover; /* Ensures image scales and fills the card */
+            }
+
+        .label {
+            font-size: 22px;
+            margin-top: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Deck section with label -->
+        <div class="deck-container">
+            <div class="deck" onclick="document.getElementById('new-hand-form').submit();"></div>
+            <div class="label">Draw 5 cards...</div>
+        </div>
+
+        <!-- Cards section with label -->
+        <div class="card-hand-container">
+            <div class="card-hand">
+                @for (int i = 0; i < Model.Length; i++)
+                {
+                    <div class="card">
+                        <img src="@Url.Content($"~/images/story-cards/{Model[i]}.jpg")" alt="Card @Model[i]" />
+                    </div>
+                }
+            </div>
+            <div class="label">Tell a story...</div>
+        </div>
+    </div>
+
+    <form id="new-hand-form" method="get" asp-action="DrawStoryCards"></form>
+</body>
+</html>
+
+
+
